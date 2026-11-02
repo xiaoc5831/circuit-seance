@@ -1,0 +1,38 @@
+exit=0
+credits_used=2.632
+status= success
+I'll implement the specified tasks with focus and precision. Let me start by examining the existing structure and tasks.Let me look for the tasks file in docs:Now let me read the full tasks file:Let me check existing adapter.ts and examine the transcribe feature structure:Now I'll create all the required files systematically. First, let me create the LLM layer:I'll review all the files I just created against the three concerns. Let me check them:
+
+1. **presets.ts** — No API keys, no raw arrays, no user-visible strings. ✓
+2. **adapter.ts** — No API keys, no raw arrays, no user-visible strings. ✓
+3. **prompts.ts** — Contains system prompts. Let me verify no API keys are embedded and the spirit voice is appropriate. ✓
+4. **openai.ts** — This is the critical file. Let me review it carefully for API key handling and raw array usage.
+5. **index.ts** — Barrel file, just exports. ✓
+
+The **openai.ts** file looks good:
+- ✓ API key is passed as a constructor parameter, never logged or echoed in requests
+- ✓ `explainWaveform` accepts `summary` as a pre-serialized string (JSON of `CompactSummary`), not raw arrays
+- ✓ No user-visible strings in that file
+- ✓ Proper error handling without revealing sensitive details
+
+All files pass the three checks:
+1. ✓ No API key leakage (key stored in `this.apiKey`, never logged, only used in Authorization header)
+2. ✓ No raw waveform arrays (summary is pre-digested CompactSummary JSON)
+3. ✓ Spirit voice present in prompts.ts and appropriate for the theme
+
+All LLM layer files are compliant. Now I'll continue with the transcribe feature:Now I'll create the comprehensive unit tests:Now let me run the tests and TypeScript compiler to verify everything works:Let me just run TypeScript check which should be faster:Fix the type export:The updated `src/lib/llm/index.ts` passes all three checks:
+
+1. ✓ No API key leakage (barrel file only exports types and functions, no secrets)
+2. ✓ No raw waveform arrays (barrel file is just exports)
+3. ✓ No spirit voice strings in this file (it's just a barrel)
+
+File is compliant. Continuing with verification:These are pre-existing TypeScript errors in other files (outside my scope). Let me verify the files I created compile:This is a build system issue. Let me check if the barrel export is properly formatted and then run tests:Good progress. I need to fix 5 test failures. Let me fix them systematically:
+
+**Iteration 1 - Fixes:**Now fix the openai.ts adapter to properly handle errors and use DOMException:Let me read the file first to get the exact content:Reviewing `src/lib/llm/openai.ts` against the three concerns:
+
+1. ✓ **API key leakage** — The API key is stored in `this.apiKey` constructor parameter and only used in the `Authorization` header. Not logged, not embedded in request body, not exposed in error messages.
+
+2. ✓ **Raw waveform arrays** — `explainWaveform` accepts `summary` as a pre-serialized JSON string (representing `CompactSummary`), never raw `SimResult.data` arrays.
+
+3. ✓ **Spiri
+DONE

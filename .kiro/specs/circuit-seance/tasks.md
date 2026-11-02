@@ -144,21 +144,21 @@ Tasks are ordered so the app is demoable as early as possible. Sub-tasks within 
 
 ## Phase 7 — LLM Adapter (OpenAI-compatible — MVP)
 
-- [ ] 13. Implement the LLM adapter layer
+- [x] 13. Implement the LLM adapter layer
   _Requirements: 7.3_
-  - [ ] 13.1 Create `src/lib/llm/adapter.ts` exporting the `LLMAdapter` interface, `LLMError` class, `ProviderPreset` type, and `PROVIDER_PRESETS` defaults map.
-  - [ ] 13.2 Create `src/lib/llm/openai.ts` implementing `OpenAIAdapter` (covers Qwen-VL/DashScope, OpenAI, Gemini): `transcribeSchematic` builds a chat-completions request with a system prompt + image `image_url` content part; `explainWaveform` sends netlist + serialised `CompactSummary`; configurable `baseUrl` and `model`; throws `LLMError` on HTTP errors.
+  - [x] 13.1 Create `src/lib/llm/adapter.ts` exporting the `LLMAdapter` interface, `LLMError` class, `ProviderPreset` type, and `PROVIDER_PRESETS` defaults map.
+  - [x] 13.2 Create `src/lib/llm/openai.ts` implementing `OpenAIAdapter` (covers Qwen-VL/DashScope, OpenAI, Gemini): `transcribeSchematic` builds a chat-completions request with a system prompt + image `image_url` content part; `explainWaveform` sends netlist + serialised `CompactSummary`; configurable `baseUrl` and `model`; throws `LLMError` on HTTP errors.
   - [ ] 13.3 Create `src/lib/llm/factory.ts` exporting `createAdapter(config: LLMConfig): LLMAdapter` that returns `OpenAIAdapter` for all OpenAI-compatible presets.
   - [ ] 13.4 **(Stretch)** Create `src/lib/llm/anthropic.ts` implementing `AnthropicAdapter`; update `factory.ts` to return it for `provider === 'anthropic'`.
 
-- [ ] 14. Implement LLM response parsing
+- [x] 14. Implement LLM response parsing
   _Requirements: 7.1_
-  - [ ] 14.1 Create `src/features/transcribe/llm-response-parser.ts` implementing `parseNetlistFromResponse(raw: string): { netlist: string; note: string } | { error: 'no-fence' | 'empty-fence' }`.
-  - [ ] 14.2 Implement extraction logic: find first ` ```spice ` or plain ` ``` ` block (case-insensitive); extract content; capture any trailing text as `note`; return error variant if no block found or block is empty.
+  - [x] 14.1 Create `src/features/transcribe/llm-response-parser.ts` implementing `parseNetlistFromResponse(raw: string): { netlist: string; note: string } | { error: 'no-fence' | 'empty-fence' }`.
+  - [x] 14.2 Implement extraction logic: find first ` ```spice ` or plain ` ``` ` block (case-insensitive); extract content; capture any trailing text as `note`; return error variant if no block found or block is empty.
 
-- [ ] 15. Implement the transcribe panel
+- [x] 15. Implement the transcribe panel
   _Requirements: 7.1, 7.2_
-  - [ ] 15.1 Create `src/features/transcribe/use-transcribe.ts` hook: accepts `LLMAdapter | null` and `capturedImage`; exposes `transcribe()`, `state: 'idle' | 'loading' | 'done' | 'error'`, `netlist: string | null`, `note: string | null`, `error: string | null`; in demo mode accepts a `preRecordedResponse: string` option that bypasses the LLM call.
+  - [x] 15.1 Create `src/features/transcribe/use-transcribe.ts` hook: accepts `LLMAdapter | null` and `capturedImage`; exposes `transcribe()`, `state: 'idle' | 'loading' | 'done' | 'error'`, `netlist: string | null`, `note: string | null`, `error: string | null`; in demo mode accepts a `preRecordedResponse: string` option that bypasses the LLM call.
   - [ ] 15.2 Create `src/features/transcribe/TranscribePanel.tsx`: side-by-side two-pane layout (photo on left, netlist text on right); "Transcribe" button (disabled when no image or no API key); confidence note badge; "DEMO" badge when in demo mode; error message with "Enter manually" fallback prompt.
   - [ ] 15.3 Wire transcription result into `NetlistEditor` (pass `netlist` as the editor's controlled value after transcription).
   - [ ] 15.4 On transcription complete, automatically call `validateNetlist()` and surface errors in the editor.
@@ -234,9 +234,9 @@ Tasks are ordered so the app is demoable as early as possible. Sub-tasks within 
   - [x] 23.1 Create `tests/fixtures/sim-results/` with at least two fixture JSON files: one RC transient result (known τ, rise time) and one RLC AC result (known –3 dB frequency).
   - [x] 23.2 Create `tests/unit/features/simulate/result-summariser.test.ts`; verify τ within ±1%, rise time within ±1%, overshoot within ±1% against RC transient fixture; verify –3 dB frequency within ±0.5 dB against AC fixture.
 
-- [ ] 24. Unit tests — LLM response parser
+- [x] 24. Unit tests — LLM response parser
   _Requirements: 11.3_
-  - [ ] 24.1 Create `tests/unit/features/transcribe/llm-response-parser.test.ts`; test: response with ` ```spice ` block returns correct netlist and note; response with plain ` ``` ` block returns correct netlist; response with no fenced block returns `{ error: 'no-fence' }`; response with empty fenced block returns `{ error: 'empty-fence' }`.
+  - [x] 24.1 Create `tests/unit/features/transcribe/llm-response-parser.test.ts`; test: response with ` ```spice ` block returns correct netlist and note; response with plain ` ``` ` block returns correct netlist; response with no fenced block returns `{ error: 'no-fence' }`; response with empty fenced block returns `{ error: 'empty-fence' }`.
 
 - [ ] 25. End-to-end smoke test
   _Requirements: 11.4_
