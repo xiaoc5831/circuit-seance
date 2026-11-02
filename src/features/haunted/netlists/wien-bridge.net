@@ -1,0 +1,15 @@
+Wien bridge oscillator (after Hewlett, 1939)
+.subckt opamp inp inn out
+Rin inp inn 1e7
+B1 out 0 V = 12*tanh(1e4*(v(inp)-v(inn))/12)
+.ends
+X1 p n out opamp
+R1 out a 10k
+C1 a p 16n
+R2 p 0 10k
+C2 p 0 16n
+Rf out n 21k
+Rg n 0 10k
+.ic v(p)=0.01
+.tran 5u 20m
+.end

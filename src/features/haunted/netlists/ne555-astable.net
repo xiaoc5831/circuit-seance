@@ -1,0 +1,11 @@
+NE555 astable multivibrator (behavioural model, after Signetics 1972)
+VCC vcc 0 DC 5
+RA vcc dis 1k
+RB dis thr 10k
+C1 thr 0 10n
+* discharge transistor + comparators: switch with hysteresis 1/3..2/3 Vcc
+S1 dis 0 thr 0 SW555
+.model SW555 SW(Ron=10 Roff=1e9 Vt=2.5 Vh=0.8333)
+Bout out 0 V = v(dis) > 1 ? 5 : 0
+.tran 0.5u 600u
+.end
