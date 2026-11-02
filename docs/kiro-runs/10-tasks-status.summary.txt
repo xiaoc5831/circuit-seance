@@ -1,2 +1,2 @@
-exit=124 (killed by the 110 s wrapper timeout before the turn summary; tasks.md edits up to 27.6 were already written)
+exit=124 (killed by the 110 s wrapper timeout before the turn summary; tasks.md edits up to 27.6 were already written and are kept verbatim)
 credits_used=not reported (estimate ≈1-2; see app.kiro.dev)

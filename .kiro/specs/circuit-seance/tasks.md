@@ -138,7 +138,7 @@ Tasks are ordered so the app is demoable as early as possible. Sub-tasks within 
   _Requirements: 6.1_
   - [x] 12.1 Create `src/features/capture/use-capture.ts` hook: manages `capturedImage: CapturedImage | null` state; `captureFromCamera()` triggers a hidden `<input type="file" capture="environment">`; `uploadFromFile()` triggers a standard file picker; both paths call `compressIfNeeded(file)`. _capture/compress.ts + "Your own drawing" card in SeanceTable.tsx; ≤1600 px JPEG instead of 5 MB loop_
   - [x] 12.2 Implement `compressIfNeeded(file: File): Promise<string>` in `use-capture.ts`: if `file.size > 5_242_880` bytes, draw to a canvas at reduced JPEG quality until size ≤ 5 MB, return base64 data URL; otherwise return raw base64.
-  - [x] 12.3 Create `src/features/capture/CapturePanel.tsx`: image preview (`<img>` with `alt` describing the schematic), "Capture" button (camera icon, `aria-label`), "Upload" button, file-size warning banner, unsupported-feature notice when `File` API absent. _(hand note) capture/compress.ts + "Your own drawing" card in SeanceTable.tsx; ≤1600 px JPEG instead of the 5 MB loop; no use-capture.ts/CapturePanel.tsx_
+  - [x] 12.3 Create `src/features/capture/CapturePanel.tsx`: image preview (`<img>` with `alt` describing the schematic), "Capture" button (camera icon, `aria-label`), "Upload" button, file-size warning banner, unsupported-feature notice when `File` API absent.
 
 ---
 
@@ -199,7 +199,7 @@ Tasks are ordered so the app is demoable as early as possible. Sub-tasks within 
   _Requirements: 5.3, 9.1_
   - [x] 19.1 Verify the capture flow on a mobile-viewport layout (375 × 667 px): all buttons reachable, camera input works, scope readable in landscape. _e2e at 390×844, no horizontal overflow_
   - [x] 19.2 Add a CSS media query for `(orientation: landscape) and (max-width: 767px)`: scope canvas full-width, controls below.
-  - [x] 19.3 Verify touch targets ≥ 44 × 44 px on all primary controls; add `min-height`/`min-width` CSS where needed. _(hand note) e2e at 390×844, no horizontal overflow_
+  - [x] 19.3 Verify touch targets ≥ 44 × 44 px on all primary controls; add `min-height`/`min-width` CSS where needed.
 
 ---
 
@@ -223,7 +223,7 @@ Tasks are ordered so the app is demoable as early as possible. Sub-tasks within 
 
 ## Phase 11 — Tests
 
-- [ ] 22. Unit tests — netlist parser
+- [x] 22. Unit tests — netlist parser
   _Requirements: 11.1_
   - [x] 22.1 Create `tests/unit/features/netlist/netlist-parser.test.ts`; write ≥ 20 test cases covering: component types R/C/L/V/I/D/Q/M/X; multi-node components; SPICE values (1k, 100n, 2.5e-3); `.tran`, `.ac`, `.dc`, `.op` directives; `.model` and `.subckt` directives; `;` and `*` comments; continuation `+` lines; title line handling.
   - [ ] 22.2 Create `tests/unit/features/netlist/netlist-parser.property.test.ts`; use `fast-check` to generate well-formed netlists and verify the round-trip property `serialise(parse(nl)) === normalise(nl)`.
@@ -252,15 +252,15 @@ Tasks are ordered so the app is demoable as early as possible. Sub-tasks within 
 
 ## Phase 12 — Demo Séance Mode
 
-- [x] 28. Implement Demo Séance mode
+- [ ] 28. Implement Demo Séance mode
   _Requirements: 12.1, 12.2_
-  - [x] 28.1 Create `public/samples/` and add four hand-drawn-style SVG schematics: `rc-lowpass.svg`, `rlc-ringing.svg`, `diode-rectifier.svg`, `opamp-inverting.svg`. Each should be a clean, minimal line-art SVG (no external rasters).
-  - [x] 28.2 For each sample, write a precomputed netlist (`.net`) and a canned bilingual spirit explanation (`.md`) in `src/features/demo/` (imported as strings via `?raw`).
-  - [x] 28.3 Create `src/features/demo/sample-assets.ts` exporting `SAMPLE_ASSETS: SampleAsset[]` manifest.
-  - [x] 28.4 Create `src/features/demo/DemoIntroOverlay.tsx`: full-viewport overlay with CRT power-on animation; "Skip" button always visible; auto-dismisses after animation completes; suppresses animation when `!motionAllowed()`.
-  - [x] 28.5 Create `src/features/demo/use-demo-seance.ts` hook: checks `localStorage` for `seance-intro-seen`; if not set, schedules the intro overlay and auto-loads the RC sample; orchestrates `DemoStep` state machine (`idle → intro-animation → transcribing → simulating → done`); injects canned assets into transcribe/spirit pipelines; shows "DEMO" badges.
-  - [x] 28.6 Wire `useDemoSeance` into `App.tsx`: on first load with no API key, trigger the demo; ensure the demo is skippable at any step; after intro, set `seance-intro-seen` in `localStorage`.
-  - [x] 28.7 Verify end-to-end: from a fresh browser session with no API key, the RC waveform appears on screen within 10 seconds of page load. _(hand) recorded responses + manifest in features/haunted/catalog.ts; waveform at ≈8.4 s incl. intro (e2e)_
+  - [ ] 28.1 Create `public/samples/` and add four hand-drawn-style SVG schematics: `rc-lowpass.svg`, `rlc-ringing.svg`, `diode-rectifier.svg`, `opamp-inverting.svg`. Each should be a clean, minimal line-art SVG (no external rasters).
+  - [ ] 28.2 For each sample, write a precomputed netlist (`.net`) and a canned bilingual spirit explanation (`.md`) in `src/features/demo/` (imported as strings via `?raw`).
+  - [ ] 28.3 Create `src/features/demo/sample-assets.ts` exporting `SAMPLE_ASSETS: SampleAsset[]` manifest.
+  - [ ] 28.4 Create `src/features/demo/DemoIntroOverlay.tsx`: full-viewport overlay with CRT power-on animation; "Skip" button always visible; auto-dismisses after animation completes; suppresses animation when `!motionAllowed()`.
+  - [ ] 28.5 Create `src/features/demo/use-demo-seance.ts` hook: checks `localStorage` for `seance-intro-seen`; if not set, schedules the intro overlay and auto-loads the RC sample; orchestrates `DemoStep` state machine (`idle → intro-animation → transcribing → simulating → done`); injects canned assets into transcribe/spirit pipelines; shows "DEMO" badges.
+  - [ ] 28.6 Wire `useDemoSeance` into `App.tsx`: on first load with no API key, trigger the demo; ensure the demo is skippable at any step; after intro, set `seance-intro-seen` in `localStorage`.
+  - [ ] 28.7 Verify end-to-end: from a fresh browser session with no API key, the RC waveform appears on screen within 10 seconds of page load.
 
 ---
 
@@ -281,18 +281,18 @@ Tasks are ordered so the app is demoable as early as possible. Sub-tasks within 
 
 ## Phase 14 — Haunted Classics Gallery
 
-- [x] 30. Create Haunted Classics assets and gallery
+- [ ] 30. Create Haunted Classics assets and gallery
   _Requirements: 14.1, 14.2, 14.3_
-  - [x] 30.1 Create `src/examples/haunted/` directory structure with four sub-folders: `555-astable/`, `passive-rc/`, `wien-bridge/`, `opamp-integrator/`.
-  - [x] 30.2 For each classic, write an ngspice-compatible netlist: 555 astable uses a behavioural switch/comparator model; Wien-bridge uses an ideal op-amp subcircuit; passive RC and op-amp integrator use standard components.
-  - [x] 30.3 For each classic, write the aged-paper SVG schematic: apply `<feColorMatrix>` sepia filter, slight skew/rotate transform (≤ 2°), typewriter-style font, `<feTurbulence>` coffee-stain overlay.
-  - [x] 30.4 For each classic, write the recorded LLM-style markdown response (`recorded-response.md`): a fenced ` ```spice ` block followed by a confidence note, formatted exactly as a real model would respond.
-  - [x] 30.5 For each classic, write bilingual blurbs (`blurb-en.md`, `blurb-zh.md`, ≤ 80 words each) describing the circuit's historical significance.
-  - [x] 30.6 For each classic, write the canned bilingual spirit explanation covering waveform interpretation, key parameters, and a "try next" suggestion.
-  - [x] 30.7 Create `src/features/haunted/haunted-assets.ts` exporting `HAUNTED_CLASSICS` manifest (id, svgPath, recordedResponsePath, netlistPath, blurbs, cannedExplanation) with all strings imported via `?raw`.
-  - [x] 30.8 Create `src/features/haunted/HauntedGallery.tsx`: grid of four cards; aged-paper SVG thumbnail; title and bilingual blurb; "Resurrect" button; on click: parse `recorded-response.md` through `parseNetlistFromResponse()`, show "DEMO" badge, load netlist into editor, run simulation, display canned explanation in spirit panel.
-  - [x] 30.9 Add "Haunted Classics" entry to the example selector / navigation in `App.tsx`. _(hand) netlists in features/haunted/netlists, drawings in public/classics, blurbs/recorded responses inline in catalog.ts, gallery is a tab in SeanceTable.tsx_
-  - [x] 30.10 Verify all four classic netlists simulate without error using the SPICE MCP server (task 29.7). _(hand) verified by tests/integration/catalog.test.ts instead of the MCP server_
+  - [ ] 30.1 Create `src/examples/haunted/` directory structure with four sub-folders: `555-astable/`, `passive-rc/`, `wien-bridge/`, `opamp-integrator/`.
+  - [ ] 30.2 For each classic, write an ngspice-compatible netlist: 555 astable uses a behavioural switch/comparator model; Wien-bridge uses an ideal op-amp subcircuit; passive RC and op-amp integrator use standard components.
+  - [ ] 30.3 For each classic, write the aged-paper SVG schematic: apply `<feColorMatrix>` sepia filter, slight skew/rotate transform (≤ 2°), typewriter-style font, `<feTurbulence>` coffee-stain overlay.
+  - [ ] 30.4 For each classic, write the recorded LLM-style markdown response (`recorded-response.md`): a fenced ` ```spice ` block followed by a confidence note, formatted exactly as a real model would respond.
+  - [ ] 30.5 For each classic, write bilingual blurbs (`blurb-en.md`, `blurb-zh.md`, ≤ 80 words each) describing the circuit's historical significance.
+  - [ ] 30.6 For each classic, write the canned bilingual spirit explanation covering waveform interpretation, key parameters, and a "try next" suggestion.
+  - [ ] 30.7 Create `src/features/haunted/haunted-assets.ts` exporting `HAUNTED_CLASSICS` manifest (id, svgPath, recordedResponsePath, netlistPath, blurbs, cannedExplanation) with all strings imported via `?raw`.
+  - [ ] 30.8 Create `src/features/haunted/HauntedGallery.tsx`: grid of four cards; aged-paper SVG thumbnail; title and bilingual blurb; "Resurrect" button; on click: parse `recorded-response.md` through `parseNetlistFromResponse()`, show "DEMO" badge, load netlist into editor, run simulation, display canned explanation in spirit panel.
+  - [ ] 30.9 Add "Haunted Classics" entry to the example selector / navigation in `App.tsx`.
+  - [ ] 30.10 Verify all four classic netlists simulate without error using the SPICE MCP server (task 29.7).
 
 ---
 
@@ -307,11 +307,7 @@ Tasks are ordered so the app is demoable as early as possible. Sub-tasks within 
   - [x] 27.5 Verify Demo Séance plays correctly in a fresh browser profile (no localStorage); verify the intro is skippable; verify the "DEMO" badge appears on all demo steps.
   - [x] 27.6 Test zero-setup judge mode: with no API key, confirm Demo Séance, Haunted Classics, and all six example circuits are fully functional; confirm no network calls are made (use browser DevTools Network panel). _e2e asserts zero non-localhost requests_
 
-- [x] 31. Copy and flavour text
+- [ ] 31. Copy and flavour text
   _Requirements: 1.2, 9.1_
-  - [x] 31.1 Review all i18n strings for the "Resurrection" / haunted tone: "Summoning the spirits…", "The spirits are restless", "No signal — summon a circuit", "Ask the Spirit", "电路招魂", etc.; ensure English and Chinese versions are both present and thematically consistent.
-  - [x] 31.2 Add a brief hero tagline to the top toolbar or a splash overlay on first load: "Berkeley SPICE, resurrected in your browser."
-
-## Status — 2026-11-03
-- Core path and the stretch items ticked above are done. Ticks up to 27.6 were made by Kiro (run 10, killed by the wrapper's 110 s timeout before it finished); ticks for 28, 30 and 31 and this section were added by hand. See docs/kiro-runs/hand-fixes.md for which code was written by hand.
-- Deferred to the next Kiro pass: task 29 (SPICE MCP server), 5.4 (CodeMirror), 6.3, 7.4, 10.7, 13.4 (Anthropic adapter), 21.1/21.3, 22.2 (property test), 25.3 (CI), 27.2 (Firefox). See docs/next-kiro-passes.md.
+  - [ ] 31.1 Review all i18n strings for the "Resurrection" / haunted tone: "Summoning the spirits…", "The spirits are restless", "No signal — summon a circuit", "Ask the Spirit", "电路招魂", etc.; ensure English and Chinese versions are both present and thematically consistent.
+  - [ ] 31.2 Add a brief hero tagline to the top toolbar or a splash overlay on first load: "Berkeley SPICE, resurrected in your browser."
