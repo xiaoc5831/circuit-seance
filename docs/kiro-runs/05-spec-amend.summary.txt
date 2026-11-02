@@ -1,0 +1,47 @@
+exit=0
+credits_used=5.110
+status= success
+Good, I have a thorough read of all three files. Now I'll write the updated versions.Now update `design.md`:Now update `tasks.md`:Let me do a quick sanity check on all three files:All three spec files are updated. Here's what changed in each:
+
+**requirements.md (v1.1)**
+- §1.1 — added `VITE_BASE_URL` / configurable `base` for static deploy
+- §3.1 — MVP editor is styled `<textarea>` with error highlights; CodeMirror 6 is stretch; added Ctrl/Cmd+Enter shortcut
+- §5.1 — added "No signal" empty state and CRT power-on animation AC
+- §5.2 — added arrow-key knob control with phosphor focus ring
+- §5.4 — new sub-section for loading/error/empty states and `aria-live`
+- §7.2 — **Qwen-VL (DashScope) is now the default provider** with pre-filled endpoint; OpenAI-compat and Gemini as presets; Anthropic is stretch
+- §9.2 — added zero-setup judge mode requirement
+- §10.1 — expanded with arrow-key knobs and `aria-live`
+- **§12** — new: Demo Séance mode (4 sample SVGs, canned assets, ≤10s first-run intro, skippable, reduced-motion, `seance-intro-seen` flag)
+- **§13** — new: SPICE MCP server (`tools/spice-mcp/`, stdio, `simulate_netlist` + `explain_waveform`, registered in `.kiro/settings/mcp.json`)
+- **§14** — new: Haunted Classics gallery (555, RC, Wien-bridge, op-amp integrator; aged-paper SVGs; recorded LLM responses; bilingual blurbs)
+- **§15** — new: Homework check (student enters expected τ / −3 dB freq; offline rule-based comparison; bilingual feedback)
+
+**design.md (v1.1)**
+- Architecture diagram updated to show `demo/`, `haunted/`, MCP server (dev-time only)
+- `LLMConfig` — `ProviderPreset` type with `PROVIDER_PRESETS` defaults map; Qwen-VL default
+- Added §3.1 Demo Séance sequence diagram
+- New `§4.8` / `§4.9` data models for sample assets, demo state, and homework check
+- Feature modules updated for new `demo/`, `haunted/`, `homework-check.ts`
+- §7 — empty/loading/error states added to rendering section
+- §9 — full MCP server design with tool schemas and `.kiro/settings/mcp.json` snippet
+- §10 — Haunted Classics asset directory layout with aged-paper SVG technique
+- Folder checklist updated with all new paths
+
+**tasks.md (v1.1)**
+- Added "MVP core path" note at top
+- Task 1 — added `SampleAsset`, `DemoStep`, `HomeworkCheckResult` to types; `VITE_BASE_URL` to scaffold
+- Task 4.6 — settings panel now has provider presets with Qwen default
+- Task 5 — MVP editor is styled textarea (5.1); CM6 is 5.1-stretch
+- Task 9.3 — added `playCRTPowerOn` subtask
+- Task 10.5 — empty-state "No signal" rendering
+- Task 11 — arrow-key focus ring for knobs
+- Task 13 — single `OpenAIAdapter` covers Qwen/OpenAI/Gemini; Anthropic is 13.4 stretch
+- Task 17.4–17.5 — homework check in spirit panel
+- Task 18.8 — `aria-live` wiring
+- Task 26 — new: homework-check unit tests
+- **Task 28** — new Phase 12: Demo Séance mode (7 subtasks)
+- **Task 29** — new Phase 13: SPICE MCP server (8 subtasks incl. `docs/spice-mcp.md`)
+- **Task 30** — new Phase 14: Haunted Classics (10 subtasks)
+- Ta
+DONE
