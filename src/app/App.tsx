@@ -238,7 +238,11 @@ export default function App() {
   }, [measurements, simNetlist, lang, t]);
 
   // ------------------------------------------------------------ possession
-  const possessParts = useMemo(() => (sim.result && !preError ? findPossessable(possess?.base ?? simNetlist) : []), [sim.result, preError, possess, simNetlist]);
+  // while possessed the panel stays even if a run fails, so the value can always be released
+  const possessParts = useMemo(
+    () => (possess ? findPossessable(possess.base) : sim.result && !preError ? findPossessable(simNetlist) : []),
+    [sim.result, preError, possess, simNetlist],
+  );
 
   const onPossess = useCallback(
     (part: Possessable) => {

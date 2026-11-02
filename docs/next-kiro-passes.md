@@ -11,7 +11,9 @@ The free tier is spent (see `kiro-usage-log.md`). These passes are deliberately 
 | 15 | Hook fix found in review: `netlist-guard` `timeout` sits inside `action` instead of at hook level | – | `.kiro/hooks` | tiny |
 | 16 | Remaining spec items: 22.2 parser property test (fast-check), 13.4 Anthropic adapter, 5.4 CodeMirror 6 behind a flag, 6.3 validation summary, 7.4 dry-run validation through the worker, 10.7 DC-sweep check, 21.1 offline WASM cache (service worker), 25.3 CI workflow | listed | Spec-tracked implementation | medium–large |
 
-Known gaps that don't need Kiro (do whenever):
-- The API key sits in React state while the app runs (spec 4.7 wanted it read from storage only at call time). It's never logged or sent anywhere but the provider.
-- `useTranscribe` (run 09) is unused. Either wire it in or delete it during pass 13.
-- Firefox / Safari manual smoke (27.2) hasn't been done yet. Playwright only covers Chromium.
+Known gaps that don't need Kiro: **closed in polish round 3** (2026-11-03, by hand, logged in `kiro-runs/hand-fixes.md`):
+- ~~API key in React state~~: the app now holds only `hasKey`; `liveAdapter()` reads `localStorage` per request (spec 4.7).
+- ~~`useTranscribe` unused~~: extended (`getAdapter`, outcome, latest-wins abort) and wired into the photo flow.
+- ~~Firefox smoke~~: the full e2e suite passes in Firefox 131 (`PW_FIREFOX=1`). Safari is still unchecked.
+
+Add to pass 13 (review): the round-3 hand-written files (`src/features/possess/*`, the Scope `ghost`/`hold` props, the adaptive glow in `scope-renderer.ts`, `tools/record-demo.mjs`). Add a requirement + task for "possess a component" to the spec so it's spec-tracked, and do 22.2 as a **property-based test** (fast-check: `parse(format(netlist))` round-trips, and `withValue` changes only the value token). PBT is on the rules' list of Kiro features judges look for.
