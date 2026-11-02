@@ -1,0 +1,11 @@
+Implement spec `circuit-seance` tasks **9, 10, 11** (CRT phosphor scope: effects, renderer, controls) and the minimal wiring **18.2 + 18.4** so the app is demoable end-to-end: example list → netlist editor → Simulate (button + Ctrl/Cmd+Enter) → worker → scope trace. Headless: no questions, no git, no dev server. Mark finished sub-tasks `[x]` in tasks.md.
+
+This is the visual heart of a hackathon entry judged on design — make the scope gorgeous and smooth:
+- Canvas 2D, devicePixelRatio-aware, ResizeObserver. 10×8 graticule with minor ticks, dim phosphor grid, bezel/vignette, subtle barrel-curvature illusion via radial gradient overlay (CSS), scanlines (CSS overlay is fine), gentle flicker; all motion off under `prefers-reduced-motion`.
+- Trace: P31 green `#39ff14` CH1 and phosphor tints for CH2–CH4; two-pass glow (wide faint shadowBlur pass + sharp core pass). **Beam-sweep reveal animation**: on a new result the beam draws the trace left→right over ~900 ms with a bright leading dot, then persistence afterglow (offscreen buffer fading). Idle: slow free-running "no signal" baseline with noise + text "NO SIGNAL — summon a circuit".
+- Auto-scale: pick volts/div and time/div from the 1-2-5 sequence so the trace fills ~80% of the screen; show readouts in the corners (CH1 2 V/div, 1 ms/div, analysis type) in the mono font. Channels default to the node voltages (skip `time`, currents hidden by default, max 4).
+- `.op` → node-voltage table styled like a phosphor readout; `.ac` → magnitude dB on log-x (phase as CH2) if data is complex (use `{real,img}`); `.dc` → X-Y.
+- Controls: per-channel enable toggles with colour swatches, volts/div and time/div knobs (buttons ±, arrow keys when focused, phosphor focus ring, aria-labels), ≥44 px targets. `data-testid="scope-canvas"` with `data-has-trace="true"` after first draw; `data-testid="sim-status"` aria-live.
+- Keep it performant (batch one path per channel, decimate to ≤ 2 points per pixel column using min/max).
+
+Budget rule (credits are scarce): write each file once carefully; run `npm run build` and `npx vitest run` at the end; if errors remain after 3 fix iterations, stop and list them in your reply instead of continuing. Reply with a short summary.

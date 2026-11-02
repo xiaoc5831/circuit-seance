@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 440" width="760" height="440" role="img" aria-label="Series RLC — why does it ring?">
+<style>.ink{fill:none;stroke:#1d3f8f;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}.lbl{fill:#1d3f8f;font-family:'Comic Sans MS','Segoe Print','Bradley Hand',cursive}</style><defs>
+  <filter id="hand" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="80" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="3.2" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+  <filter id="paper"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="7"/><feColorMatrix values="0 0 0 0 0.45  0 0 0 0 0.35  0 0 0 0 0.2  0 0 0 0.10 0"/></filter>
+  <radialGradient id="stain" cx="50%" cy="50%" r="50%"><stop offset="60%" stop-color="#8a5a2b" stop-opacity="0"/><stop offset="85%" stop-color="#8a5a2b" stop-opacity="0.22"/><stop offset="100%" stop-color="#8a5a2b" stop-opacity="0"/></radialGradient>
+  <radialGradient id="age" cx="50%" cy="45%" r="75%"><stop offset="55%" stop-color="#000" stop-opacity="0"/><stop offset="100%" stop-color="#5a3a12" stop-opacity="0.35"/></radialGradient>
+  <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="#9fc3e6" stroke-width="0.8"/></pattern>
+</defs><rect width="760" height="440" fill="#fbfcf7"/><rect width="760" height="440" fill="url(#grid)"/><line x1="70" y1="0" x2="70" y2="440" stroke="#e79b9b" stroke-width="1.5"/><g transform="rotate(-0.59 380.0 220.0)"><g filter="url(#hand)"><text x="90" y="44" font-size="24" class="lbl" font-weight="bold">Series RLC — why does it ring?</text><text x="90" y="72" font-size="16" class="lbl">f0 = 1/(2π√LC) ≈ 1 kHz,  ζ = ?</text>
+<path d="M150.0,160.0 L150.0,226.0" class="ink"/>
+<path d="M150.0,274.0 L150.0,340.0" class="ink"/>
+<circle cx="150" cy="250.0" r="24" class="ink"/>
+<path d="M137.0,257.0 L145.0,257.0 L145.0,243.0 L155.0,243.0 L155.0,257.0 L163.0,257.0" class="ink"/>
+<text x="116" y="256.0" font-size="18" text-anchor="end" class="lbl">V1</text>
+<path d="M150.0,160.0 L150.0,130.0 L220.0,130.0" class="ink"/>
+<path d="M220.0,130.0 L250.0,130.0 L260.0,140.0 L270.0,120.0 L280.0,140.0 L290.0,120.0 L300.0,140.0 L310.0,130.0 L340.0,130.0" class="ink"/>
+<text x="280.0" y="112.0" font-size="18" text-anchor="middle" class="lbl">R1 = 100Ω</text>
+<path d="M340.0,130.0 L380.0,130.0" class="ink"/>
+<path d="M380.0,130.0 L418.0,130.0 L418.6,126.6 L420.3,123.8 L422.9,121.9 L426.0,121.2 L429.1,121.9 L431.7,123.8 L433.4,126.6 L434.0,130.0 L434.6,126.6 L436.3,123.8 L438.9,121.9 L442.0,121.2 L445.1,121.9 L447.7,123.8 L449.4,126.6 L450.0,130.0 L450.6,126.6 L452.3,123.8 L454.9,121.9 L458.0,121.2 L461.1,121.9 L463.7,123.8 L465.4,126.6 L466.0,130.0 L466.6,126.6 L468.3,123.8 L470.9,121.9 L474.0,121.2 L477.1,121.9 L479.7,123.8 L481.4,126.6 L482.0,130.0 L520.0,130.0" class="ink"/>
+<text x="450.0" y="108.0" font-size="18" text-anchor="middle" class="lbl">L1 = 100mH</text>
+<path d="M520.0,130.0 L600.0,130.0" class="ink"/>
+<circle cx="600" cy="130" r="4.5" fill="#1d3f8f"/>
+<text x="620" y="120" font-size="18" text-anchor="start" font-style="italic" class="lbl">n2</text>
+<path d="M600.0,130.0 L600.0,180.0" class="ink"/>
+<path d="M600.0,180.0 L600.0,234.0" class="ink"/>
+<path d="M600.0,246.0 L600.0,300.0" class="ink"/>
+<path d="M582.0,234.0 L618.0,234.0" class="ink"/>
+<path d="M582.0,246.0 L618.0,246.0" class="ink"/>
+<text x="630.0" y="246.0" font-size="18" text-anchor="start" class="lbl">C1 = 253nF</text>
+<path d="M600.0,300.0 L600.0,340.0 L150.0,340.0" class="ink"/>
+<path d="M380.0,340.0 L380.0,350.0" class="ink"/>
+<path d="M358.0,350.0 L402.0,350.0" class="ink"/>
+<path d="M366.0,356.0 L394.0,356.0" class="ink"/>
+<path d="M374.0,362.0 L386.0,362.0" class="ink"/></g></g></svg>

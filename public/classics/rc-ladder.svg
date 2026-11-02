@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 440" width="820" height="440" role="img" aria-label="TWO-SECTION RC LOW-PASS FILTER">
+<style>.ink{fill:none;stroke:#3b2a1a;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}.lbl{fill:#3b2a1a;font-family:'Courier New',Courier,monospace}</style><defs>
+  <filter id="hand" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="38" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+  <filter id="paper"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="7"/><feColorMatrix values="0 0 0 0 0.45  0 0 0 0 0.35  0 0 0 0 0.2  0 0 0 0.10 0"/></filter>
+  <radialGradient id="stain" cx="50%" cy="50%" r="50%"><stop offset="60%" stop-color="#8a5a2b" stop-opacity="0"/><stop offset="85%" stop-color="#8a5a2b" stop-opacity="0.22"/><stop offset="100%" stop-color="#8a5a2b" stop-opacity="0"/></radialGradient>
+  <radialGradient id="age" cx="50%" cy="45%" r="75%"><stop offset="55%" stop-color="#000" stop-opacity="0"/><stop offset="100%" stop-color="#5a3a12" stop-opacity="0.35"/></radialGradient>
+  <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="#9fc3e6" stroke-width="0.8"/></pattern>
+</defs><rect width="820" height="440" fill="#e9d8a6"/><rect width="820" height="440" filter="url(#paper)"/><circle cx="672" cy="97" r="70" fill="url(#stain)"/><rect width="820" height="440" fill="url(#age)"/><g transform="rotate(1.41 410.0 220.0)"><g filter="url(#hand)"><text x="40" y="44" font-size="24" class="lbl" font-weight="bold">TWO-SECTION RC LOW-PASS FILTER</text><text x="40" y="72" font-size="16" class="lbl">after a 1950s radio servicing handbook — corner ≈ 1.6 kHz</text><text x="790" y="420" font-size="14" text-anchor="end" class="lbl">Haunted Classics</text>
+<path d="M130.0,160.0 L130.0,226.0" class="ink"/>
+<path d="M130.0,274.0 L130.0,340.0" class="ink"/>
+<circle cx="130" cy="250.0" r="24" class="ink"/>
+<path d="M117.0,250.0 L118.6,246.9 L120.2,244.3 L121.9,242.6 L123.5,242.0 L125.1,242.6 L126.8,244.3 L128.4,246.9 L130.0,250.0 L131.6,253.1 L133.2,255.7 L134.9,257.4 L136.5,258.0 L138.1,257.4 L139.8,255.7 L141.4,253.1 L143.0,250.0" class="ink"/>
+<text x="96" y="256.0" font-size="18" text-anchor="end" class="lbl">Vin 1V</text>
+<path d="M130.0,160.0 L130.0,130.0 L200.0,130.0" class="ink"/>
+<path d="M200.0,130.0 L235.0,130.0 L245.0,140.0 L255.0,120.0 L265.0,140.0 L275.0,120.0 L285.0,140.0 L295.0,130.0 L330.0,130.0" class="ink"/>
+<text x="265.0" y="112.0" font-size="18" text-anchor="middle" class="lbl">R1 1k</text>
+<path d="M330.0,130.0 L400.0,130.0" class="ink"/>
+<circle cx="400" cy="130" r="4.5" fill="#3b2a1a"/>
+<path d="M400.0,130.0 L400.0,180.0" class="ink"/>
+<path d="M400.0,180.0 L400.0,234.0" class="ink"/>
+<path d="M400.0,246.0 L400.0,300.0" class="ink"/>
+<path d="M382.0,234.0 L418.0,234.0" class="ink"/>
+<path d="M382.0,246.0 L418.0,246.0" class="ink"/>
+<text x="430.0" y="246.0" font-size="18" text-anchor="start" class="lbl">C1 100nF</text>
+<path d="M400.0,130.0 L450.0,130.0" class="ink"/>
+<path d="M450.0,130.0 L485.0,130.0 L495.0,140.0 L505.0,120.0 L515.0,140.0 L525.0,120.0 L535.0,140.0 L545.0,130.0 L580.0,130.0" class="ink"/>
+<text x="515.0" y="112.0" font-size="18" text-anchor="middle" class="lbl">R2 10k</text>
+<path d="M580.0,130.0 L650.0,130.0" class="ink"/>
+<circle cx="650" cy="130" r="4.5" fill="#3b2a1a"/>
+<text x="665" y="122" font-size="16" text-anchor="start" class="lbl">OUT</text>
+<path d="M650.0,130.0 L650.0,180.0" class="ink"/>
+<path d="M650.0,180.0 L650.0,234.0" class="ink"/>
+<path d="M650.0,246.0 L650.0,300.0" class="ink"/>
+<path d="M632.0,234.0 L668.0,234.0" class="ink"/>
+<path d="M632.0,246.0 L668.0,246.0" class="ink"/>
+<text x="680.0" y="246.0" font-size="18" text-anchor="start" class="lbl">C2 10nF</text>
+<path d="M650.0,300.0 L650.0,340.0 L130.0,340.0" class="ink"/>
+<path d="M400.0,300.0 L400.0,340.0" class="ink"/>
+<circle cx="400" cy="340" r="4.5" fill="#3b2a1a"/>
+<path d="M270.0,340.0 L270.0,350.0" class="ink"/>
+<path d="M248.0,350.0 L292.0,350.0" class="ink"/>
+<path d="M256.0,356.0 L284.0,356.0" class="ink"/>
+<path d="M264.0,362.0 L276.0,362.0" class="ink"/></g></g></svg>

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 520" width="820" height="520" role="img" aria-label="SIGNETICS NE555 — ASTABLE MODE">
+<style>.ink{fill:none;stroke:#3b2a1a;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}.lbl{fill:#3b2a1a;font-family:'Courier New',Courier,monospace}</style><defs>
+  <filter id="hand" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="22" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+  <filter id="paper"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="7"/><feColorMatrix values="0 0 0 0 0.45  0 0 0 0 0.35  0 0 0 0 0.2  0 0 0 0.10 0"/></filter>
+  <radialGradient id="stain" cx="50%" cy="50%" r="50%"><stop offset="60%" stop-color="#8a5a2b" stop-opacity="0"/><stop offset="85%" stop-color="#8a5a2b" stop-opacity="0.22"/><stop offset="100%" stop-color="#8a5a2b" stop-opacity="0"/></radialGradient>
+  <radialGradient id="age" cx="50%" cy="45%" r="75%"><stop offset="55%" stop-color="#000" stop-opacity="0"/><stop offset="100%" stop-color="#5a3a12" stop-opacity="0.35"/></radialGradient>
+  <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="#9fc3e6" stroke-width="0.8"/></pattern>
+</defs><rect width="820" height="520" fill="#e9d8a6"/><rect width="820" height="520" filter="url(#paper)"/><circle cx="672" cy="114" r="83" fill="url(#stain)"/><rect width="820" height="520" fill="url(#age)"/><g transform="rotate(-0.30 410.0 260.0)"><g filter="url(#hand)"><text x="40" y="44" font-size="24" class="lbl" font-weight="bold">SIGNETICS NE555 — ASTABLE MODE</text><text x="40" y="72" font-size="16" class="lbl">Fig. 9  (after Signetics app. note, 1972)  f = 1.44/((RA+2RB)C)</text><text x="790" y="500" font-size="14" text-anchor="end" class="lbl">Haunted Classics</text>
+<path d="M380.0,150.0 L560.0,150.0 L560.0,400.0 L380.0,400.0 L380.0,150.0" class="ink"/>
+<text x="470" y="368" font-size="26" text-anchor="middle" class="lbl">NE555</text>
+<text x="388" y="195" font-size="14" text-anchor="start" class="lbl">7 DIS</text>
+<text x="388" y="275" font-size="14" text-anchor="start" class="lbl">6 THR</text>
+<text x="388" y="335" font-size="14" text-anchor="start" class="lbl">2 TRIG</text>
+<text x="552" y="245" font-size="14" text-anchor="end" class="lbl">3 OUT</text>
+<text x="470" y="172" font-size="13" text-anchor="middle" class="lbl">8 VCC   4 RST</text>
+<text x="470" y="392" font-size="13" text-anchor="middle" class="lbl">1 GND</text>
+<path d="M110.0,120.0 L110.0,266.0" class="ink"/>
+<path d="M110.0,314.0 L110.0,460.0" class="ink"/>
+<circle cx="110" cy="290.0" r="24" class="ink"/>
+<text x="110" y="286.0" font-size="18" text-anchor="middle" class="lbl">+</text>
+<text x="110" y="306.0" font-size="18" text-anchor="middle" class="lbl">−</text>
+<text x="76" y="296.0" font-size="18" text-anchor="end" class="lbl">VCC 5V</text>
+<path d="M110.0,120.0 L110.0,90.0 L470.0,90.0 L470.0,150.0" class="ink"/>
+<path d="M230.0,90.0 L230.0,110.0" class="ink"/>
+<path d="M230.0,110.0 L230.0,120.0 L240.0,130.0 L220.0,140.0 L240.0,150.0 L220.0,160.0 L240.0,170.0 L230.0,180.0 L230.0,190.0" class="ink"/>
+<text x="260.0" y="156.0" font-size="18" text-anchor="start" class="lbl">RA 1k</text>
+<path d="M230.0,190.0 L380.0,190.0" class="ink"/>
+<circle cx="230" cy="190" r="4.5" fill="#3b2a1a"/>
+<path d="M230.0,190.0 L230.0,210.0" class="ink"/>
+<path d="M230.0,210.0 L230.0,225.0 L240.0,235.0 L220.0,245.0 L240.0,255.0 L220.0,265.0 L240.0,275.0 L230.0,285.0 L230.0,300.0" class="ink"/>
+<text x="260.0" y="261.0" font-size="18" text-anchor="start" class="lbl">RB 10k</text>
+<path d="M230.0,300.0 L300.0,300.0" class="ink"/>
+<circle cx="300" cy="300" r="4.5" fill="#3b2a1a"/>
+<path d="M300.0,270.0 L380.0,270.0" class="ink"/>
+<path d="M300.0,270.0 L300.0,330.0 L380.0,330.0" class="ink"/>
+<path d="M300.0,330.0 L300.0,350.0" class="ink"/>
+<path d="M300.0,350.0 L300.0,389.0" class="ink"/>
+<path d="M300.0,401.0 L300.0,440.0" class="ink"/>
+<path d="M282.0,389.0 L318.0,389.0" class="ink"/>
+<path d="M282.0,401.0 L318.0,401.0" class="ink"/>
+<text x="285" y="400" font-size="16" text-anchor="end" class="lbl">C 10nF</text>
+<path d="M560.0,240.0 L660.0,240.0" class="ink"/>
+<circle cx="660" cy="240" r="4.5" fill="#3b2a1a"/>
+<text x="670" y="232" font-size="16" text-anchor="start" class="lbl">OUT</text>
+<path d="M110.0,460.0 L110.0,480.0 L470.0,480.0 L470.0,400.0" class="ink"/>
+<path d="M300.0,440.0 L300.0,480.0" class="ink"/>
+<path d="M380.0,480.0 L380.0,490.0" class="ink"/>
+<path d="M358.0,490.0 L402.0,490.0" class="ink"/>
+<path d="M366.0,496.0 L394.0,496.0" class="ink"/>
+<path d="M374.0,502.0 L386.0,502.0" class="ink"/></g></g></svg>

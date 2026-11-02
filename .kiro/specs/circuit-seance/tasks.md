@@ -104,31 +104,31 @@ Tasks are ordered so the app is demoable as early as possible. Sub-tasks within 
 
 ## Phase 5 — CRT Oscilloscope
 
-- [ ] 9. Implement the phosphor effects utilities
+- [x] 9. Implement the phosphor effects utilities
   _Requirements: 5.1, 5.4_
-  - [ ] 9.1 Create `src/features/scope/phosphor-effects.ts` with: `applyGlow(ctx, color, blurRadius)`, `applyPersistence(screenCtx, persistCtx, decayAlpha)`, `applyScanlines(ctx, canvasHeight)`, `applyFlicker(ctx, timestamp)`. Each function is pure (no internal state; state lives in the renderer).
-  - [ ] 9.2 Implement `prefers-reduced-motion` detection in `phosphor-effects.ts`; export a `motionAllowed(): boolean` helper that the renderer checks each frame.
-  - [ ] 9.3 Implement `playCRTPowerOn(ctx: CanvasRenderingContext2D): Promise<void>`: brightness-ramp + horizontal-line-expand animation (≤ 1 s); resolves immediately (no animation) when `!motionAllowed()`.
+  - [x] 9.1 Create `src/features/scope/phosphor-effects.ts` with: `applyGlow(ctx, color, blurRadius)`, `applyPersistence(screenCtx, persistCtx, decayAlpha)`, `applyScanlines(ctx, canvasHeight)`, `applyFlicker(ctx, timestamp)`. Each function is pure (no internal state; state lives in the renderer).
+  - [x] 9.2 Implement `prefers-reduced-motion` detection in `phosphor-effects.ts`; export a `motionAllowed(): boolean` helper that the renderer checks each frame.
+  - [x] 9.3 Implement `playCRTPowerOn(ctx: CanvasRenderingContext2D): Promise<void>`: brightness-ramp + horizontal-line-expand animation (≤ 1 s); resolves immediately (no animation) when `!motionAllowed()`.
 
-- [ ] 10. Implement the scope renderer
+- [x] 10. Implement the scope renderer
   _Requirements: 5.1, 5.2, 5.4, 7.5_
-  - [ ] 10.1 Create `src/features/scope/scope-renderer.ts` with a `ScopeRenderer` class: constructor takes canvas ref; `draw(viewState, simResult, timestamp)` is the RAF callback.
-  - [ ] 10.2 Implement graticule drawing: 10 × 8 divisions, centre-line ticks (5 sub-divisions), phosphor-tint grid lines, outer border.
-  - [ ] 10.3 Implement transient trace rendering: project time/voltage to canvas coordinates per `voltsPerDiv` and `timePerDiv`; batch per channel into a single `beginPath/stroke`; apply glow via `shadowBlur`.
-  - [ ] 10.4 Implement the off-screen persistence buffer (`persistCanvas`): each frame, draw `persistCanvas` onto `screenCanvas` at `globalAlpha = 0.85` before current trace; copy current trace onto `persistCanvas` for next frame.
-  - [ ] 10.5 Implement empty-state rendering: when `simResult` is null, draw "No signal — summon a circuit" (bilingual, from i18n) centred on the canvas with phosphor-green styling and gentle idle glow.
+  - [x] 10.1 Create `src/features/scope/scope-renderer.ts` with a `ScopeRenderer` class: constructor takes canvas ref; `draw(viewState, simResult, timestamp)` is the RAF callback.
+  - [x] 10.2 Implement graticule drawing: 10 × 8 divisions, centre-line ticks (5 sub-divisions), phosphor-tint grid lines, outer border.
+  - [x] 10.3 Implement transient trace rendering: project time/voltage to canvas coordinates per `voltsPerDiv` and `timePerDiv`; batch per channel into a single `beginPath/stroke`; apply glow via `shadowBlur`.
+  - [x] 10.4 Implement the off-screen persistence buffer (`persistCanvas`): each frame, draw `persistCanvas` onto `screenCanvas` at `globalAlpha = 0.85` before current trace; copy current trace onto `persistCanvas` for next frame.
+  - [x] 10.5 Implement empty-state rendering: when `simResult` is null, draw "No signal — summon a circuit" (bilingual, from i18n) centred on the canvas with phosphor-green styling and gentle idle glow.
   - [ ] 10.6 Implement AC Bode rendering: log₁₀ x-axis transform; dual traces (magnitude dB, phase °) in two different phosphor tints. _(nice to have)_
   - [ ] 10.7 Implement DC sweep trace rendering (single X-Y path). _(nice to have)_
   - [ ] 10.8 Implement `.op` node-voltage table view (replaces canvas; rendered as a styled HTML table overlay).
-  - [ ] 10.9 Add adaptive quality: if frame time > 16 ms for 2 consecutive frames, halve `shadowBlur`; restore when frame time drops back below 14 ms.
-  - [ ] 10.10 Create `src/features/scope/ScopeCanvas.tsx`: owns canvas ref and `ResizeObserver`; instantiates `ScopeRenderer`; drives RAF loop; calls `playCRTPowerOn` on mount; sets `data-has-trace="true"` after first successful draw; adds `data-testid="scope-canvas"`.
+  - [x] 10.9 Add adaptive quality: if frame time > 16 ms for 2 consecutive frames, halve `shadowBlur`; restore when frame time drops back below 14 ms.
+  - [x] 10.10 Create `src/features/scope/ScopeCanvas.tsx`: owns canvas ref and `ResizeObserver`; instantiates `ScopeRenderer`; drives RAF loop; calls `playCRTPowerOn` on mount; sets `data-has-trace="true"` after first successful draw; adds `data-testid="scope-canvas"`.
 
-- [ ] 11. Implement scope controls
+- [x] 11. Implement scope controls
   _Requirements: 5.2, 5.3_
-  - [ ] 11.1 Create `src/features/scope/ScopeControls.tsx`: volts/div selector (dropdown or scroll knob) per channel, time/div selector, channel enable checkboxes with colour swatches, channel variable-name selector (populated from `SimResult.variableNames`).
-  - [ ] 11.2 Add arrow-key support to each knob: when focused, Up/Right increments by one step, Down/Left decrements; apply a phosphor-style CSS `outline` as the focus ring.
-  - [ ] 11.3 Ensure all control touch targets are ≥ 44 × 44 px; add `aria-label` to icon controls.
-  - [ ] 11.4 Add a `data-testid="sim-status"` element that reflects the current simulation status string (idle / loading / running / complete / error).
+  - [x] 11.1 Create `src/features/scope/ScopeControls.tsx`: volts/div selector (dropdown or scroll knob) per channel, time/div selector, channel enable checkboxes with colour swatches, channel variable-name selector (populated from `SimResult.variableNames`).
+  - [x] 11.2 Add arrow-key support to each knob: when focused, Up/Right increments by one step, Down/Left decrements; apply a phosphor-style CSS `outline` as the focus ring.
+  - [x] 11.3 Ensure all control touch targets are ≥ 44 × 44 px; add `aria-label` to icon controls.
+  - [x] 11.4 Add a `data-testid="sim-status"` element that reflects the current simulation status string (idle / loading / running / complete / error).
 
 ---
 
@@ -184,16 +184,16 @@ Tasks are ordered so the app is demoable as early as possible. Sub-tasks within 
 
 ## Phase 9 — Integration & Wiring
 
-- [ ] 18. Wire all features together in App.tsx
+- [x] 18. Wire all features together in App.tsx
   _Requirements: 9.1, 9.2_
-  - [ ] 18.1 Connect `useCapture` → `TranscribePanel` → `NetlistEditor` data flow: captured image flows to transcribe; transcribed netlist flows to editor.
-  - [ ] 18.2 Connect `NetlistEditor` → `useSimulation` → `ScopeCanvas` data flow: on "Simulate" click (or Ctrl+Enter, or example load), run validation then simulation; pass `SimResult` to scope.
+  - [x] 18.1 Connect `useCapture` → `TranscribePanel` → `NetlistEditor` data flow: captured image flows to transcribe; transcribed netlist flows to editor.
+  - [x] 18.2 Connect `NetlistEditor` → `useSimulation` → `ScopeCanvas` data flow: on "Simulate" click (or Ctrl+Enter, or example load), run validation then simulation; pass `SimResult` to scope.
   - [ ] 18.3 Connect `useSimulation` → `summariseResult` → `useSpirit` data flow: after simulation completes, compute summary; pass to spirit hook.
-  - [ ] 18.4 Wire example selector: clicking an example sets the netlist in the editor, sets `exampleId`, and auto-triggers simulation.
+  - [x] 18.4 Wire example selector: clicking an example sets the netlist in the editor, sets `exampleId`, and auto-triggers simulation.
   - [ ] 18.5 Wire language toggle to `LanguageContext` and propagate to LLM adapter calls and all i18n strings.
   - [ ] 18.6 Wire settings panel to `createAdapter(config)`: when config changes, recreate the adapter and pass to `useTranscribe` and `useSpirit`.
   - [ ] 18.7 Ensure the "Simulate" button is disabled when validation has errors; "Transcribe" and "Ask Spirit" buttons are disabled when no API key is configured.
-  - [ ] 18.8 Wire status bar and `aria-live` region to simulation state changes ("idle", "Summoning…", "Simulation complete", error messages).
+  - [x] 18.8 Wire status bar and `aria-live` region to simulation state changes ("idle", "Summoning…", "Simulation complete", error messages).
 
 - [ ] 19. Mobile & responsive polish
   _Requirements: 5.3, 9.1_

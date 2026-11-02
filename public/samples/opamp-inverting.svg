@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 460" width="760" height="460" role="img" aria-label="Inverting amplifier">
+<style>.ink{fill:none;stroke:#1d3f8f;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}.lbl{fill:#1d3f8f;font-family:'Comic Sans MS','Segoe Print','Bradley Hand',cursive}</style><defs>
+  <filter id="hand" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="58" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="3.2" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+  <filter id="paper"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="7"/><feColorMatrix values="0 0 0 0 0.45  0 0 0 0 0.35  0 0 0 0 0.2  0 0 0 0.10 0"/></filter>
+  <radialGradient id="stain" cx="50%" cy="50%" r="50%"><stop offset="60%" stop-color="#8a5a2b" stop-opacity="0"/><stop offset="85%" stop-color="#8a5a2b" stop-opacity="0.22"/><stop offset="100%" stop-color="#8a5a2b" stop-opacity="0"/></radialGradient>
+  <radialGradient id="age" cx="50%" cy="45%" r="75%"><stop offset="55%" stop-color="#000" stop-opacity="0"/><stop offset="100%" stop-color="#5a3a12" stop-opacity="0.35"/></radialGradient>
+  <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="#9fc3e6" stroke-width="0.8"/></pattern>
+</defs><rect width="760" height="460" fill="#fbfcf7"/><rect width="760" height="460" fill="url(#grid)"/><line x1="70" y1="0" x2="70" y2="460" stroke="#e79b9b" stroke-width="1.5"/><g transform="rotate(0.88 380.0 230.0)"><g filter="url(#hand)"><text x="90" y="44" font-size="24" class="lbl" font-weight="bold">Inverting amplifier</text><text x="90" y="72" font-size="16" class="lbl">gain = −Rf/R1 = ?</text>
+<path d="M140.0,200.0 L140.0,256.0" class="ink"/>
+<path d="M140.0,304.0 L140.0,360.0" class="ink"/>
+<circle cx="140" cy="280.0" r="24" class="ink"/>
+<path d="M127.0,280.0 L128.6,276.9 L130.2,274.3 L131.9,272.6 L133.5,272.0 L135.1,272.6 L136.8,274.3 L138.4,276.9 L140.0,280.0 L141.6,283.1 L143.2,285.7 L144.9,287.4 L146.5,288.0 L148.1,287.4 L149.8,285.7 L151.4,283.1 L153.0,280.0" class="ink"/>
+<text x="106" y="286.0" font-size="18" text-anchor="end" class="lbl">Vin</text>
+<text x="140" y="400" font-size="15" text-anchor="middle" class="lbl">0.5 V, 1 kHz</text>
+<path d="M140.0,200.0 L140.0,175.0 L210.0,175.0" class="ink"/>
+<path d="M210.0,175.0 L245.0,175.0 L255.0,185.0 L265.0,165.0 L275.0,185.0 L285.0,165.0 L295.0,185.0 L305.0,175.0 L340.0,175.0" class="ink"/>
+<text x="275.0" y="157.0" font-size="18" text-anchor="middle" class="lbl">R1 1k</text>
+<path d="M340.0,175.0 L400.0,175.0" class="ink"/>
+<circle cx="400" cy="175" r="4.5" fill="#1d3f8f"/>
+<path d="M420.0,150.0 L420.0,250.0 L510.0,200.0 L420.0,150.0" class="ink"/>
+<text x="434" y="180" font-size="22" text-anchor="middle" class="lbl">−</text>
+<text x="434" y="234" font-size="22" text-anchor="middle" class="lbl">+</text>
+<path d="M400.0,175.0 L420.0,175.0" class="ink"/>
+<path d="M400.0,175.0 L400.0,100.0 L450.0,100.0" class="ink"/>
+<path d="M450.0,100.0 L485.0,100.0 L495.0,110.0 L505.0,90.0 L515.0,110.0 L525.0,90.0 L535.0,110.0 L545.0,100.0 L580.0,100.0" class="ink"/>
+<text x="515.0" y="82.0" font-size="18" text-anchor="middle" class="lbl">Rf 10k</text>
+<path d="M580.0,100.0 L620.0,100.0 L620.0,200.0" class="ink"/>
+<path d="M510.0,200.0 L680.0,200.0" class="ink"/>
+<circle cx="620" cy="200" r="4.5" fill="#1d3f8f"/>
+<text x="690" y="205" font-size="18" text-anchor="start" font-style="italic" class="lbl">out</text>
+<path d="M420.0,225.0 L400.0,225.0 L400.0,360.0" class="ink"/>
+<path d="M140.0,360.0 L400.0,360.0" class="ink"/>
+<path d="M400.0,360.0 L400.0,370.0" class="ink"/>
+<path d="M378.0,370.0 L422.0,370.0" class="ink"/>
+<path d="M386.0,376.0 L414.0,376.0" class="ink"/>
+<path d="M394.0,382.0 L406.0,382.0" class="ink"/></g></g></svg>

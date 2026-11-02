@@ -11,4 +11,6 @@ export default defineConfig({
   },
   base: process.env.VITE_BASE_URL || '/',
   assetsInclude: ['**/*.net', '**/*.sp'],
+  worker: { format: 'es' },
+  build: { target: 'es2022' },
 });

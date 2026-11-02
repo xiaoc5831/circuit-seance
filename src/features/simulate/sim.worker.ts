@@ -3,7 +3,7 @@
  * Singleton Simulation instance with lazy WASM import
  */
 
-import { Simulation } from 'eecircuit-engine';
+import type { Simulation } from 'eecircuit-engine';
 
 let sim: Simulation | null = null;
 

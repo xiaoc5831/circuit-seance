@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 560" width="820" height="560" role="img" aria-label="WIEN-BRIDGE OSCILLATOR">
+<style>.ink{fill:none;stroke:#3b2a1a;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}.lbl{fill:#3b2a1a;font-family:'Courier New',Courier,monospace}</style><defs>
+  <filter id="hand" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="49" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+  <filter id="paper"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="7"/><feColorMatrix values="0 0 0 0 0.45  0 0 0 0 0.35  0 0 0 0 0.2  0 0 0 0.10 0"/></filter>
+  <radialGradient id="stain" cx="50%" cy="50%" r="50%"><stop offset="60%" stop-color="#8a5a2b" stop-opacity="0"/><stop offset="85%" stop-color="#8a5a2b" stop-opacity="0.22"/><stop offset="100%" stop-color="#8a5a2b" stop-opacity="0"/></radialGradient>
+  <radialGradient id="age" cx="50%" cy="45%" r="75%"><stop offset="55%" stop-color="#000" stop-opacity="0"/><stop offset="100%" stop-color="#5a3a12" stop-opacity="0.35"/></radialGradient>
+  <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="#9fc3e6" stroke-width="0.8"/></pattern>
+</defs><rect width="820" height="560" fill="#e9d8a6"/><rect width="820" height="560" filter="url(#paper)"/><circle cx="672" cy="123" r="90" fill="url(#stain)"/><rect width="820" height="560" fill="url(#age)"/><g transform="rotate(0.97 410.0 280.0)"><g filter="url(#hand)"><text x="40" y="44" font-size="24" class="lbl" font-weight="bold">WIEN-BRIDGE OSCILLATOR</text><text x="40" y="72" font-size="16" class="lbl">after W. R. Hewlett's thesis (1939), the HP 200A  -  f = 1/(2πRC) ≈ 1 kHz</text><text x="790" y="540" font-size="14" text-anchor="end" class="lbl">Haunted Classics</text>
+<path d="M430.0,240.0 L430.0,340.0 L520.0,290.0 L430.0,240.0" class="ink"/>
+<text x="444" y="270" font-size="22" text-anchor="middle" class="lbl">+</text>
+<text x="444" y="324" font-size="22" text-anchor="middle" class="lbl">−</text>
+<path d="M520.0,290.0 L600.0,290.0" class="ink"/>
+<circle cx="600" cy="290" r="4.5" fill="#3b2a1a"/>
+<text x="612" y="282" font-size="16" text-anchor="start" class="lbl">OUT</text>
+<path d="M600.0,290.0 L600.0,140.0 L530.0,140.0" class="ink"/>
+<path d="M530.0,140.0 L500.0,140.0 L490.0,150.0 L480.0,130.0 L470.0,150.0 L460.0,130.0 L450.0,150.0 L440.0,140.0 L410.0,140.0" class="ink"/>
+<text x="470.0" y="122.0" font-size="18" text-anchor="middle" class="lbl">R1 10k</text>
+<path d="M410.0,140.0 L380.0,140.0" class="ink"/>
+<path d="M380.0,140.0 L334.0,140.0" class="ink"/>
+<path d="M346.0,140.0 L300.0,140.0" class="ink"/>
+<path d="M334.0,122.0 L334.0,158.0" class="ink"/>
+<path d="M346.0,122.0 L346.0,158.0" class="ink"/>
+<text x="340.0" y="114.0" font-size="18" text-anchor="middle" class="lbl">C1 16n</text>
+<path d="M300.0,140.0 L260.0,140.0 L260.0,265.0" class="ink"/>
+<circle cx="260" cy="265" r="4.5" fill="#3b2a1a"/>
+<path d="M260.0,265.0 L430.0,265.0" class="ink"/>
+<path d="M260.0,265.0 L170.0,265.0 L170.0,290.0" class="ink"/>
+<path d="M170.0,290.0 L170.0,325.0 L180.0,335.0 L160.0,345.0 L180.0,355.0 L160.0,365.0 L180.0,375.0 L170.0,385.0 L170.0,420.0" class="ink"/>
+<text x="160" y="360" font-size="16" text-anchor="end" class="lbl">R2 10k</text>
+<path d="M260.0,265.0 L260.0,300.0" class="ink"/>
+<path d="M260.0,300.0 L260.0,349.0" class="ink"/>
+<path d="M260.0,361.0 L260.0,410.0" class="ink"/>
+<path d="M242.0,349.0 L278.0,349.0" class="ink"/>
+<path d="M242.0,361.0 L278.0,361.0" class="ink"/>
+<text x="285" y="360" font-size="16" text-anchor="start" class="lbl">C2 16n</text>
+<path d="M170.0,420.0 L170.0,470.0 L400.0,470.0" class="ink"/>
+<path d="M260.0,410.0 L260.0,470.0" class="ink"/>
+<circle cx="260" cy="470" r="4.5" fill="#3b2a1a"/>
+<path d="M430.0,315.0 L400.0,315.0 L400.0,380.0" class="ink"/>
+<circle cx="400" cy="380" r="4.5" fill="#3b2a1a"/>
+<path d="M400.0,380.0 L450.0,380.0" class="ink"/>
+<path d="M450.0,380.0 L480.0,380.0 L490.0,390.0 L500.0,370.0 L510.0,390.0 L520.0,370.0 L530.0,390.0 L540.0,380.0 L570.0,380.0" class="ink"/>
+<text x="510.0" y="410.0" font-size="18" text-anchor="middle" class="lbl">Rf 21k</text>
+<path d="M570.0,380.0 L600.0,380.0 L600.0,290.0" class="ink"/>
+<path d="M400.0,380.0 L400.0,390.0" class="ink"/>
+<path d="M400.0,390.0 L400.0,400.0 L410.0,410.0 L390.0,420.0 L410.0,430.0 L390.0,440.0 L410.0,450.0 L400.0,460.0 L400.0,470.0" class="ink"/>
+<text x="415" y="440" font-size="16" text-anchor="start" class="lbl">Rg 10k</text>
+<path d="M330.0,470.0 L330.0,480.0" class="ink"/>
+<path d="M308.0,480.0 L352.0,480.0" class="ink"/>
+<path d="M316.0,486.0 L344.0,486.0" class="ink"/>
+<path d="M324.0,492.0 L336.0,492.0" class="ink"/></g></g></svg>

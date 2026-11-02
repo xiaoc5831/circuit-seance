@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 520" width="820" height="520" role="img" aria-label="OP-AMP INTEGRATOR">
+<style>.ink{fill:none;stroke:#3b2a1a;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}.lbl{fill:#3b2a1a;font-family:'Courier New',Courier,monospace}</style><defs>
+  <filter id="hand" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="84" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+  <filter id="paper"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="7"/><feColorMatrix values="0 0 0 0 0.45  0 0 0 0 0.35  0 0 0 0 0.2  0 0 0 0.10 0"/></filter>
+  <radialGradient id="stain" cx="50%" cy="50%" r="50%"><stop offset="60%" stop-color="#8a5a2b" stop-opacity="0"/><stop offset="85%" stop-color="#8a5a2b" stop-opacity="0.22"/><stop offset="100%" stop-color="#8a5a2b" stop-opacity="0"/></radialGradient>
+  <radialGradient id="age" cx="50%" cy="45%" r="75%"><stop offset="55%" stop-color="#000" stop-opacity="0"/><stop offset="100%" stop-color="#5a3a12" stop-opacity="0.35"/></radialGradient>
+  <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="#9fc3e6" stroke-width="0.8"/></pattern>
+</defs><rect width="820" height="520" fill="#e9d8a6"/><rect width="820" height="520" filter="url(#paper)"/><circle cx="672" cy="114" r="83" fill="url(#stain)"/><rect width="820" height="520" fill="url(#age)"/><g transform="rotate(-0.07 410.0 260.0)"><g filter="url(#hand)"><text x="40" y="44" font-size="24" class="lbl" font-weight="bold">OP-AMP INTEGRATOR</text><text x="40" y="72" font-size="16" class="lbl">after the 1970s linear-applications handbooks — square in, triangle out</text><text x="790" y="500" font-size="14" text-anchor="end" class="lbl">Haunted Classics</text>
+<g transform="translate(0,60)">
+<path d="M130.0,190.0 L130.0,251.0" class="ink"/>
+<path d="M130.0,299.0 L130.0,360.0" class="ink"/>
+<circle cx="130" cy="275.0" r="24" class="ink"/>
+<path d="M117.0,282.0 L125.0,282.0 L125.0,268.0 L135.0,268.0 L135.0,282.0 L143.0,282.0" class="ink"/>
+<text x="96" y="281.0" font-size="18" text-anchor="end" class="lbl">Vin</text>
+<text x="130" y="400" font-size="15" text-anchor="middle" class="lbl">±1 V square</text>
+<path d="M130.0,190.0 L130.0,175.0 L200.0,175.0" class="ink"/>
+<path d="M200.0,175.0 L235.0,175.0 L245.0,185.0 L255.0,165.0 L265.0,185.0 L275.0,165.0 L285.0,185.0 L295.0,175.0 L330.0,175.0" class="ink"/>
+<text x="265.0" y="157.0" font-size="18" text-anchor="middle" class="lbl">R1 10k</text>
+<path d="M330.0,175.0 L400.0,175.0" class="ink"/>
+<circle cx="400" cy="175" r="4.5" fill="#3b2a1a"/>
+<path d="M420.0,150.0 L420.0,250.0 L510.0,200.0 L420.0,150.0" class="ink"/>
+<text x="434" y="180" font-size="22" text-anchor="middle" class="lbl">−</text>
+<text x="434" y="234" font-size="22" text-anchor="middle" class="lbl">+</text>
+<path d="M400.0,175.0 L420.0,175.0" class="ink"/>
+<path d="M400.0,175.0 L400.0,100.0 L470.0,100.0" class="ink"/>
+<path d="M470.0,100.0 L514.0,100.0" class="ink"/>
+<path d="M526.0,100.0 L570.0,100.0" class="ink"/>
+<path d="M514.0,82.0 L514.0,118.0" class="ink"/>
+<path d="M526.0,82.0 L526.0,118.0" class="ink"/>
+<text x="520.0" y="78.0" font-size="18" text-anchor="middle" class="lbl">C1 10nF</text>
+<path d="M570.0,100.0 L620.0,100.0 L620.0,200.0" class="ink"/>
+<path d="M400.0,100.0 L400.0,50.0 L470.0,50.0" class="ink"/>
+<path d="M470.0,50.0 L490.0,50.0 L500.0,60.0 L510.0,40.0 L520.0,60.0 L530.0,40.0 L540.0,60.0 L550.0,50.0 L570.0,50.0" class="ink"/>
+<text x="520.0" y="36.0" font-size="18" text-anchor="middle" class="lbl">Rf 1M</text>
+<path d="M570.0,50.0 L620.0,50.0 L620.0,100.0" class="ink"/>
+<path d="M510.0,200.0 L680.0,200.0" class="ink"/>
+<circle cx="620" cy="200" r="4.5" fill="#3b2a1a"/>
+<text x="690" y="205" font-size="16" text-anchor="start" class="lbl">OUT</text>
+<path d="M420.0,225.0 L400.0,225.0 L400.0,360.0" class="ink"/>
+<path d="M130.0,360.0 L400.0,360.0" class="ink"/>
+<path d="M400.0,360.0 L400.0,370.0" class="ink"/>
+<path d="M378.0,370.0 L422.0,370.0" class="ink"/>
+<path d="M386.0,376.0 L414.0,376.0" class="ink"/>
+<path d="M394.0,382.0 L406.0,382.0" class="ink"/>
+</g></g></g></svg>

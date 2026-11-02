@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 440" width="720" height="440" role="img" aria-label="RC low-pass — step response">
+<style>.ink{fill:none;stroke:#1d3f8f;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}.lbl{fill:#1d3f8f;font-family:'Comic Sans MS','Segoe Print','Bradley Hand',cursive}</style><defs>
+  <filter id="hand" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="31" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="3.2" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+  <filter id="paper"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="7"/><feColorMatrix values="0 0 0 0 0.45  0 0 0 0 0.35  0 0 0 0 0.2  0 0 0 0.10 0"/></filter>
+  <radialGradient id="stain" cx="50%" cy="50%" r="50%"><stop offset="60%" stop-color="#8a5a2b" stop-opacity="0"/><stop offset="85%" stop-color="#8a5a2b" stop-opacity="0.22"/><stop offset="100%" stop-color="#8a5a2b" stop-opacity="0"/></radialGradient>
+  <radialGradient id="age" cx="50%" cy="45%" r="75%"><stop offset="55%" stop-color="#000" stop-opacity="0"/><stop offset="100%" stop-color="#5a3a12" stop-opacity="0.35"/></radialGradient>
+  <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="#9fc3e6" stroke-width="0.8"/></pattern>
+</defs><rect width="720" height="440" fill="#fbfcf7"/><rect width="720" height="440" fill="url(#grid)"/><line x1="70" y1="0" x2="70" y2="440" stroke="#e79b9b" stroke-width="1.5"/><g transform="rotate(0.22 360.0 220.0)"><g filter="url(#hand)"><text x="90" y="44" font-size="24" class="lbl" font-weight="bold">RC low-pass — step response</text><text x="90" y="72" font-size="16" class="lbl">V1: 0→5 V step   τ = RC = ?</text>
+<path d="M160.0,160.0 L160.0,226.0" class="ink"/>
+<path d="M160.0,274.0 L160.0,340.0" class="ink"/>
+<circle cx="160" cy="250.0" r="24" class="ink"/>
+<path d="M147.0,257.0 L155.0,257.0 L155.0,243.0 L165.0,243.0 L165.0,257.0 L173.0,257.0" class="ink"/>
+<text x="126" y="256.0" font-size="18" text-anchor="end" class="lbl">V1</text>
+<path d="M160.0,160.0 L160.0,130.0 L260.0,130.0" class="ink"/>
+<path d="M260.0,130.0 L310.0,130.0 L320.0,140.0 L330.0,120.0 L340.0,140.0 L350.0,120.0 L360.0,140.0 L370.0,130.0 L420.0,130.0" class="ink"/>
+<text x="340.0" y="112.0" font-size="18" text-anchor="middle" class="lbl">R1 = 1kΩ</text>
+<path d="M420.0,130.0 L540.0,130.0" class="ink"/>
+<circle cx="540" cy="130" r="4.5" fill="#1d3f8f"/>
+<text x="560" y="120" font-size="18" text-anchor="start" font-style="italic" class="lbl">out</text>
+<path d="M540.0,130.0 L540.0,180.0" class="ink"/>
+<path d="M540.0,180.0 L540.0,234.0" class="ink"/>
+<path d="M540.0,246.0 L540.0,300.0" class="ink"/>
+<path d="M522.0,234.0 L558.0,234.0" class="ink"/>
+<path d="M522.0,246.0 L558.0,246.0" class="ink"/>
+<text x="570.0" y="246.0" font-size="18" text-anchor="start" class="lbl">C1 = 1µF</text>
+<path d="M540.0,300.0 L540.0,340.0 L160.0,340.0" class="ink"/>
+<text x="150" y="125" font-size="18" text-anchor="end" font-style="italic" class="lbl">in</text>
+<path d="M350.0,340.0 L350.0,350.0" class="ink"/>
+<path d="M328.0,350.0 L372.0,350.0" class="ink"/>
+<path d="M336.0,356.0 L364.0,356.0" class="ink"/>
+<path d="M344.0,362.0 L356.0,362.0" class="ink"/></g></g></svg>
