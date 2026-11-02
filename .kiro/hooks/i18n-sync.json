@@ -1,0 +1,14 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "i18n Sync — Mirror New Keys to Simplified Chinese",
+      "trigger": "PostFileSave",
+      "matcher": "src/app/i18n/en\\.ts$",
+      "action": {
+        "type": "agent",
+        "prompt": "The file `src/app/i18n/en.ts` was just saved. Compare it against `src/app/i18n/zh-CN.ts` and identify any keys that are present in `en.ts` but missing from `zh-CN.ts`, as well as any keys whose English values have changed since the last sync.\n\nFor every such key:\n1. Add the key to `zh-CN.ts` with a natural Simplified Chinese translation that reads well for undergraduate EE students (not a literal word-for-word render).\n2. Preserve the haunted / playful-spooky tone of the Circuit Séance UI where the English copy has that tone.\n3. Keep the key order in `zh-CN.ts` identical to the key order in `en.ts`.\n4. Do not remove keys from `zh-CN.ts` that still exist in `en.ts`.\n5. Do not modify any other files.\n\nIf the two files are already in sync, do nothing and stay silent."
+      }
+    }
+  ]
+}

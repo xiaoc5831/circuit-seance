@@ -1,0 +1,14 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Lint and Format on Save",
+      "trigger": "PostFileSave",
+      "matcher": "src/.*\\.tsx?$",
+      "action": {
+        "type": "command",
+        "command": "node scripts/hooks/lint-on-save.mjs"
+      }
+    }
+  ]
+}

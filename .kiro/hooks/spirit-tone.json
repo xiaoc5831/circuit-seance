@@ -1,0 +1,14 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Spirit Tone & Safety Review",
+      "trigger": "PostFileSave",
+      "matcher": "src/(features/spirit|lib/llm)/",
+      "action": {
+        "type": "agent",
+        "prompt": "A file under `src/features/spirit/` or `src/lib/llm/` was just saved. Review it for the following three concerns and fix any violations you find:\n\n1. **API key leakage** — No API key, token, or secret stored in browser storage must ever appear in a string literal, template literal, log statement, or be included in the body of an LLM request. Keys must be read from storage at the last moment before the fetch call and must not be logged. If you see a key being embedded anywhere in a prompt or request body, remove it.\n\n2. **Raw waveform arrays** — The `explainWaveform` call must pass a `CompactSummary` object (the numeric digest from `result-summariser.ts`) to the LLM, never the raw `SimResult.data` arrays. These arrays can be tens of thousands of floats and add no pedagogical value in the prompt. If raw arrays are being serialised into the prompt, replace them with the compact summary.\n\n3. **Spirit voice** — User-visible strings in spirit prompts, offline explanations (`offline-explainer.ts`), and UI copy inside `SpiritPanel.tsx` must maintain the playful-spooky tone established by the Circuit Séance \"haunted oscilloscope\" theme (e.g. phrasing like \"the spirit whispers\", \"circuits from beyond\", \"the ghost of the waveform\"). The explanation must still be technically accurate and appropriate for undergraduate EE students — tone must not compromise correctness. If copy is bland, dry, or technically incorrect, suggest improved wording.\n\nOnly edit the file that was saved. Do not modify other files unless a cross-file fix is strictly required to resolve a key-leakage or raw-array issue."
+      }
+    }
+  ]
+}

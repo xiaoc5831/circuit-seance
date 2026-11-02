@@ -1,0 +1,15 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Netlist Guard — Run Related Tests on Save",
+      "trigger": "PostFileSave",
+      "matcher": "src/(features/(netlist|simulate)|examples)/",
+      "action": {
+        "type": "command",
+        "command": "node scripts/hooks/netlist-guard.mjs",
+        "timeout": 60
+      }
+    }
+  ]
+}

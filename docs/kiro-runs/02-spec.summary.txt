@@ -1,0 +1,34 @@
+exit=0
+credits_used=3.969
+status= success
+Let me read the steering files first to ground the spec in the actual project details.Good, I have all three steering files. Now I'll create the spec directory and write all three artifacts.Let me verify all three files were created correctly and have reasonable content.All three artifacts are written to `.kiro/specs/circuit-seance/`. Here's a summary of what was produced:
+
+---
+
+### `requirements.md` — 242 lines
+
+11 numbered user story groups with EARS-notation acceptance criteria (WHEN/IF/WHILE/WHERE … THE SYSTEM SHALL):
+
+1. Project Bootstrap & Shell (build/lint/test commands, i18n)
+2. Example Circuits (6 bundled netlists, no-API-key path)
+3. Netlist Editor & Validation (CodeMirror, 3-stage validation pipeline)
+4. Simulation Engine / Web Worker (lazy WASM, "Summoning…" state, typed error handling)
+5. CRT Oscilloscope Display (P31 glow/persistence/flicker, graticule, 4 analysis views, 60 fps, reduced-motion)
+6. Image Capture & Upload (camera + file picker, 5 MB compression)
+7. Vision LLM Transcription (side-by-side view, fenced-block extraction, provider config, key privacy)
+8. AI Spirit (compact summary, per-language prompting, offline fallback)
+9. Application Shell & Settings (layout, responsive, static deployment)
+10. Accessibility & Performance (WCAG AA, keyboard nav, 3 s TTI)
+11. Testing (unit, property-based, e2e)
+
+---
+
+### `design.md` — 717 lines
+
+13 sections: ASCII architecture diagram, Mermaid component diagram, Mermaid sequence diagram (photo→netlist→simulate→explain), full TypeScript interfaces for every data model (`SimResult`, `CompactSummary`, `ParsedNetlist`, `ValidationResult`, `LLMAdapter`, `LLMError`, `WorkerInbound/Outbound`, `ScopeViewState`, `AppSettings`), detailed notes on each feature module, Web Worker lifecycle, CRT rendering pipeline (phosphor colours, persistence algorithm, adaptive quality, per-analysis-type views), LLM adapter design, i18n strategy, error handling table, key storage policy, full file/folder checklist, and testing strategy.
+
+---
+
+### `tasks.md` — 244 lines
+
+27 top-level tasks, 108 sub-tasks across 12 phases, each task labelled with the requirement numbers it satisfies. Ordering puts the demoable path first: scaffold → examples → simulation → scope → LLM features → spirit → tests → polish.
