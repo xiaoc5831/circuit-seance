@@ -747,6 +747,9 @@ kbd {
 .scope-screen {
   position: relative;
   aspect-ratio: 5 / 4;
+  /* keep the screen, its knobs and the possess slider within one laptop-height viewport */
+  width: min(100%, max(420px, calc((100vh - 450px) * 1.25)));
+  margin-inline: auto;
   border-radius: 16px / 20px;
   overflow: hidden;
   background: #020a03;

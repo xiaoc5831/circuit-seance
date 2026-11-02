@@ -47,6 +47,8 @@ export class ScopeRenderer {
   private settleUntil = 0;
   private reduced = prefersReducedMotion();
   private glowScale = 1;
+  private slowFrames = 0;
+  private cheapGlow = false;
   onFirstTrace?: () => void;
   private tracedOnce = false;
 
@@ -100,9 +102,12 @@ export class ScopeRenderer {
     this.raf = 0;
     const dt = now - (this.lastFrame || now);
     this.lastFrame = now;
-    // adaptive quality: drop the halo pass on slow frames
-    if (dt > 24) this.glowScale = Math.max(0.35, this.glowScale - 0.1);
-    else if (dt < 15) this.glowScale = Math.min(1, this.glowScale + 0.02);
+    // adaptive quality: shrink the blur on slow frames; after a few really slow ones
+    // (software canvas, no GPU) switch for good to the blur-free glow
+    if (dt > 24) this.glowScale = Math.max(0.35, this.glowScale - 0.12);
+    else if (dt < 15 && !this.cheapGlow) this.glowScale = Math.min(1, this.glowScale + 0.02);
+    if (dt > 45 && dt < 1000) this.slowFrames++;
+    if (this.slowFrames >= 3) this.cheapGlow = true;
 
     this.render(now);
     const idle = !this.input?.plot;
@@ -298,23 +303,41 @@ export class ScopeRenderer {
 
       p.lineJoin = 'round';
       p.lineCap = 'round';
-      // halo pass
-      p.save();
-      p.globalAlpha = 0.28 * this.glowScale;
-      p.strokeStyle = color;
-      p.lineWidth = 7;
-      p.shadowColor = color;
-      p.shadowBlur = 18 * this.glowScale;
-      p.stroke(path);
-      p.restore();
-      // core pass
-      p.save();
-      p.globalAlpha = 0.9;
-      p.strokeStyle = color;
-      p.lineWidth = 1.8;
-      p.shadowColor = color;
-      p.shadowBlur = 6;
-      p.stroke(path);
+      if (!this.cheapGlow && this.glowScale >= 0.7) {
+        // halo pass (canvas shadow blur: lovely, but expensive without a GPU)
+        p.save();
+        p.globalAlpha = 0.28 * this.glowScale;
+        p.strokeStyle = color;
+        p.lineWidth = 7;
+        p.shadowColor = color;
+        p.shadowBlur = 18 * this.glowScale;
+        p.stroke(path);
+        p.restore();
+        // core pass
+        p.save();
+        p.globalAlpha = 0.9;
+        p.strokeStyle = color;
+        p.lineWidth = 1.8;
+        p.shadowColor = color;
+        p.shadowBlur = 6;
+        p.stroke(path);
+      } else {
+        // cheap glow for slow (software-rendered) frames: stacked translucent strokes, no blur
+        p.save();
+        p.strokeStyle = color;
+        for (const [wd, a] of [
+          [11, 0.05],
+          [7, 0.09],
+          [4, 0.2],
+        ] as const) {
+          p.globalAlpha = a;
+          p.lineWidth = wd;
+          p.stroke(path);
+        }
+        p.globalAlpha = 0.9;
+        p.lineWidth = 1.8;
+        p.stroke(path);
+      }
       p.globalAlpha = 0.55;
       p.strokeStyle = '#eaffea';
       p.lineWidth = 0.7;
