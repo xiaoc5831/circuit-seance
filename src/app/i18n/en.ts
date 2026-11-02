@@ -91,6 +91,14 @@ export const en = {
   'spirit.needsKey': 'Add an API key in Settings to ask a live model about your own circuits.',
 
   // homework
+  'possess.title': 'Possess a component',
+  'possess.badge': 'Possessed',
+  'possess.hint': 'Pick a part. Its spirit takes the slider, and the scope redraws as you drag.',
+  'possess.hintActive': 'Drag from ÷10 to ×10. ngspice re-runs on every move; the dashed trace is the circuit before you possessed it.',
+  'possess.parts': 'Components you can possess',
+  'possess.to': 'now',
+  'possess.legend': 'dashed = before possession',
+  'possess.release': 'Release (restore value)',
   'hw.title': 'Homework check',
   'hw.hint': 'Work it out by hand first, then check against the simulation (±5 %).',
   'hw.tau': 'Time constant τ',

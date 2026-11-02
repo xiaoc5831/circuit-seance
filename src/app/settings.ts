@@ -4,7 +4,8 @@
  * and is sent only to the configured provider base URL.
  */
 import { PROVIDER_PRESETS } from '@/lib/llm/presets';
-import type { AdapterConfig } from '@/lib/llm/factory';
+import { createAdapter, type AdapterConfig } from '@/lib/llm/factory';
+import type { LLMAdapter } from '@/lib/llm/adapter';
 
 export type Lang = 'en' | 'zh-CN';
 
@@ -43,10 +44,27 @@ export function saveLlm(cfg: AdapterConfig): void {
   store()?.setItem(KEY_LLM, JSON.stringify(cfg));
 }
 
-export function forgetKey(cfg: AdapterConfig): AdapterConfig {
-  const next = { ...cfg, apiKey: '' };
-  saveLlm(next);
-  return next;
+export function forgetKey(): void {
+  saveLlm({ ...loadLlm(), apiKey: '' });
+}
+
+/** What the UI may hold in React state: everything about the provider except the key. */
+export interface LlmStatus {
+  hasKey: boolean;
+  provider: string;
+  baseUrl: string;
+}
+
+export function llmStatus(cfg: AdapterConfig = loadLlm()): LlmStatus {
+  return { hasKey: !!cfg.apiKey.trim() && !!cfg.baseUrl.trim(), provider: cfg.provider, baseUrl: cfg.baseUrl };
+}
+
+/**
+ * Build an adapter for one request. The key is read from localStorage at call time
+ * (spec 4.7) so it never sits in long-lived React state; null when no key is saved.
+ */
+export function liveAdapter(): LLMAdapter | null {
+  return createAdapter(loadLlm());
 }
 
 export function loadLang(): Lang {

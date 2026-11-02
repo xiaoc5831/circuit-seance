@@ -7,7 +7,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { LanguageContext, getLocale, type LocaleKey } from './i18n';
 import { SettingsDialog } from './SettingsDialog';
 import { friendlySimError, type FriendlyError } from './sim-errors';
-import { forgetKey, introSeen, loadLang, loadLlm, markIntroSeen, saveLang, saveLlm, type Lang } from './settings';
+import { DEFAULT_LLM, forgetKey, introSeen, liveAdapter, llmStatus, loadLang, loadLlm, markIntroSeen, saveLang, saveLlm, type Lang } from './settings';
 import { NetlistEditor } from '@/features/netlist';
 import { useSimulation } from '@/features/simulate';
 import { Scope, type ScopeStrings } from '@/features/scope';
@@ -20,9 +20,16 @@ import { SpiritPanel, type SpiritView } from '@/features/spirit/SpiritPanel';
 import { measure } from '@/features/spirit/measure';
 import { hasCannedExplanation, offlineExplanation } from '@/features/spirit/offline-explainer';
 import { fileToDataUrl } from '@/features/capture';
-import { createAdapter, LLMError, PROVIDER_PRESETS } from '@/lib/llm';
+import { LLMError, PROVIDER_PRESETS } from '@/lib/llm';
+import { useTranscribe } from '@/features/transcribe/use-transcribe';
+import { PossessPanel, type PossessReadout } from '@/features/possess/PossessPanel';
+import { findPossessable, SLIDER_MID, sliderToValue, withValue, type Possessable } from '@/features/possess/possess';
+import { homeworkTargets } from '@/features/spirit/homework-check';
+import { eng } from '@/features/scope/scope-math';
+import type { SimResult } from '@/shared/types';
 import { prefersReducedMotion } from '@/features/scope/scope-renderer';
 import type { AnalysisType } from '@/shared/types';
+import type { HomeworkField } from '@/features/spirit/homework-check';
 import { sanitizeNetlist } from '@/features/simulate/sanitize';
 
 const asset = (p: string) => `${import.meta.env.BASE_URL}${p}`;
@@ -33,9 +40,12 @@ export default function App() {
   const locale = getLocale(lang);
   const t = useCallback((k: LocaleKey) => locale[k] ?? k, [locale]);
 
-  const [llm, setLlm] = useState(loadLlm);
-  const adapter = useMemo(() => createAdapter(llm), [llm]);
+  // The API key is NOT held in React state: only whether one is saved. Adapters are built
+  // per request by liveAdapter(), which reads localStorage at call time (spec 4.7).
+  const [llm, setLlm] = useState(llmStatus);
+  const hasKey = llm.hasKey;
   const providerLabel = PROVIDER_PRESETS[llm.provider]?.label ?? llm.baseUrl;
+  const transcriber = useTranscribe({ getAdapter: liveAdapter });
 
   const [showIntro, setShowIntro] = useState(() => !introSeen());
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -50,6 +60,9 @@ export default function App() {
   const [live, setLive] = useState<SpiritView['live']>({ state: 'idle' });
   const runRef = useRef(0);
   const liveAbort = useRef<AbortController | null>(null);
+  // "Possess a component"
+  const [possess, setPossess] = useState<{ part: Possessable; base: string; baseResult: SimResult; pos: number; baseTarget: { field: HomeworkField; actual: number; unit: string } | null } | null>(null);
+  const possessTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const sim = useSimulation();
 
@@ -71,7 +84,12 @@ export default function App() {
   }, [simNetlist]);
 
   const runSim = useCallback(
-    (text: string) => {
+    (text: string, opts?: { quiet?: boolean }) => {
+      if (!opts?.quiet) {
+        // a manual run / new circuit ends any possession
+        if (possessTimer.current) clearTimeout(possessTimer.current);
+        setPossess(null);
+      }
       setLive({ state: 'idle' });
       liveAbort.current?.abort();
       const body = text.trim();
@@ -87,7 +105,7 @@ export default function App() {
       }
       setPreError(null);
       setSimNetlist(text);
-      setSweepKey((k) => k + 1);
+      if (!opts?.quiet) setSweepKey((k) => k + 1);
       void sim.simulate(text);
     },
     [sim, t],
@@ -96,8 +114,9 @@ export default function App() {
   // per-circuit probe choice (e.g. the 555 shows OUT and the timing capacitor, not the supply rail)
   const probes = useMemo(() => {
     if (!selected?.probes) return undefined;
-    return simNetlist.trim() === selected.netlist.trim() ? selected.probes : undefined;
-  }, [selected, simNetlist]);
+    const bundled = selected.netlist.trim();
+    return simNetlist.trim() === bundled || possess?.base.trim() === bundled ? selected.probes : undefined;
+  }, [selected, simNetlist, possess]);
 
   const measurements = useMemo(() => {
     if (!sim.result) return null;
@@ -125,6 +144,8 @@ export default function App() {
       const run = ++runRef.current;
       setSelected(c);
       setPreError(null);
+      if (possessTimer.current) clearTimeout(possessTimer.current);
+      setPossess(null);
       // single-column layout: bring the scope into view so the waveform isn't off-screen
       if (window.matchMedia?.('(max-width: 1100px)').matches) {
         document.getElementById('scope-title')?.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' });
@@ -172,9 +193,10 @@ export default function App() {
 
   const onPhoto = useCallback(
     async (file: File) => {
-      if (!adapter) return;
+      if (!hasKey) return;
       const run = ++runRef.current;
       setSelected(null);
+      setPossess(null);
       let dataUrl: string;
       try {
         dataUrl = await fileToDataUrl(file);
@@ -183,27 +205,24 @@ export default function App() {
         return;
       }
       setTx({ state: 'reading', text: '', live: true, provider: providerLabel, image: dataUrl, imageAlt: file.name });
-      try {
-        const raw = await adapter.transcribeSchematic(dataUrl);
-        if (run !== runRef.current) return;
-        const parsed = parseNetlistFromResponse(raw);
-        if ('error' in parsed) {
-          setTx((s) => ({ ...s, state: 'error', text: raw, error: t('err.noFence') }));
-          return;
-        }
-        setTx((s) => ({ ...s, state: 'done', text: raw }));
-        setNetlist(parsed.netlist);
-        setLoadedNetlist(parsed.netlist);
-        runSim(parsed.netlist);
-      } catch (e) {
-        if (run !== runRef.current) return;
-        setTx((s) => ({ ...s, state: 'error', error: llmErrorText(e, t) }));
+      const out = await transcriber.transcribe(dataUrl);
+      if (!out || run !== runRef.current) return; // superseded
+      if (out.ok) {
+        setTx((s) => ({ ...s, state: 'done', text: out.raw }));
+        setNetlist(out.netlist);
+        setLoadedNetlist(out.netlist);
+        runSim(out.netlist);
+      } else if (out.kind === 'no-netlist') {
+        setTx((s) => ({ ...s, state: 'error', text: out.raw, error: t('err.noFence') }));
+      } else {
+        setTx((s) => ({ ...s, state: 'error', error: out.kind === 'request' ? llmErrorText(out.cause, t) : t('err.llmBad') }));
       }
     },
-    [adapter, providerLabel, runSim, t],
+    [hasKey, providerLabel, runSim, t, transcriber],
   );
 
   const askLive = useCallback(async () => {
+    const adapter = liveAdapter();
     if (!adapter || !measurements) return;
     liveAbort.current?.abort();
     const ac = new AbortController();
@@ -216,7 +235,65 @@ export default function App() {
     } catch (e) {
       if (!ac.signal.aborted) setLive({ state: 'error', error: llmErrorText(e, t) });
     }
-  }, [adapter, measurements, simNetlist, lang, t]);
+  }, [measurements, simNetlist, lang, t]);
+
+  // ------------------------------------------------------------ possession
+  const possessParts = useMemo(() => (sim.result && !preError ? findPossessable(possess?.base ?? simNetlist) : []), [sim.result, preError, possess, simNetlist]);
+
+  const onPossess = useCallback(
+    (part: Possessable) => {
+      if (!sim.result || !measurements) return;
+      if (possessTimer.current) clearTimeout(possessTimer.current);
+      const base = possess?.base ?? simNetlist;
+      // switching parts: restore the previous one first
+      if (possess && possess.pos !== SLIDER_MID) {
+        setNetlist(base);
+        runSim(base, { quiet: true });
+      }
+      const tg = homeworkTargets(measurements)[0] ?? null;
+      setPossess({
+        part,
+        base,
+        baseResult: possess?.baseResult ?? sim.result,
+        pos: SLIDER_MID,
+        baseTarget: possess?.baseTarget ?? (tg ? { field: tg.field, actual: tg.actual, unit: tg.unit } : null),
+      });
+    },
+    [sim.result, measurements, possess, simNetlist, runSim],
+  );
+
+  const onSlide = useCallback(
+    (pos: number) => {
+      if (!possess) return;
+      const next = withValue(possess.base, possess.part, sliderToValue(pos, possess.part.value));
+      setPossess({ ...possess, pos });
+      setNetlist(next);
+      if (possessTimer.current) clearTimeout(possessTimer.current);
+      // debounce: one engine, latest request wins inside useSimulation too
+      possessTimer.current = setTimeout(() => runSim(next, { quiet: true }), 90);
+    },
+    [possess, runSim],
+  );
+
+  const onRelease = useCallback(() => {
+    if (!possess) return;
+    if (possessTimer.current) clearTimeout(possessTimer.current);
+    setNetlist(possess.base);
+    runSim(possess.base); // not quiet: ends the possession
+  }, [possess, runSim]);
+
+  const possessReadout: PossessReadout | null = useMemo(() => {
+    if (!possess?.baseTarget || !measurements) return null;
+    const bt = possess.baseTarget;
+    const now = homeworkTargets(measurements).find((x) => x.field === bt.field);
+    const fmt = (v: number) => (bt.unit ? eng(v, bt.unit, 3) : v.toPrecision(3));
+    return {
+      label: t(`hw.${bt.field}` as LocaleKey),
+      before: fmt(bt.actual),
+      now: now ? fmt(now.actual) : '—',
+      ratio: now ? now.actual / bt.actual : null,
+    };
+  }, [possess, measurements, t]);
 
   const finishIntro = useCallback(() => {
     markIntroSeen();
@@ -235,7 +312,9 @@ export default function App() {
 
   // ------------------------------------------------------------ derived view
   const busy = sim.state === 'loading' || sim.state === 'running';
-  const scopeStatus = preError ? 'error' : sim.state;
+  // while possessed, keep the last trace on screen (no "summoning" curtain between slider moves)
+  const quietBusy = !!possess && busy && !!sim.result;
+  const scopeStatus = preError ? 'error' : quietBusy ? 'complete' : sim.state;
   const scopeError = preError ?? (sim.error ? friendlySimError(sim.error, t) : null);
   const sanitised = useMemo(() => (netlist ? sanitizeNetlist(netlist).warnings : []), [netlist]);
   const edited = !!loadedNetlist && netlist.trim() !== loadedNetlist.trim();
@@ -295,7 +374,7 @@ export default function App() {
             </div>
           </div>
           <div className="top-actions">
-            <span className={`mode${adapter ? ' live' : ''}`}>{adapter ? `${t('mode.live')} · ${providerLabel}` : t('mode.demo')}</span>
+            <span className={`mode${hasKey ? ' live' : ''}`}>{hasKey ? `${t('mode.live')} · ${providerLabel}` : t('mode.demo')}</span>
             <button type="button" className="btn ghost small" onClick={() => setShowIntro(true)}>
               ▶ <span className="hide-sm">{t('nav.replayIntro')}</span>
               <span className="sr-only show-sm-sr">{t('nav.replayIntro')}</span>
@@ -318,7 +397,7 @@ export default function App() {
               selectedId={selected?.id ?? null}
               onSummon={summon}
               onPhoto={onPhoto}
-              canUsePhoto={!!adapter}
+              canUsePhoto={hasKey}
               onOpenSettings={() => setSettingsOpen(true)}
               busy={busy}
               t={t}
@@ -358,13 +437,23 @@ export default function App() {
                 </span>
               </header>
               <div className="bezel">
-                <Scope result={preError ? null : sim.result} analysisHint={hint} channels={probes} status={scopeStatus} error={scopeError} strings={scopeStrings} sweepKey={sweepKey} />
+                <Scope result={preError ? null : sim.result} analysisHint={hint} channels={probes} status={scopeStatus} error={scopeError} strings={scopeStrings} sweepKey={sweepKey} ghost={possess && possess.pos !== SLIDER_MID ? possess.baseResult : null} hold={!!possess} />
               </div>
             </section>
+            <PossessPanel
+              parts={possessParts}
+              possessed={possess?.part ?? null}
+              pos={possess?.pos ?? SLIDER_MID}
+              readout={possessReadout}
+              onPossess={onPossess}
+              onSlide={onSlide}
+              onRelease={onRelease}
+              t={t}
+            />
             <SpiritPanel
               view={{ offlineText: preError || sim.state === 'error' ? null : offlineText, live }}
               measurements={preError || sim.state === 'error' ? null : measurements}
-              canAskLive={!!adapter}
+              canAskLive={hasKey}
               onAskLive={askLive}
               onShowOffline={() => setLive({ state: 'idle' })}
               busy={busy}
@@ -384,14 +473,17 @@ export default function App() {
 
       <SettingsDialog
         open={settingsOpen}
-        value={llm}
+        value={settingsOpen ? loadLlm() : DEFAULT_LLM}
         t={t}
         onClose={() => setSettingsOpen(false)}
         onSave={(v) => {
-          setLlm(v);
           saveLlm(v);
+          setLlm(llmStatus(v));
         }}
-        onForget={() => setLlm((c) => forgetKey(c))}
+        onForget={() => {
+          forgetKey();
+          setLlm(llmStatus());
+        }}
       />
 
       {showIntro && (

@@ -15,6 +15,8 @@ import { CHANNEL_COLORS, DIVS_X, DIVS_Y, type ChannelScale, type PlotModel } fro
 
 export interface RenderInput {
   plot: PlotModel | null;
+  /** optional reference trace (same channels), drawn dashed without persistence */
+  ghost?: PlotModel | null;
   enabled: boolean[];
   scales: ChannelScale[];
   /** x units per division (linear) — ignored for log-x AC plots */
@@ -146,6 +148,39 @@ export class ScopeRenderer {
     c.globalCompositeOperation = 'lighter';
     c.drawImage(this.phosphor, 0, 0);
     c.globalCompositeOperation = 'source-over';
+    if (this.input?.plot && this.input.ghost) this.drawGhost(c, this.input);
+  }
+
+  /** dashed, dim copy of the reference plot straight onto the visible canvas */
+  private drawGhost(c: CanvasRenderingContext2D, input: RenderInput): void {
+    const g = input.ghost!;
+    c.save();
+    c.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+    c.setLineDash([5, 5]);
+    c.lineWidth = 1.5;
+    c.globalAlpha = 0.72;
+    g.traces.forEach((t, ci) => {
+      if (!input.enabled[ci]) return;
+      const s = input.scales[ci] ?? { perDiv: 1, center: 0 };
+      c.strokeStyle = CHANNEL_COLORS[ci % CHANNEL_COLORS.length];
+      c.beginPath();
+      let lastCol = -Infinity;
+      let started = false;
+      for (let i = 0; i < t.xs.length; i++) {
+        const px = this.xToPx(t.xs[i], { ...input, plot: g });
+        if (px < -2) continue;
+        if (px > this.w + 2) break;
+        if (px - lastCol < 1 && i < t.xs.length - 1) continue; // ~1 point per pixel
+        lastCol = px;
+        const py = this.yToPx(t.ys[i], s);
+        if (!started) {
+          c.moveTo(px, py);
+          started = true;
+        } else c.lineTo(px, py);
+      }
+      c.stroke();
+    });
+    c.restore();
   }
 
   // ---------------------------------------------------------------- drawing

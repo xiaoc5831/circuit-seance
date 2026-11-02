@@ -1559,3 +1559,154 @@ select:focus-visible {
     border: 1px solid ButtonText;
   }
 }
+
+/* ------------------------------------------------------------------ possess a component */
+.possess-panel {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+.possess-head {
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+.possess-head h2 {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.possess-glyph {
+  width: 22px;
+  height: 22px;
+  color: var(--amber);
+  filter: drop-shadow(0 0 4px rgba(255, 176, 0, 0.5));
+}
+.possess-hint {
+  margin: 0;
+}
+.possess-parts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.possess-chip {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line-hot);
+  background: var(--bg-input);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  cursor: pointer;
+}
+.possess-chip:hover {
+  border-color: var(--phosphor);
+}
+.possess-chip .chip-name {
+  color: var(--phosphor);
+}
+.possess-chip .chip-val {
+  color: var(--ink-dim);
+}
+.possess-chip.on {
+  border-color: var(--amber);
+  box-shadow: 0 0 0 1px rgba(255, 176, 0, 0.4), 0 0 14px rgba(255, 176, 0, 0.25);
+}
+.possess-chip.on .chip-name,
+.possess-chip.on .chip-val {
+  color: var(--amber);
+}
+.possess-live {
+  margin-top: 4px;
+  display: grid;
+  gap: 2px;
+}
+.possess-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.possess-row.foot {
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+}
+.possess-label {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 30px;
+  line-height: 1;
+  min-width: 11ch;
+  white-space: nowrap;
+}
+.possess-part {
+  color: var(--amber);
+}
+.possess-value {
+  color: var(--ink);
+  text-shadow: var(--glow);
+}
+.possess-ratio {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--cyan);
+}
+.possess-track {
+  flex: 1;
+  min-width: 0;
+}
+.possess-slider {
+  width: 100%;
+  height: 28px;
+  margin: 0;
+  accent-color: var(--amber);
+  cursor: ew-resize;
+}
+.possess-scale {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11.5px;
+  color: var(--ink-faint);
+}
+.possess-readout {
+  margin: 0;
+  font-size: 16px;
+  color: var(--ink);
+}
+.possess-readout .ro-label {
+  color: var(--ink-dim);
+}
+.possess-readout .ro-before {
+  color: var(--ink-faint);
+  text-decoration: line-through;
+  text-decoration-color: rgba(127, 213, 147, 0.5);
+}
+.possess-readout .ro-now {
+  color: var(--phosphor);
+  text-shadow: var(--glow);
+  font-weight: 600;
+}
+.possess-live .legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+.ghost-swatch {
+  display: inline-block;
+  width: 26px;
+  border-top: 2px dashed var(--phosphor);
+  opacity: 0.7;
+}
+@media (max-width: 640px) {
+  .possess-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+  }
+}

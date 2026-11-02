@@ -46,9 +46,13 @@ export interface ScopeProps {
   sweepKey?: number;
   /** preferred probes (variable names); falls back to automatic choice */
   channels?: string[];
+  /** "Possess a component": the pre-possession result, drawn as a dashed ghost */
+  ghost?: SimResult | null;
+  /** keep channels/scales/time base fixed across new results and redraw without a sweep */
+  hold?: boolean;
 }
 
-export function Scope({ result, analysisHint, status, error, strings: s, sweepKey = 0, channels }: ScopeProps) {
+export function Scope({ result, analysisHint, status, error, strings: s, sweepKey = 0, channels, ghost = null, hold = false }: ScopeProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const screenRef = useRef<HTMLDivElement>(null);
   const rendererRef = useRef<ScopeRenderer | null>(null);
@@ -67,11 +71,18 @@ export function Scope({ result, analysisHint, status, error, strings: s, sweepKe
     return { ch, plot: buildPlot(result, ch, analysisHint) };
   }, [result, analysisHint, channels]);
 
+  const holdRef = useRef(hold);
+  holdRef.current = hold;
+  const namesRef = useRef<string[]>([]);
   useEffect(() => {
     if (!plotAll) {
       setNames([]);
+      namesRef.current = [];
       return;
     }
+    const same = plotAll.ch.length === namesRef.current.length && plotAll.ch.every((n, i) => n === namesRef.current[i]);
+    namesRef.current = plotAll.ch;
+    if (holdRef.current && same) return; // possession: keep the operator's scales so the change is visible
     setNames(plotAll.ch);
     setEnabled([true, true, true, true]);
     setActive(0);
@@ -90,6 +101,16 @@ export function Scope({ result, analysisHint, status, error, strings: s, sweepKe
 
   const plot = plotAll?.plot ?? null;
   const isOp = plot?.analysis === 'op';
+
+  const ghostPlot = useMemo(() => {
+    if (!ghost || !plotAll) return null;
+    try {
+      const g = buildPlot(ghost, plotAll.ch, analysisHint);
+      return g.analysis === plotAll.plot.analysis && g.traces.length === plotAll.plot.traces.length ? g : null;
+    } catch {
+      return null;
+    }
+  }, [ghost, plotAll, analysisHint]);
 
   // renderer lifecycle
   useEffect(() => {
@@ -120,8 +141,8 @@ export function Scope({ result, analysisHint, status, error, strings: s, sweepKe
       r.setInput({ plot: null, enabled, scales: [], xPerDiv: 1, xStart: 0 }, false);
       return;
     }
-    r.setInput({ plot, enabled, scales, xPerDiv, xStart: plot.xMin }, fresh);
-  }, [plot, isOp, enabled, scales, xPerDiv, result, sweepKey]);
+    r.setInput({ plot, ghost: ghostPlot, enabled, scales, xPerDiv, xStart: plot.xMin }, fresh && !hold);
+  }, [plot, ghostPlot, isOp, enabled, scales, xPerDiv, result, sweepKey, hold]);
 
   const nudgeV = useCallback(
     (ch: number, dir: 1 | -1) =>

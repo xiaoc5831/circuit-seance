@@ -10,6 +10,7 @@ export {
 export {
   useTranscribe,
   type TranscribeState,
+  type TranscribeOutcome,
   type UseTranscribeOptions,
   type UseTranscribeResult,
 } from './use-transcribe';

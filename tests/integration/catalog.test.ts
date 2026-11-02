@@ -9,6 +9,7 @@ import { ALL_CIRCUITS, findCircuit } from '@/features/haunted/catalog';
 import { measure, type Measurements } from '@/features/spirit/measure';
 import { offlineExplanation } from '@/features/spirit/offline-explainer';
 import type { SimResult } from '@/shared/types';
+import { findPossessable, sliderToValue, withValue } from '@/features/possess/possess';
 
 const results = new Map<string, Measurements>();
 let sim: Simulation;
@@ -71,5 +72,26 @@ describe('edited circuits: τ from an unsettled window', () => {
     const m = measure((await sim.runSim()) as unknown as SimResult);
     near(m.channels.find((c) => /out/.test(c.name))!.tau, 2.2e-3, 0.03);
     expect(m.channels.find((c) => /in\)/.test(c.name))!.tau).toBeNull();
+  });
+});
+
+describe('possess a component: the value change shows up in the measured physics', () => {
+  const run = async (net: string) => {
+    sim.setNetList(net);
+    return measure((await sim.runSim()) as unknown as SimResult);
+  };
+  it('RC: possessing C1 at ×2.2 makes τ ≈ 2.2 ms (and ÷10 → 100 µs)', async () => {
+    const net = findCircuit('rc-lowpass')!.netlist;
+    const c1 = findPossessable(net).find((p) => p.name === 'C1')!;
+    const up = await run(withValue(net, c1, sliderToValue(67, c1.value)));
+    near(up.channels.find((c) => /out/.test(c.name))!.tau, 2.2e-3, 0.05);
+    const down = await run(withValue(net, c1, sliderToValue(0, c1.value)));
+    near(down.channels.find((c) => /out/.test(c.name))!.tau, 1e-4, 0.08);
+  });
+  it('NE555: RB 10k → 4.7k raises f to ≈ 1.44/((RA+2RB)C) ≈ 13.8 kHz', async () => {
+    const net = findCircuit('ne555-astable')!.netlist;
+    const rb = findPossessable(net).find((p) => p.name === 'RB')!;
+    const m = await run(withValue(net, rb, 4.7e3));
+    near(m.channels.find((c) => /out/.test(c.name))!.freq, 1.44 / ((1e3 + 2 * 4.7e3) * 10e-9), 0.15);
   });
 });
