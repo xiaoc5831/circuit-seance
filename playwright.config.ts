@@ -12,11 +12,17 @@ export default defineConfig({
   reporter: [['list']],
   use: {
     baseURL: `http://127.0.0.1:${PORT}`,
-    launchOptions: { executablePath, args: ['--no-sandbox'] },
     trace: 'off',
   },
   projects: [
-    { name: 'desktop', use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } } },
+    {
+      name: 'desktop',
+      use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 }, launchOptions: { executablePath, args: ['--no-sandbox'] } },
+    },
+    // opt-in: PW_FIREFOX=1 scripts/e2e.sh --project=firefox (needs `npx playwright install firefox`)
+    ...(process.env.PW_FIREFOX
+      ? [{ name: 'firefox', use: { ...devices['Desktop Firefox'], viewport: { width: 1440, height: 900 } } }]
+      : []),
   ],
   webServer: process.env.PW_EXTERNAL_SERVER
     ? undefined

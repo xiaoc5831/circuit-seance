@@ -127,8 +127,10 @@ test('keyboard: tabs move with arrow keys; scope knobs respond to keys', async (
   await expect(dial).not.toHaveText(before ?? '');
 });
 
-test('reduced motion: intro shows all lines at once; no horizontal overflow on a phone', async ({ browser }) => {
-  const ctx = await browser.newContext({ reducedMotion: 'reduce', viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+test('reduced motion: intro shows all lines at once; no horizontal overflow on a phone', async ({ browser, browserName }) => {
+  // Playwright's Firefox has no isMobile emulation; a 390 px viewport still checks overflow
+  const mobile = browserName === 'firefox' ? {} : { isMobile: true };
+  const ctx = await browser.newContext({ reducedMotion: 'reduce', viewport: { width: 390, height: 844 }, ...mobile, hasTouch: true });
   const page = await ctx.newPage();
   await guardNetwork(page);
   await page.goto('/');
