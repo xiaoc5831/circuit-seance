@@ -7,6 +7,10 @@
 
 ![The RC demo: hand-drawn schematic, recorded transcription, CRT trace and the spirit's explanation](docs/screenshots/02-rc-demo.png)
 
+**Demo video (2:12, English captions burned in):** [`docs/demo/circuit-seance-demo.mp4`](docs/demo/circuit-seance-demo.mp4), recorded automatically from the real app by [`tools/record-demo.mjs`](tools/record-demo.mjs). *(YouTube link: added once the owner uploads it.)*
+
+**For EE students:** check your homework and lab circuits before you hand them in. Draw it, simulate it, compare it with your hand calculation (±5 %), and drag any R, C or L to *see* why the answer is what it is. It works in English and 简体中文 and needs no install or account. It also runs offline, and in mainland China: no Google Fonts, no CDN, no blocked services.
+
 ---
 
 ## Judge quickstart (no key, about 2 minutes)
@@ -21,7 +25,8 @@ npm run build && npx vite preview      # → http://localhost:4173
 3. **Haunted Classics** tab: four circuits from old pages, each with its history: the **NE555 astable (1972)**, **Hewlett's Wien-bridge oscillator (1939, HP's first product)**, a 1950s two-section RC filter (Bode plot), and the 1970s op-amp integrator.
 4. **Edit the netlist** (for example change `C1 out 0 1u` to `2.2u`) and press **Ctrl+Enter**. The spirit switches from the canned story to a reading of the new measurements, and the **Homework check** tells you whether your hand-calculated τ is within ±5 %.
 5. Hover the screen to read values with the cursor. With the screen focused, ↑/↓ change volts/div, ←/→ change time/div, keys 1–4 pick a channel, and `A` auto-scales.
-6. **中文** in the top bar switches the whole UI and the spirit to Chinese.
+6. **Possess a component** (new): under the scope, click a part such as **C1** and drag its slider (÷10 … ×10, log scale). ngspice re-runs on every move, the CRT keeps its scales and shows the original trace as a dashed ghost, and the readout tracks the measured physics (τ 1.00 ms → 2.19 ms, ×2.19). **Release** restores the value.
+7. **中文** in the top bar switches the whole UI and the spirit to Chinese.
 
 Demo mode makes **zero network requests**. The Playwright suite blocks and records every non-localhost request and checks the list is empty. The BYOK path (photo → vision model → netlist → simulate → live spirit) is covered end-to-end against a mocked DashScope endpoint, and DashScope, OpenAI and Gemini all accept browser CORS preflights, so keys work straight from a static site. Add `?nointro` to the URL to skip the intro.
 
@@ -82,7 +87,7 @@ Everything under [`.kiro/`](.kiro) was written by **kiro-cli** (2.37, headless `
 
 The Kiro free tier (≈ 31–36 credits used) ran out partway through implementation, so a large part of the shipped app was written by hand. Every file is listed in [`docs/kiro-runs/hand-fixes.md`](docs/kiro-runs/hand-fixes.md). In short:
 
-- **By hand:** the final simulation worker, the CRT `<Scope/>` and its renderer, waveform measurement and the offline spirit, the Haunted Classics catalogue and its netlists, the schematic-drawing generator (`scripts/gen-schematics.py`), the **entire UI wiring** (`App.tsx`, intro, séance table, transcription stage, spirit panel, settings, CSS), the integration and e2e tests, and these docs.
+- **By hand:** the possess-a-component feature, the demo-video recorder, the final simulation worker, the CRT `<Scope/>` and its renderer, waveform measurement and the offline spirit, the Haunted Classics catalogue and its netlists, the schematic-drawing generator (`scripts/gen-schematics.py`), the **entire UI wiring** (`App.tsx`, intro, séance table, transcription stage, spirit panel, settings, CSS), the integration and e2e tests, and these docs.
 - **Fixed by hand:** four of Kiro's example netlists that were electrically wrong, build blockers left by a killed run, a timeout bug in the LLM adapter, and an ESLint config that flagged every TypeScript file.
 - **Queued for Kiro** once the 4,000-credit grant arrives ([`docs/next-kiro-passes.md`](docs/next-kiro-passes.md)): the **SPICE MCP server** (spec task 29) so Kiro can simulate netlists itself, a Kiro **ownership/review pass** over every hand-written file against the EARS requirements, and the rest of the `tasks.md` status sync.
 
@@ -91,10 +96,12 @@ The Kiro free tier (≈ 31–36 credits used) ran out partway through implementa
 ```bash
 npm ci
 npm run dev                 # http://localhost:5173
-npm test                    # 105 unit + integration tests (vitest; integration runs the real engine)
+npm test                    # 134 unit + integration tests (vitest; integration runs the real engine)
 npm run build               # tsc -b + vite build → dist/ (static; the engine is a lazy ~20 MB chunk)
 npm run lint                # ESLint (type-aware) on src/
-npm run test:e2e            # Playwright (12 tests) against vite preview; set CHROMIUM_PATH if needed
+npm run test:e2e            # Playwright (13 tests) against vite preview; set CHROMIUM_PATH if needed
+PW_FIREFOX=1 npm run test:e2e -- --project=firefox   # same suite in Firefox (npx playwright install firefox)
+node tools/record-demo.mjs  # re-record docs/demo/circuit-seance-demo.mp4 (needs a build, Chromium and ffmpeg)
 npm run screenshots         # regenerate docs/screenshots/
 npm run verify:netlists     # every bundled netlist through ngspice in Node
 ```
@@ -109,7 +116,7 @@ The app deploys as static files (any static host). `VITE_BASE_URL` sets the base
 | ![NE555](docs/screenshots/04-ne555.png) | ![Bode plot](docs/screenshots/05-bode.png) |
 | ![中文 UI](docs/screenshots/07-zh-rlc.png) | ![Error state](docs/screenshots/09-error.png) |
 
-Phone: [`11-mobile.png`](docs/screenshots/11-mobile.png), [`12-mobile-full.png`](docs/screenshots/12-mobile-full.png). Homework check: [`08-homework.png`](docs/screenshots/08-homework.png). Settings: [`10-settings.png`](docs/screenshots/10-settings.png).
+Possess a component: [`13-possess.png`](docs/screenshots/13-possess.png). Phone: [`11-mobile.png`](docs/screenshots/11-mobile.png), [`12-mobile-full.png`](docs/screenshots/12-mobile-full.png). Homework check: [`08-homework.png`](docs/screenshots/08-homework.png). Settings: [`10-settings.png`](docs/screenshots/10-settings.png).
 
 ## Credits
 

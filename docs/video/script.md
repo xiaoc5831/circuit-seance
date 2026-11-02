@@ -1,5 +1,7 @@
 # Circuit Séance: demo video script (target 2:50, hard limit < 3:00)
 
+> **An auto-recorded cut already exists:** `docs/demo/circuit-seance-demo.mp4` (2:12, 1920×1080, English captions burned in, generated ambient drone, no voice). It's produced by `node tools/record-demo.mjs` and follows this script, with the new *possess a component* scene after scene 4 and a homework check that catches a wrong answer. Its caption timings (measured during the recording) are in `docs/demo/circuit-seance-demo.en.srt` and `docs/demo/scenes.json`. The script below is still the plan for a voiced version: record the voice-over over that cut, or re-record by hand.
+
 Recording notes: 1440×900 browser at 100 % zoom, a fresh profile (so the intro plays), `npm run build && npx vite preview`. Cursor visible. Background: low ambient drone, plus a faint CRT hum under the intro. Voice: calm and a little playful. English subtitles from `circuit-seance.en.srt` (timings match the scenes below). Every shot is the real app; nothing is mocked except where noted.
 
 | # | Time | On screen | Voice-over |

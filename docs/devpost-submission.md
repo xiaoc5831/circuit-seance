@@ -4,7 +4,13 @@
 
 **Tagline (≤ 60 chars):** Berkeley SPICE (1973), resurrected in your browser.
 
-**Links:** Demo: `TODO (GitHub Pages URL after push)` · Repo: `TODO (public GitHub, MIT, /.kiro at root)` · Video: `TODO (YouTube, < 3 min)`
+**Links:** Demo: `TODO (GitHub Pages URL after push)` · Repo: `TODO (public GitHub, MIT, /.kiro at root)` · Video: `TODO (YouTube, < 3 min)`. Upload `docs/demo/circuit-seance-demo.mp4` (2:12, English captions burned in, no third-party music) and also attach `docs/demo/circuit-seance-demo.en.srt` as YouTube subtitles.
+
+**Bonus prizes to tick on the form** (rules read 2026-11-03):
+- **Best Student Project (Resurrection):** needs LinkedIn, **student email**, year + degree (M.Eng./M.S. year 2, Electrical Engineering), and school name (Zhongyuan University of Technology). All team members must be students.
+- **Bonus Blog:** publish `docs/blog-post.md` on dev.to / Medium / Hashnode during the Submission Period (it already says it was written for Kiroween 2026) and paste the URL.
+- **Social Blitz:** the post must *start with* `#KiroweenHackathon26`. Drafts are in `docs/social-posts.md`; rewrite them in your own words, since judging favours original writing.
+- **Best Demo:** automatic (Presentation score + top 10 % overall).
 
 ---
 
@@ -14,6 +20,10 @@ In 1973, Laurence Nagel and Donald Pederson at UC Berkeley released **SPICE**, t
 
 Fifty years on, plenty of EE students still don't get the second half of that experience. Many of us have the textbook and a pencil, but no bench scope, no simulator licence, and sometimes not even a laptop that will install one. We wanted to bring both ghosts back, the simulator *and* the oscilloscope with someone explaining it, in a browser tab that works on a phone.
 
+## Who it's for
+
+EE students checking homework and lab circuits. You solve it by hand, then draw it, simulate it, and let the spirit grade you. It works in English and Chinese, offline, and in mainland China, where many web tools fail silently on blocked fonts and CDNs. There's nothing to install and no account.
+
 ## What it does
 
 1. **Draw a circuit** (or pick one of ours). A vision model reads the drawing and writes a SPICE netlist, along with a confidence note.
@@ -21,8 +31,9 @@ Fifty years on, plenty of EE students still don't get the second half of that ex
 3. **ngspice 45**, the open-source descendant of Berkeley SPICE compiled to **WebAssembly**, simulates it on your own device. There's no server.
 4. The waveform sweeps onto a **haunted green-phosphor CRT**, with phosphor persistence, scanlines, a measurement cursor and real 1-2-5 volts/div and time/div knobs. Transient, AC (Bode) and DC operating-point analyses all work.
 5. **The Spirit**, the ghost of a 1970s oscilloscope, explains what the trace shows, why, and what to try next, in **English or 简体中文**. Its numbers are *measured* from the simulation (τ, frequency, overshoot, ripple, −3 dB corner, gain) and compared with textbook theory.
-6. **Homework check:** type your hand-calculated τ or corner frequency and see if you're within ±5 %.
-7. **Haunted Classics:** four circuits from old pages, re-simulated with their history attached. The **NE555** astable (1972), **Bill Hewlett's Wien-bridge oscillator** (1939; it became the HP 200A, HP's first product, and Disney bought eight of its 200B siblings for *Fantasia*), a 1950s two-section RC filter, and the 1970s op-amp integrator.
+6. **Homework check:** type your hand-calculated τ or corner frequency and see if you're within ±5 %. A wrong answer gets caught with how far off it is (a τ = RC/2 slip shows "off by −50 %").
+7. **Possess a component:** click any R, C or L and drag its value from ÷10 to ×10 on a log slider. ngspice re-runs on every move (debounced, one engine, latest wins). The CRT holds its scales, the pre-possession trace stays as a dashed ghost, and the readout shows the measured physics following the part: τ 1.00 ms → 2.19 ms, ×2.19. A textbook says τ = RC; this lets you *watch* it.
+8. **Haunted Classics:** four circuits from old pages, re-simulated with their history attached. The **NE555** astable (1972), **Bill Hewlett's Wien-bridge oscillator** (1939; it became the HP 200A, HP's first product, and Disney bought eight of its 200B siblings for *Fantasia*), a 1950s two-section RC filter, and the 1970s op-amp integrator.
 
 **Zero-setup judge mode:** with no API key, a 6.5 s séance intro auto-plays a demo. A hand-drawn RC schematic is "read" (a recorded vision response that goes through the real parser), simulated and explained, and the waveform is on screen about **8.4 s after page load**. Everything in demo mode runs offline, and our e2e suite checks that it makes zero external requests. Add your own key (**Qwen-VL** by default, or OpenAI, Gemini or any OpenAI-compatible endpoint) to read your own photos and ask the live spirit. The key never leaves your browser except to go to that provider.
 
@@ -32,7 +43,9 @@ Fifty years on, plenty of EE students still don't get the second half of that ex
 - **The CRT** is a Canvas 2D renderer with an off-screen phosphor buffer that fades each frame (afterglow), a two-pass glow (halo plus hot core), and a beam sweep with a bright leading dot. Text readouts are DOM so they stay crisp and accessible. Under `prefers-reduced-motion` it draws one static frame.
 - **Measurement:** τ from the 63 % crossing, or a **three-point exponential fit** when the window is shorter than 5τ. Period from mean-crossings after start-up, 10–90 % rise, overshoot, tail ripple, and for AC the −3 dB corner and roll-off slope.
 - **Safety:** model output is HTML-escaped before Markdown rendering, and the LLM only ever sees a compact measurement digest, never raw arrays.
-- **Tests:** 105 unit + integration tests. The integration test runs every bundled circuit through the real engine and checks every number the spirit quotes. There are also 12 Playwright tests covering the intro, Haunted Classics, edit + homework, the error state, Chinese, settings storage, keyboard, reduced motion with no phone overflow, zero external requests, and the BYOK path against a mocked provider.
+- **Tests:** 134 unit + integration tests. The integration test runs every bundled circuit through the real engine and checks every number the spirit quotes, including possessed values (C1 × 2.2 → τ 2.2 ms; NE555 RB 4.7 k → f ≈ 1.44/((RA+2RB)C)). There are also 13 Playwright tests, passing in **Chromium and Firefox**. They cover the intro, Haunted Classics, edit + homework, possess (English and Chinese), the error state, settings storage, keyboard, reduced motion with no phone overflow, zero external requests, and the BYOK path against a mocked provider.
+- **Privacy:** the API key is never held in React state. It's read from `localStorage` when a request is made and sent only to the provider's base URL.
+- **The demo video records itself:** `tools/record-demo.mjs` drives the real app with Playwright, renders the real `.kiro/` files into a viewer page, times English captions to the measured scene starts and burns them in with ffmpeg.
 
 ## How we used Kiro
 
@@ -53,6 +66,7 @@ Everything in `/.kiro` was written by **kiro-cli**, run headless (`--no-interact
 - **Kiro wrote electrically wrong circuits.** Its RL example had a floating node, the BJT input shorted the bias network, and the op-amp was mis-wired. We verified every netlist in ngspice and fixed four by hand. That's why the integration test now pins the physics.
 - **"63 % of the final value" is wrong when the curve hasn't settled.** An edited RC with 2.2 µF read 2.1 ms. The three-point fit now gives 2.2 ms.
 - **Fonts:** Google Fonts hangs or is blocked in mainland China, so the fonts are self-hosted.
+- **Canvas glow vs. no GPU:** `shadowBlur` cost 100–300 ms per frame on a GPU-less machine, so dragging the possess slider ran at ~2 fps. The renderer now notices slow frames and switches to a blur-free stacked-stroke glow that looks almost the same.
 
 ## Accomplishments we're proud of
 
