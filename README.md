@@ -23,7 +23,7 @@ npm run build && npx vite preview      # → http://localhost:4173
 5. Hover the screen to read values with the cursor. With the screen focused, ↑/↓ change volts/div, ←/→ change time/div, keys 1–4 pick a channel, and `A` auto-scales.
 6. **中文** in the top bar switches the whole UI and the spirit to Chinese.
 
-Demo mode makes **zero network requests**. The Playwright suite blocks and records every non-localhost request and checks the list is empty. Add `?nointro` to the URL to skip the intro.
+Demo mode makes **zero network requests**. The Playwright suite blocks and records every non-localhost request and checks the list is empty. The BYOK path (photo → vision model → netlist → simulate → live spirit) is covered end-to-end against a mocked DashScope endpoint, and DashScope, OpenAI and Gemini all accept browser CORS preflights, so keys work straight from a static site. Add `?nointro` to the URL to skip the intro.
 
 **Optional (bring your own key):** ⚙ Settings → provider (**Qwen-VL / DashScope is the default**; OpenAI, Gemini and any OpenAI-compatible endpoint also work) → paste a key. That unlocks two things: **reading your own photo** of a hand-drawn circuit, and **asking the live spirit** about any circuit. The key is stored **only in this browser's `localStorage`** and sent only to the base URL you set. There is no server.
 
@@ -94,7 +94,7 @@ npm run dev                 # http://localhost:5173
 npm test                    # 105 unit + integration tests (vitest; integration runs the real engine)
 npm run build               # tsc -b + vite build → dist/ (static; the engine is a lazy ~20 MB chunk)
 npm run lint                # ESLint (type-aware) on src/
-npm run test:e2e            # Playwright (10 tests) against vite preview; set CHROMIUM_PATH if needed
+npm run test:e2e            # Playwright (12 tests) against vite preview; set CHROMIUM_PATH if needed
 npm run screenshots         # regenerate docs/screenshots/
 npm run verify:netlists     # every bundled netlist through ngspice in Node
 ```

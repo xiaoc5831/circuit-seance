@@ -142,13 +142,13 @@ function generic(m: Measurements, L: Lang): string {
         if (c.freq) bits.push(`periodic at ${eng(c.freq, 'Hz')}`);
         if (c.tau) bits.push(`τ ≈ ${eng(c.tau, 's')}`);
         if (c.overshootPct) bits.push(`overshoot ${c.overshootPct.toFixed(0)} %`);
-        if (!c.freq) bits.push(`settles at ${eng(c.final, c.unit)}`);
+        if (!c.freq) bits.push(c.tau && c.tau * 5 > m.span ? `still settling at the end of the window (${eng(c.final, c.unit)}, still moving)` : `settles at ${eng(c.final, c.unit)}`);
       } else {
         bits.push(`${eng(c.min, c.unit)} … ${eng(c.max, c.unit)}`);
         if (c.freq) bits.push(`周期信号，${eng(c.freq, 'Hz')}`);
         if (c.tau) bits.push(`τ ≈ ${eng(c.tau, 's')}`);
         if (c.overshootPct) bits.push(`过冲 ${c.overshootPct.toFixed(0)} %`);
-        if (!c.freq) bits.push(`最终值 ${eng(c.final, c.unit)}`);
+        if (!c.freq) bits.push(c.tau && c.tau * 5 > m.span ? `窗口结束时仍在趋稳（${eng(c.final, c.unit)}，仍在变化）` : `最终值 ${eng(c.final, c.unit)}`);
       }
       return `- ${c.name}: ${bits.join(', ')}`;
     })
