@@ -107,8 +107,8 @@ export const CLASSICS: CircuitEntry[] = [
     drawing: 'classics/ne555-astable.svg',
     probes: ['v(out)', 'v(thr)'],
     blurb: {
-      en: 'Hans Camenzind designed the 555 for Signetics in 1971; it shipped in 1972 and became the best-selling chip in history — billions per year. This page of the original app note makes it blink an LED.',
-      zh: '1971 年 Hans Camenzind 为 Signetics 设计了 555，1972 年上市，此后成为史上销量最大的芯片（每年数十亿颗）。原厂应用笔记里的这一页，用它让 LED 闪烁。',
+      en: 'Hans Camenzind designed the 555 for Signetics in 1971; it shipped in 1972 and became one of the best-selling chips ever, around a billion a year by the 2000s. Its classic astable circuit makes an LED blink.',
+      zh: '1971 年 Hans Camenzind 为 Signetics 设计了 555，1972 年上市，此后成为史上最畅销的芯片之一，到 2000 年代每年约十亿颗。经典的多谐振荡电路让 LED 闪烁。',
     },
     recordedVision: fence(ne555Net, 'medium', [
       'No NE555 model in the netlist library: replaced the chip with a behavioural equivalent — a hysteretic switch on THR (trips at 2/3 VCC, releases at 1/3 VCC) as the discharge transistor, and a B-source as the output stage.',
@@ -138,8 +138,8 @@ export const CLASSICS: CircuitEntry[] = [
     netlist: wienNet,
     drawing: 'classics/wien-bridge.svg',
     blurb: {
-      en: "Bill Hewlett's 1939 Stanford master's thesis turned Max Wien's bridge into a clean audio oscillator. It became the HP 200A — HP's first product, sold to Disney for Fantasia — built in a Palo Alto garage.",
-      zh: '1939 年 Bill Hewlett 的斯坦福硕士论文把 Max Wien 的电桥变成了纯净的音频振荡器。它成为惠普的第一款产品 HP 200A——在帕洛阿尔托的车库里造出，卖给了迪士尼用于《幻想曲》。',
+      en: "Bill Hewlett's 1939 Stanford thesis turned Max Wien's bridge into a clean audio oscillator. It became the HP 200A, HP's first product, built in a Palo Alto garage; Disney bought eight of its 200B siblings for Fantasia.",
+      zh: '1939 年 Bill Hewlett 的斯坦福学位论文把 Max Wien 的电桥变成了纯净的音频振荡器。它成为惠普的第一款产品 HP 200A，在帕洛阿尔托的车库里造出；迪士尼还为《幻想曲》买了八台同系列的 200B。',
     },
     recordedVision: fence(wienNet, 'medium', [
       'Hewlett stabilised the amplitude with a light bulb; here the op-amp’s soft rails (tanh) limit it instead.',
