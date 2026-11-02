@@ -1,0 +1,129 @@
+1
+00:00:00,300 --> 00:00:04,600
+In 1973, at UC Berkeley, a program called SPICE
+learned to simulate circuits.
+
+2
+00:00:04,600 --> 00:00:08,800
+Punch cards in, line printer out.
+
+3
+00:00:09,000 --> 00:00:14,200
+Fifty years later, a lot of students still learn electronics
+without a lab, without an oscilloscope,
+
+4
+00:00:14,200 --> 00:00:19,800
+without a simulator licence.
+So we summoned both ghosts back.
+
+5
+00:00:20,000 --> 00:00:25,600
+This is Circuit Séance. A vision model reads
+a hand-drawn circuit and writes a SPICE netlist.
+
+6
+00:00:25,600 --> 00:00:32,400
+Then ngspice, the open-source heir of Berkeley SPICE
+compiled to WebAssembly,
+
+7
+00:00:32,400 --> 00:00:37,800
+simulates it right here in the browser.
+No server, no install.
+
+8
+00:00:38,000 --> 00:00:44,600
+The waveform lands on a green-phosphor oscilloscope,
+and its resident spirit explains it,
+
+9
+00:00:44,600 --> 00:00:51,800
+using numbers measured from the simulation:
+tau is one millisecond, exactly R times C.
+
+10
+00:00:52,000 --> 00:00:58,600
+Change a part and press Control-Enter.
+The spirit re-reads the new curve,
+
+11
+00:00:58,600 --> 00:01:09,600
+and the homework check tells you if your hand calculation
+is within five percent.
+
+12
+00:01:10,000 --> 00:01:16,800
+Haunted Classics brings back circuits from old pages.
+The 555 timer from 1972,
+
+13
+00:01:16,800 --> 00:01:22,400
+its capacitor sawing between one third
+and two thirds of the supply.
+
+14
+00:01:22,400 --> 00:01:28,400
+And Bill Hewlett's 1939 Wien-bridge oscillator,
+the circuit behind HP's first product,
+
+15
+00:01:28,400 --> 00:01:33,800
+growing a sine wave out of a ten-millivolt whisper.
+
+16
+00:01:34,000 --> 00:01:39,800
+Everything works in Chinese too, and on a phone,
+
+17
+00:01:39,800 --> 00:01:45,800
+because the simulator runs on your own device.
+
+18
+00:01:46,000 --> 00:01:51,600
+Bring your own key, Qwen-VL by default,
+to read your own drawings and ask a live spirit.
+
+19
+00:01:51,600 --> 00:01:55,600
+The key stays in your browser.
+
+20
+00:01:55,600 --> 00:01:59,800
+The demo needs no key at all,
+and makes zero network requests.
+
+21
+00:02:00,000 --> 00:02:06,400
+We built it spec-first with Kiro. Kiro wrote the steering,
+a requirements spec in EARS notation,
+
+22
+00:02:06,400 --> 00:02:13,800
+a design and a linked task list,
+then implemented it in headless task waves.
+
+23
+00:02:13,800 --> 00:02:21,600
+Agent hooks fired on every save:
+lint, netlist tests,
+
+24
+00:02:21,600 --> 00:02:31,800
+and a spirit-tone hook that reviews the LLM code
+for leaked keys.
+
+25
+00:02:32,000 --> 00:02:38,400
+When the free credits ran out, we finished the scope,
+the spirit and the UI by hand,
+
+26
+00:02:38,400 --> 00:02:43,800
+and logged every hand-written file. Next, Kiro builds
+a SPICE MCP server so it can simulate circuits itself.
+
+27
+00:02:44,000 --> 00:02:51,800
+Circuit Séance.
+Berkeley SPICE, resurrected in your browser.
