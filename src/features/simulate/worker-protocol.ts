@@ -1,87 +1,44 @@
 /**
- * Worker protocol types for simulation
+ * Typed message protocol between the main thread and sim.worker.ts
  */
+import type { SimResult } from '@/shared/types';
 
-export type SimulationProgressState = 'loading' | 'running' | 'complete' | 'error';
+export type SimulationProgressState = 'loading' | 'running';
 
 export interface SimulateRequest {
   type: 'simulate';
   id: string;
   netlist: string;
-  timeoutMs?: number;
 }
 
 export interface SimulateProgress {
   type: 'progress';
   id: string;
   state: SimulationProgressState;
-  message?: string;
 }
 
 export interface SimulateResponse {
   type: 'response';
   id: string;
   success: boolean;
-  result?: {
-    header: string;
-    numVariables: number;
-    variableNames: string[];
-    numPoints: number;
-    dataType: 'real' | 'complex';
-    data: Array<{
-      name: string;
-      type: string;
-      values: number[] | Array<{ real: number; img: number }>;
-    }>;
-  };
+  result?: SimResult;
+  /** ngspice error lines (failure only) */
   errors?: string[];
+  /** tail of ngspice info output (failure only) */
   info?: string;
+  /** sanitiser notes + ngspice warnings */
+  warnings?: string[];
+  elapsedMs?: number;
 }
 
-export interface SimulateError {
-  type: 'error';
-  id: string;
-  message: string;
-  code?: string;
-}
+export type SimulateError = { type: 'error'; id: string; message: string };
 
-export type WorkerMessage = SimulateRequest | SimulateProgress | SimulateResponse | SimulateError;
+export type WorkerOutbound = SimulateProgress | SimulateResponse;
 
-export function isSimulateRequest(msg: WorkerMessage): msg is SimulateRequest {
-  return msg.type === 'simulate';
-}
-
-export function isSimulateProgress(msg: WorkerMessage): msg is SimulateProgress {
+export function isSimulateProgress(msg: WorkerOutbound): msg is SimulateProgress {
   return msg.type === 'progress';
 }
 
-export function isSimulateResponse(msg: WorkerMessage): msg is SimulateResponse {
+export function isSimulateResponse(msg: WorkerOutbound): msg is SimulateResponse {
   return msg.type === 'response';
 }
-
-export function isSimulateError(msg: WorkerMessage): msg is SimulateError {
-  return msg.type === 'error';
-}
-
-// Message event types
-export interface SimulateRequestEvent extends MessageEvent {
-  data: SimulateRequest;
-}
-
-export interface SimulateProgressEvent extends MessageEvent {
-  data: SimulateProgress;
-}
-
-export interface SimulateResponseEvent extends MessageEvent {
-  data: SimulateResponse;
-}
-
-export interface SimulateErrorEvent extends MessageEvent {
-  data: SimulateError;
-}
-
-export type SimulateMessageEvent = 
-  | SimulateRequestEvent 
-  | SimulateProgressEvent 
-  | SimulateResponseEvent 
-  | SimulateErrorEvent;

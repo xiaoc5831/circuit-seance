@@ -1,259 +1,150 @@
 /**
- * React hook for managing simulation via Web Worker
- * Enforces timeout, recreates worker on hang, queues requests
+ * React hook that owns the simulation Web Worker.
+ * - Worker is created lazily on the first simulate() call (keeps first paint light).
+ * - Latest request wins: a newer simulate() supersedes an in-flight one.
+ * - Timeout (default 20 s): the worker is terminated and recreated on the next call.
  */
-
-import { useEffect, useRef, useState, useCallback } from 'react';
-import { SimResult, SimulateError } from '@/shared/types';
-import {
-  isSimulateProgress,
-  isSimulateResponse,
-  isSimulateError,
-  SimulateRequest,
-} from './worker-protocol';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import type { SimResult, SimulateError } from '@/shared/types';
+import type { SimulateRequest, WorkerOutbound } from './worker-protocol';
 
 export type SimulationState = 'idle' | 'loading' | 'running' | 'complete' | 'error';
 
-interface PendingRequest {
-  id: string;
-  resolve: (result: SimResult) => void;
-  reject: (error: SimulateError) => void;
-  timeoutHandle: ReturnType<typeof setTimeout>;
+export interface SimulationOutcome {
+  result: SimResult | null;
+  error: SimulateError | null;
+  warnings: string[];
+  elapsedMs: number | null;
 }
 
-export function useSimulation() {
+interface Pending {
+  id: string;
+  resolve: (o: SimulationOutcome) => void;
+  timer: ReturnType<typeof setTimeout>;
+}
+
+export function useSimulation(defaultTimeoutMs = 20000) {
   const [state, setState] = useState<SimulationState>('idle');
   const [result, setResult] = useState<SimResult | null>(null);
   const [error, setError] = useState<SimulateError | null>(null);
-
+  const [warnings, setWarnings] = useState<string[]>([]);
+  const [elapsedMs, setElapsedMs] = useState<number | null>(null);
   const workerRef = useRef<Worker | null>(null);
-  const pendingRef = useRef<Map<string, PendingRequest>>(new Map());
-  const requestQueueRef = useRef<SimulateRequest[]>([]);
-  const isProcessingRef = useRef(false);
+  const pendingRef = useRef<Pending | null>(null);
+  const engineReadyRef = useRef(false);
 
-  /**
-   * Create or recreate the worker
-   */
-  const createWorker = useCallback(() => {
-    if (workerRef.current) {
-      workerRef.current.terminate();
-    }
-
-    const worker = new Worker(new URL('./sim.worker.ts', import.meta.url), {
-      type: 'module',
-    });
-
-    worker.onmessage = (event: MessageEvent) => {
-      const message = event.data;
-
-      if (isSimulateProgress(message)) {
-        const { state: progressState } = message;
-        if (progressState === 'loading') {
-          setState('loading');
-        } else if (progressState === 'running') {
-          setState('running');
-        }
-      } else if (isSimulateResponse(message)) {
-        const { id, success, result: simResult, errors, info } = message;
-        const pending = pendingRef.current.get(id);
-
-        if (pending) {
-          clearTimeout(pending.timeoutHandle);
-          pendingRef.current.delete(id);
-
-          if (success && simResult) {
-            const result: SimResult = {
-              header: simResult.header,
-              numVariables: simResult.numVariables,
-              variableNames: simResult.variableNames,
-              numPoints: simResult.numPoints,
-              dataType: simResult.dataType,
-              data: simResult.data,
-            };
-            setResult(result);
-            setError(null);
-            setState('complete');
-            pending.resolve(result);
-          } else {
-            const err: SimulateError = {
-              message: errors?.join('; ') || info || 'Simulation failed',
-              rawErrors: errors || [],
-              rawInfo: info || '',
-            };
-            setError(err);
-            setResult(null);
-            setState('error');
-            pending.reject(err);
-          }
-        }
-      } else if (isSimulateError(message)) {
-        const { id, message: errMsg } = message;
-        const pending = pendingRef.current.get(id);
-
-        if (pending) {
-          clearTimeout(pending.timeoutHandle);
-          pendingRef.current.delete(id);
-
-          const err: SimulateError = {
-            message: errMsg,
-            rawErrors: [errMsg],
-            rawInfo: '',
-          };
-          setError(err);
-          setResult(null);
-          setState('error');
-          pending.reject(err);
-        }
-      }
-    };
-
-    worker.onerror = (event: ErrorEvent) => {
-      console.error('Worker error:', event.message);
-      // Notify all pending requests
-      pendingRef.current.forEach((pending) => {
-        clearTimeout(pending.timeoutHandle);
-        pending.reject({
-          message: 'The spirits went silent (worker crashed)',
-          rawErrors: [event.message],
-          rawInfo: '',
-        });
-      });
-      pendingRef.current.clear();
-      setState('error');
-      setError({
-        message: 'The spirits went silent (worker crashed)',
-        rawErrors: [event.message],
-        rawInfo: '',
-      });
-
-      // Recreate worker for next use
-      workerRef.current = null;
-    };
-
-    workerRef.current = worker;
+  const finish = useCallback((id: string, outcome: SimulationOutcome) => {
+    const p = pendingRef.current;
+    if (!p || p.id !== id) return;
+    clearTimeout(p.timer);
+    pendingRef.current = null;
+    setResult(outcome.result);
+    setError(outcome.error);
+    setWarnings(outcome.warnings);
+    setElapsedMs(outcome.elapsedMs);
+    setState(outcome.error ? 'error' : 'complete');
+    p.resolve(outcome);
   }, []);
 
-  /**
-   * Process queued requests
-   */
-  const processQueue = useCallback(() => {
-    if (isProcessingRef.current || requestQueueRef.current.length === 0) {
-      return;
-    }
-
-    isProcessingRef.current = true;
-
-    const request = requestQueueRef.current.shift();
-    if (!request || !workerRef.current) {
-      isProcessingRef.current = false;
-      return;
-    }
-
-    const timeoutMs = (request as unknown as { timeoutMs?: number }).timeoutMs || 20000;
-
-    let timeoutHandle: ReturnType<typeof setTimeout>;
-
-    const cleanupTimeout = () => {
-      clearTimeout(timeoutHandle);
-    };
-
-    timeoutHandle = setTimeout(() => {
-      const pending = pendingRef.current.get(request.id);
-      if (pending) {
-        pendingRef.current.delete(request.id);
-        pending.reject({
-          message: 'The spirits went silent (timeout)',
-          rawErrors: [`Simulation timed out after ${Math.round(timeoutMs / 1000)}s`],
-          rawInfo: '',
-        });
-        setError({
-          message: 'The spirits went silent (timeout)',
-          rawErrors: [`Simulation timed out after ${Math.round(timeoutMs / 1000)}s`],
-          rawInfo: '',
-        });
-        setState('error');
-
-        // Recreate worker on timeout
-        createWorker();
-        isProcessingRef.current = false;
-        processQueue();
+  const getWorker = useCallback((): Worker => {
+    if (workerRef.current) return workerRef.current;
+    const w = new Worker(new URL('./sim.worker.ts', import.meta.url), { type: 'module' });
+    w.onmessage = (ev: MessageEvent<WorkerOutbound>) => {
+      const msg = ev.data;
+      if (msg.type === 'progress') {
+        if (pendingRef.current?.id !== msg.id) return;
+        if (msg.state === 'running') engineReadyRef.current = true;
+        setState(msg.state);
+        return;
       }
-    }, timeoutMs);
-
-    const promise = new Promise<SimResult>((resolve, reject) => {
-      pendingRef.current.set(request.id, { id: request.id, resolve, reject, timeoutHandle });
-
-      workerRef.current!.postMessage(request);
-    });
-
-    promise
-      .then(() => {
-        cleanupTimeout();
-        isProcessingRef.current = false;
-        processQueue();
-      })
-      .catch(() => {
-        cleanupTimeout();
-        isProcessingRef.current = false;
-        processQueue();
-      });
-  }, [createWorker]);
-
-  /**
-   * Initialize worker on mount
-   */
-  useEffect(() => {
-    createWorker();
-
-    return () => {
-      if (workerRef.current) {
-        workerRef.current.terminate();
+      if (msg.success && msg.result) {
+        finish(msg.id, {
+          result: msg.result,
+          error: null,
+          warnings: msg.warnings ?? [],
+          elapsedMs: msg.elapsedMs ?? null,
+        });
+      } else {
+        const raw = msg.errors ?? [];
+        finish(msg.id, {
+          result: null,
+          error: { message: raw[0] ?? 'Simulation failed', rawErrors: raw, rawInfo: msg.info ?? '' },
+          warnings: msg.warnings ?? [],
+          elapsedMs: null,
+        });
       }
-      pendingRef.current.forEach((pending) => {
-        clearTimeout(pending.timeoutHandle);
-      });
     };
-  }, [createWorker]);
+    w.onerror = (ev) => {
+      const id = pendingRef.current?.id;
+      workerRef.current?.terminate();
+      workerRef.current = null;
+      engineReadyRef.current = false;
+      if (id)
+        finish(id, {
+          result: null,
+          error: { message: 'worker-crashed', rawErrors: [ev.message || 'Worker crashed'], rawInfo: '' },
+          warnings: [],
+          elapsedMs: null,
+        });
+    };
+    workerRef.current = w;
+    return w;
+  }, [finish]);
 
-  /**
-   * Main simulate function
-   */
   const simulate = useCallback(
-    (netlist: string, timeoutMs: number = 20000): Promise<SimResult> => {
-      return new Promise((resolve, reject) => {
-        const id = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-
-        const request: SimulateRequest = {
-          type: 'simulate',
-          id,
-          netlist,
-          timeoutMs,
-        };
-
-        requestQueueRef.current.push(request);
-        processQueue();
-
-        // Store the promise handlers for this request
-        const handle = setTimeout(() => {
-          // Cleanup if not already handled
-          pendingRef.current.delete(id);
-        }, timeoutMs + 1000);
-
-        pendingRef.current.set(id, {
-          id,
-          resolve,
-          reject,
-          timeoutHandle: handle,
-        });
+    (netlist: string, timeoutMs = defaultTimeoutMs): Promise<SimulationOutcome> => {
+      // supersede any in-flight request
+      const prev = pendingRef.current;
+      if (prev) {
+        clearTimeout(prev.timer);
+        pendingRef.current = null;
+        prev.resolve({ result: null, error: null, warnings: [], elapsedMs: null });
+      }
+      const id = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+      setState(engineReadyRef.current ? 'running' : 'loading');
+      return new Promise<SimulationOutcome>((resolve) => {
+        // first run also downloads + compiles the WASM engine, so give it longer
+        const budget = engineReadyRef.current ? timeoutMs : timeoutMs + 40000;
+        const timer = setTimeout(() => {
+          workerRef.current?.terminate();
+          workerRef.current = null;
+          engineReadyRef.current = false;
+          finish(id, {
+            result: null,
+            error: {
+              message: 'timeout',
+              rawErrors: [`No answer from ngspice after ${Math.round(budget / 1000)} s`],
+              rawInfo: '',
+            },
+            warnings: [],
+            elapsedMs: null,
+          });
+        }, budget);
+        pendingRef.current = { id, resolve, timer };
+        const req: SimulateRequest = { type: 'simulate', id, netlist };
+        getWorker().postMessage(req);
       });
     },
-    [processQueue]
+    [defaultTimeoutMs, finish, getWorker],
   );
 
-  return {
-    simulate,
-    state,
-    result,
-    error,
-  };
+  /** Start downloading/compiling the engine in the background (no simulation). */
+  const warmUp = useCallback(() => {
+    if (workerRef.current) return;
+    getWorker().postMessage({
+      type: 'simulate',
+      id: 'warmup',
+      netlist: 'warmup\nV1 1 0 1\nR1 1 0 1k\n.op\n.end\n',
+    } satisfies SimulateRequest);
+  }, [getWorker]);
+
+  useEffect(
+    () => () => {
+      workerRef.current?.terminate();
+      if (pendingRef.current) clearTimeout(pendingRef.current.timer);
+    },
+    [],
+  );
+
+  return { simulate, warmUp, state, result, error, warnings, elapsedMs };
 }
