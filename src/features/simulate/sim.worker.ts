@@ -8,51 +8,31 @@
 import type { Simulation } from 'eecircuit-engine';
 import type { SimResult } from '@/shared/types';
 import type { SimulateRequest, SimulateResponse, SimulateProgress } from './worker-protocol';
+import { sanitizeNetlist } from './sanitize';
 
 let sim: Simulation | null = null;
 
-const REPLACEMENTS: Array<[RegExp, string, string]> = [
-  [/[µμ]/g, 'u', 'µ → u'],
-  [/[Ωω]/g, '', 'Ω removed'],
-  [/τ/g, 'tau', 'τ → tau'],
-  [/×/g, '*', '× → *'],
-  [/[−–—]/g, '-', 'dash → -'],
-  [/[“”]/g, '"', 'quotes'],
-  [/[‘’]/g, "'", 'quotes'],
-  [/\u3000/g, ' ', 'full-width space'],
-];
+// One engine per worker, created once. Concurrent first requests (e.g. the intro's
+// warm-up + an early click) must share the same start() promise: a second
+// Simulation instance in the same worker hangs ngspice forever.
+let simPromise: Promise<Simulation> | null = null;
 
-export function sanitizeNetlist(netlist: string): { sanitized: string; warnings: string[] } {
-  const warnings: string[] = [];
-  let s = netlist.replace(/\r\n?/g, '\n');
-  // full-width ASCII (Ａ-ｚ, ０-９, punctuation) → half-width
-  s = s.replace(/[\uff01-\uff5e]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0xfee0));
-  for (const [re, rep, label] of REPLACEMENTS) {
-    if (re.test(s)) {
-      s = s.replace(re, rep);
-      warnings.push(label);
-    }
+function getSim(id: string): Promise<Simulation> {
+  if (sim) return Promise.resolve(sim);
+  if (!simPromise) {
+    postMessage({ type: 'progress', id, state: 'loading' } satisfies SimulateProgress);
+    simPromise = (async () => {
+      const { Simulation: SimClass } = await import('eecircuit-engine');
+      const instance = new SimClass();
+      await instance.start();
+      sim = instance;
+      return instance;
+    })();
+    simPromise.catch(() => {
+      simPromise = null;
+    });
   }
-  // eslint-disable-next-line no-control-regex
-  const rest = s.match(/[^\x00-\x7f]/g);
-  if (rest) {
-    // eslint-disable-next-line no-control-regex
-    s = s.replace(/[^\x00-\x7f]/g, '');
-    warnings.push(`${rest.length} non-ASCII character(s) removed`);
-  }
-  if (!/^\s*\.end\s*$/im.test(s)) s = s.trimEnd() + '\n.end\n';
-  return { sanitized: s, warnings };
-}
-
-async function getSim(id: string): Promise<Simulation> {
-  if (sim) return sim;
-  const progress: SimulateProgress = { type: 'progress', id, state: 'loading' };
-  postMessage(progress);
-  const { Simulation: SimClass } = await import('eecircuit-engine');
-  const instance = new SimClass();
-  await instance.start();
-  sim = instance;
-  return instance;
+  return simPromise;
 }
 
 async function handle(req: SimulateRequest): Promise<SimulateResponse> {
@@ -103,7 +83,13 @@ async function handle(req: SimulateRequest): Promise<SimulateResponse> {
   }
 }
 
-self.onmessage = async (event: MessageEvent<SimulateRequest>) => {
+// ngspice is not re-entrant: run requests strictly one after another.
+let queue: Promise<void> = Promise.resolve();
+
+self.onmessage = (event: MessageEvent<SimulateRequest>) => {
   if (event.data?.type !== 'simulate') return;
-  postMessage(await handle(event.data));
+  const req = event.data;
+  queue = queue.then(async () => {
+    postMessage(await handle(req));
+  });
 };
