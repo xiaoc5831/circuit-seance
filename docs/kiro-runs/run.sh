@@ -2,6 +2,7 @@
 # usage: run.sh <label> <prompt-file> [extra kiro-cli flags...]
 # Runs kiro-cli headless, saves stream-json, prints final text + credits used.
 set -u
+[ -x /home/sandbox/.local/bin/kiro-cli ] || bash /workspace/work/kiro-persist/restore.sh >/dev/null 2>&1
 label=$1; pf=$2; shift 2
 out=docs/kiro-runs/$label.jsonl
 /home/sandbox/.local/bin/kiro-cli chat --v3 --no-interactive --trust-workspace --trust-all-tools \

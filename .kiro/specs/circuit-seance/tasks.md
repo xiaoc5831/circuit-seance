@@ -66,39 +66,39 @@ Tasks are ordered so the app is demoable as early as possible. Sub-tasks within 
 
 ## Phase 3 — Netlist Editor
 
-- [ ] 5. Implement the SPICE netlist parser
+- [x] 5. Implement the SPICE netlist parser
   _Requirements: 3.1, 3.2, 3.3_
-  - [ ] 5.1 **MVP editor:** create `src/features/netlist/NetlistEditor.tsx` as a styled `<textarea>` with a line-number gutter (CSS counter overlay) and absolutely-positioned error-highlight markers; accept `value`, `onChange`, `errors` props. _(CodeMirror 6 is a stretch upgrade — see 5.1-stretch.)_
-  - [ ] 5.2 Create `src/features/netlist/netlist-parser.ts` implementing `parseNetlist(text: string): ParsedNetlist`; handle: title line, component lines (R/C/L/V/I/D/Q/M/E/F/G/H/X), directives (`.tran`, `.ac`, `.dc`, `.op`, `.model`, `.subckt`, `.ends`, `.end`), comments (`;` prefix and `*` first-char), continuation lines (`+`).
+  - [x] 5.1 **MVP editor:** create `src/features/netlist/NetlistEditor.tsx` as a styled `<textarea>` with a line-number gutter (CSS counter overlay) and absolutely-positioned error-highlight markers; accept `value`, `onChange`, `errors` props. _(CodeMirror 6 is a stretch upgrade — see 5.1-stretch.)_
+  - [x] 5.2 Create `src/features/netlist/netlist-parser.ts` implementing `parseNetlist(text: string): ParsedNetlist`; handle: title line, component lines (R/C/L/V/I/D/Q/M/E/F/G/H/X), directives (`.tran`, `.ac`, `.dc`, `.op`, `.model`, `.subckt`, `.ends`, `.end`), comments (`;` prefix and `*` first-char), continuation lines (`+`).
   - [ ] 5.3 Add keyboard shortcut handling in `NetlistEditor.tsx`: intercept Ctrl+Enter / Cmd+Enter and call an `onSimulate` callback prop.
   - [ ] 5.4 **(Stretch) 5.1-stretch:** install CodeMirror 6 packages (`@codemirror/state`, `@codemirror/view`, `@codemirror/language`, `@codemirror/lint`; pin exact versions) and create `spice-mode.ts`; swap `NetlistEditor.tsx` to use CM6 behind a `USE_CODEMIRROR` feature flag.
-  - [ ] 5.5 Update `src/features/netlist/index.ts` barrel to export `NetlistEditor`, `parseNetlist`, and types.
+  - [x] 5.5 Update `src/features/netlist/index.ts` barrel to export `NetlistEditor`, `parseNetlist`, and types.
 
-- [ ] 6. Implement the netlist validator
+- [x] 6. Implement the netlist validator
   _Requirements: 3.2_
-  - [ ] 6.1 Create `src/features/netlist/netlist-validator.ts` implementing `validateNetlist(text: string, dryRun: (nl: string) => Promise<string>): Promise<ValidationResult>` with three stages: (1) syntax parse, (2) element/node checks (ground node 0 present, no floating nodes, all `.model` refs resolved), (3) ngspice dry-run via `dryRun` callback.
-  - [ ] 6.2 Add `friendlyMessage(rawNgspiceError: string): string` mapping recognisable ngspice error patterns to human-readable strings in both languages.
+  - [x] 6.1 Create `src/features/netlist/netlist-validator.ts` implementing `validateNetlist(text: string, dryRun: (nl: string) => Promise<string>): Promise<ValidationResult>` with three stages: (1) syntax parse, (2) element/node checks (ground node 0 present, no floating nodes, all `.model` refs resolved), (3) ngspice dry-run via `dryRun` callback.
+  - [x] 6.2 Add `friendlyMessage(rawNgspiceError: string): string` mapping recognisable ngspice error patterns to human-readable strings in both languages.
   - [ ] 6.3 Update `NetlistEditor.tsx` to display a validation summary panel below the editor showing counts of errors/warnings with "Spirits are restless" flavour copy.
 
 ---
 
 ## Phase 4 — Simulation Engine
 
-- [ ] 7. Implement the Web Worker simulation wrapper
+- [x] 7. Implement the Web Worker simulation wrapper
   _Requirements: 4.1, 4.2, 4.3_
-  - [ ] 7.1 Create `src/features/simulate/worker-protocol.ts` with all four typed message interfaces: `SimulateRequest`, `SimulateResponse`, `SimulateError`, `SimulateProgress`.
-  - [ ] 7.2 Create `src/features/simulate/sim.worker.ts`; lazy-import `eecircuit-engine` on first message; maintain a singleton `Simulation` instance; handle `SimulateRequest`, post `SimulateProgress('loading')` during WASM init, `SimulateProgress('running')` during `runSim()`, then `SimulateResponse` or `SimulateError`.
-  - [ ] 7.3 Create `src/features/simulate/use-simulation.ts` React hook: creates the Worker once, queues requests with a UUID `id`, exposes `simulate(netlist)`, `state: SimulationState`, `result: SimResult | null`, `error: SimulateError | null`.
+  - [x] 7.1 Create `src/features/simulate/worker-protocol.ts` with all four typed message interfaces: `SimulateRequest`, `SimulateResponse`, `SimulateError`, `SimulateProgress`.
+  - [x] 7.2 Create `src/features/simulate/sim.worker.ts`; lazy-import `eecircuit-engine` on first message; maintain a singleton `Simulation` instance; handle `SimulateRequest`, post `SimulateProgress('loading')` during WASM init, `SimulateProgress('running')` during `runSim()`, then `SimulateResponse` or `SimulateError`.
+  - [x] 7.3 Create `src/features/simulate/use-simulation.ts` React hook: creates the Worker once, queues requests with a UUID `id`, exposes `simulate(netlist)`, `state: SimulationState`, `result: SimResult | null`, `error: SimulateError | null`.
   - [ ] 7.4 Wire `dryRun` callback in `netlist-validator.ts` to use the same worker with a special no-output flag in the netlist.
   - [ ] 7.5 Add a "Summoning…" loading overlay on the scope canvas area while `SimulationState` is `'loading'` or `'running'`, using the CRT aesthetic (flickering text, green glow).
 
-- [ ] 8. Implement the result summariser
+- [x] 8. Implement the result summariser
   _Requirements: 4.1, 8.2_
-  - [ ] 8.1 Create `src/features/simulate/result-summariser.ts` implementing `summariseResult(result: SimResult, type: AnalysisType): CompactSummary`.
-  - [ ] 8.2 Implement transient summary: iterate each channel's `values` array to find min, max, final; estimate τ (time to reach 63.2% of final from start); estimate 10%–90% rise time; detect overshoot if `max > final * 1.02`.
-  - [ ] 8.3 Implement AC summary: find –3 dB point (relative to DC or max gain); find peak gain and frequency.
-  - [ ] 8.4 Implement DC sweep and `.op` summaries per spec §4.1.
-  - [ ] 8.5 Add a token-budget guard: `trimSummary(s: CompactSummary): CompactSummary` that truncates decimal precision until the JSON serialisation is ≤ 2 000 characters.
+  - [x] 8.1 Create `src/features/simulate/result-summariser.ts` implementing `summariseResult(result: SimResult, type: AnalysisType): CompactSummary`.
+  - [x] 8.2 Implement transient summary: iterate each channel's `values` array to find min, max, final; estimate τ (time to reach 63.2% of final from start); estimate 10%–90% rise time; detect overshoot if `max > final * 1.02`.
+  - [x] 8.3 Implement AC summary: find –3 dB point (relative to DC or max gain); find peak gain and frequency.
+  - [x] 8.4 Implement DC sweep and `.op` summaries per spec §4.1.
+  - [x] 8.5 Add a token-budget guard: `trimSummary(s: CompactSummary): CompactSummary` that truncates decimal precision until the JSON serialisation is ≤ 2 000 characters.
 
 ---
 
@@ -225,14 +225,14 @@ Tasks are ordered so the app is demoable as early as possible. Sub-tasks within 
 
 - [ ] 22. Unit tests — netlist parser
   _Requirements: 11.1_
-  - [ ] 22.1 Create `tests/unit/features/netlist/netlist-parser.test.ts`; write ≥ 20 test cases covering: component types R/C/L/V/I/D/Q/M/X; multi-node components; SPICE values (1k, 100n, 2.5e-3); `.tran`, `.ac`, `.dc`, `.op` directives; `.model` and `.subckt` directives; `;` and `*` comments; continuation `+` lines; title line handling.
+  - [x] 22.1 Create `tests/unit/features/netlist/netlist-parser.test.ts`; write ≥ 20 test cases covering: component types R/C/L/V/I/D/Q/M/X; multi-node components; SPICE values (1k, 100n, 2.5e-3); `.tran`, `.ac`, `.dc`, `.op` directives; `.model` and `.subckt` directives; `;` and `*` comments; continuation `+` lines; title line handling.
   - [ ] 22.2 Create `tests/unit/features/netlist/netlist-parser.property.test.ts`; use `fast-check` to generate well-formed netlists and verify the round-trip property `serialise(parse(nl)) === normalise(nl)`.
-  - [ ] 22.3 Create `tests/unit/features/netlist/netlist-validator.test.ts`; test: valid netlist passes all three stages; missing ground (no node 0) fails element check; floating node fails element check; unknown directive fails syntax stage.
+  - [x] 22.3 Create `tests/unit/features/netlist/netlist-validator.test.ts`; test: valid netlist passes all three stages; missing ground (no node 0) fails element check; floating node fails element check; unknown directive fails syntax stage.
 
-- [ ] 23. Unit tests — result summariser
+- [x] 23. Unit tests — result summariser
   _Requirements: 11.2_
-  - [ ] 23.1 Create `tests/fixtures/sim-results/` with at least two fixture JSON files: one RC transient result (known τ, rise time) and one RLC AC result (known –3 dB frequency).
-  - [ ] 23.2 Create `tests/unit/features/simulate/result-summariser.test.ts`; verify τ within ±1%, rise time within ±1%, overshoot within ±1% against RC transient fixture; verify –3 dB frequency within ±0.5 dB against AC fixture.
+  - [x] 23.1 Create `tests/fixtures/sim-results/` with at least two fixture JSON files: one RC transient result (known τ, rise time) and one RLC AC result (known –3 dB frequency).
+  - [x] 23.2 Create `tests/unit/features/simulate/result-summariser.test.ts`; verify τ within ±1%, rise time within ±1%, overshoot within ±1% against RC transient fixture; verify –3 dB frequency within ±0.5 dB against AC fixture.
 
 - [ ] 24. Unit tests — LLM response parser
   _Requirements: 11.3_

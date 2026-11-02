@@ -15,40 +15,32 @@ export interface SimResult {
   data: Array<{
     name: string;
     type: string;
-    values: number[] | [number, number][]; // real or complex pairs
+    values: number[] | Array<{ real: number; img: number }>;
   }>;
 }
 
 // Compact numeric digest passed to the LLM spirit
 export interface CompactSummary {
   analysisType: AnalysisType;
-  tran?: {
-    channels: Array<{
-      name: string;
-      min: number;
-      max: number;
-      final: number;
-      tauEstimate: number | null; // 63.2% rise time constant
-      riseTime: number | null; // 10%–90%
-      overshootPct: number | null;
-    }>;
-  };
-  ac?: {
-    dcGainDb: number;
-    minusThreeDbFreq: number | null; // Hz
-    peakGainDb: number | null;
-    peakFreqHz: number | null;
-  };
-  dc?: {
-    sweepVar: string;
-    outputVar: string;
-    min: number;
-    max: number;
-    midSlopePerUnit: number;
-  };
-  op?: {
-    nodeVoltages: Record<string, number>; // node name → volts
-  };
+  analysisTime?: number; // for transient: total simulation time
+  minValue?: number;
+  maxValue?: number;
+  finalValue?: number;
+  tau?: number; // time constant estimate
+  riseTime?: number; // 10%-90% rise time
+  overshoot?: boolean;
+  peakGain?: number; // for AC: peak gain in dB
+  peakFrequency?: number; // for AC: peak frequency in Hz
+  db3Frequency?: number; // for AC: -3dB frequency in Hz
+  nodeVoltages?: Record<string, number>; // for OP: node name → volts
+  notes?: string;
+}
+
+// Simulation error from worker
+export interface SimulateError {
+  message: string;
+  rawErrors: string[];
+  rawInfo: string;
 }
 
 // LLM configuration and preset types
@@ -140,7 +132,7 @@ export class LLMError extends Error {
   constructor(
     public provider: ProviderPreset,
     public statusCode: number,
-    message: string,
+    message: string
   ) {
     super(message);
     this.name = 'LLMError';
