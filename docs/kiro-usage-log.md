@@ -33,6 +33,39 @@ It then sums `promptTurnSummaries[].usage` (unit: credits) from the stream to re
 
 **Total ≈ 7.5 credits.** The remaining balance can't be read from the CLI in headless mode. Check it at https://app.kiro.dev (account → usage).
 
+## Runs, continued (implementation phase)
+
+| # | Purpose | Kiro mode / model | Output | Credits (reported) |
+|---|---------|-------------------|--------|--------------------|
+| 5 | Spec amendment v1.1: Demo Séance, Qwen-VL default, SPICE MCP, Haunted Classics, homework check | `--mode spec`, auto | requirements / design / tasks v1.1 | 5.110 |
+| 5a | Same, first attempt (killed) | spec | none | 0 (not reported) |
+| 6 | Wave A: tasks 1–4 (scaffold, i18n, examples, shell) | auto | Vite/React/TS scaffold, i18n, example netlists, CRT shell | 4.936 |
+| 7, 7b | Wave B, `qwen3-coder-next` | default | stalled after a file write + hooks; killed | not reported |
+| 7c | Wave B finish, `claude-haiku-4.5` | default | netlist parser/validator, textarea editor, sim worker, summariser, unit tests | 9.423 |
+| 8 | Wave C: tasks 9–11 (scope) | auto | renderer + controls; killed after ~25 min on type errors | not reported |
+| 9 | Tasks 13.1–13.2, 14, 15.1, 24 (LLM layer) | auto | `src/lib/llm/*`, response parser, `useTranscribe`, 35 unit tests | 2.632 |
+| 10 | tasks.md status sync after the hand-written UI | auto | ticks through 27.6; killed by my wrapper's 110 s timeout before it finished | not reported (est. 1–2) |
+
+**Reported total ≈ 29.6 credits** (runs 0–10). Runs 7, 7b, 8 and 10 were killed before Kiro emitted a turn summary, so their usage isn't in the stream. The real total is roughly **31–36**. The exact figure is at https://app.kiro.dev.
+
+## Hooks fired headless
+
+The `stream-json` transcripts record a `hook_update` event every time an agent hook fires during a headless run. Counts per run:
+
+| Run | lint-on-save (command) | netlist-guard (command) | spirit-tone (agent) | i18n-sync (agent) |
+|-----|------|------|------|------|
+| 06 | 11 | 11 | – | 1 |
+| 07 / 07b | 3 | 3 | – | – |
+| 07c | 28 | 26 | – | – |
+| 08 | 25 | – | – | – |
+| 09 | 11 | – | 7 | – |
+
+In run 09 you can see the agent hook working: after each save under `src/lib/llm/`, Kiro re-reviewed the file for API-key leakage, raw waveform arrays in prompts, and spirit voice (summary in `09-impl-llm.summary.txt`).
+
+## What was not done by Kiro
+
+The free-tier credits ran out partway through implementation. From wave C on, most of the app was written by hand: the worker rewrite, the scope, the spirit, the whole UI wiring, the tests, and the docs. Every such file is listed in [`docs/kiro-runs/hand-fixes.md`](kiro-runs/hand-fixes.md). Everything under `.kiro/` is still 100 % kiro-cli output.
+
 ## Kiro features used so far
 
 - **Steering**: 3 foundation files, `inclusion: always`.
@@ -40,11 +73,9 @@ It then sums `promptTurnSummaries[].usage` (unit: credits) from the stream to re
 - **Hooks**: 4 hooks. Two are `PostFileSave` shell-command hooks (lint/format, run related netlist tests). Two are `PostFileSave` agent-prompt hooks (keep the zh-CN i18n in sync, and an LLM-prompt privacy/tone review).
 - **Headless automation**: `--no-interactive` + `stream-json`, with per-run credit accounting.
 
-## Planned next (implementation phase)
+## Planned next
 
-- `/spec run circuit-seance` (or headless "implement task N") for each task wave.
-- MCP: e.g. a Playwright MCP server for the e2e smoke test, or a small custom `ngspice` MCP server so Kiro can simulate netlists while it writes example circuits.
-- More steering, such as `fileMatch` steering for `src/features/scope/**`, covering CRT rendering rules.
+See [`docs/next-kiro-passes.md`](next-kiro-passes.md): these are queued for when the 4,000-credit grant lands.
 
 ## Notes / known issues
 
