@@ -1,0 +1,11 @@
+Op-amp inverting amplifier, gain = -Rf/R1 = -10
+.subckt opamp inp inn out
+Rin inp inn 1e7
+B1 out 0 V = 14*tanh(1e5*(v(inp)-v(inn))/14)
+.ends
+VIN in 0 SIN(0 0.5 1k)
+R1 in inv 1k
+Rf inv out 10k
+X1 0 inv out opamp
+.tran 5u 3m
+.end

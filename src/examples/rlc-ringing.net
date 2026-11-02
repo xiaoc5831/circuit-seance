@@ -1,0 +1,7 @@
+RLC series under-damped ringing, f0 = 1 kHz, zeta = 0.08
+V1 in 0 PULSE(0 5 0 1n 1n 10m 20m)
+R1 in n1 100
+L1 n1 n2 100m
+C1 n2 0 253n
+.tran 2u 8m
+.end

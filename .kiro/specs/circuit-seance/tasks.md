@@ -20,47 +20,47 @@ Tasks are ordered so the app is demoable as early as possible. Sub-tasks within 
 
 ## Phase 1 — Project Scaffold
 
-- [ ] 1. Initialise the Vite + React 18 + TypeScript project with all tooling
+- [x] 1. Initialise the Vite + React 18 + TypeScript project with all tooling
   _Requirements: 1.1_
-  - [ ] 1.1 Run `npm create vite@latest circuit-seance -- --template react-ts` and commit the baseline; verify `npm run dev` starts cleanly.
-  - [ ] 1.2 Configure TypeScript `strict: true` in `tsconfig.json`; add `@/` path alias in `tsconfig.json` and `vite.config.ts`; expose `VITE_BASE_URL` env variable as the Vite `base` option.
-  - [ ] 1.3 Install and configure ESLint with `@typescript-eslint/recommended` and `eslint-plugin-react-hooks`; add `eslint.config.js`.
-  - [ ] 1.4 Install and configure Prettier; add `prettier.config.js` and `.prettierignore`; wire `npm run lint` to run both ESLint and Prettier check.
-  - [ ] 1.5 Install Vitest and configure `npm test` (single-run mode); add a trivial passing test to confirm the runner works.
-  - [ ] 1.6 Create the full `src/` folder skeleton: `app/`, `features/{capture,transcribe,netlist,simulate,scope,spirit,demo,haunted}/`, `lib/llm/`, `examples/`, `shared/`; add an `index.ts` stub barrel in each feature folder.
-  - [ ] 1.7 Create `src/shared/types.ts` with the core interfaces: `SimResult`, `AnalysisType`, `CompactSummary`, `AppSettings`, `LLMConfig`, `LLMError`, `SampleAsset`, `DemoStep`, `HomeworkCheckResult`.
-  - [ ] 1.8 Create `src/shared/utils.ts` with at minimum a `generateId()` (nanoid-style) helper.
+  - [x] 1.1 Run `npm create vite@latest circuit-seance -- --template react-ts` and commit the baseline; verify `npm run dev` starts cleanly.
+  - [x] 1.2 Configure TypeScript `strict: true` in `tsconfig.json`; add `@/` path alias in `tsconfig.json` and `vite.config.ts`; expose `VITE_BASE_URL` env variable as the Vite `base` option.
+  - [x] 1.3 Install and configure ESLint with `@typescript-eslint/recommended` and `eslint-plugin-react-hooks`; add `eslint.config.js`.
+  - [x] 1.4 Install and configure Prettier; add `prettier.config.js` and `.prettierignore`; wire `npm run lint` to run both ESLint and Prettier check.
+  - [x] 1.5 Install Vitest and configure `npm test` (single-run mode); add a trivial passing test to confirm the runner works.
+  - [x] 1.6 Create the full `src/` folder skeleton: `app/`, `features/{capture,transcribe,netlist,simulate,scope,spirit,demo,haunted}/`, `lib/llm/`, `examples/`, `shared/`; add an `index.ts` stub barrel in each feature folder.
+  - [x] 1.7 Create `src/shared/types.ts` with the core interfaces: `SimResult`, `AnalysisType`, `CompactSummary`, `AppSettings`, `LLMConfig`, `LLMError`, `SampleAsset`, `DemoStep`, `HomeworkCheckResult`.
+  - [x] 1.8 Create `src/shared/utils.ts` with at minimum a `generateId()` (nanoid-style) helper.
 
-- [ ] 2. Set up i18n string system
+- [x] 2. Set up i18n string system
   _Requirements: 1.2_
-  - [ ] 2.1 Create `src/app/i18n/en.ts` with all English UI strings as a typed `Record<string, string>` export; cover: nav labels, button labels, error messages, loading states, settings labels, scope labels, spirit labels, demo badge text, homework check labels.
-  - [ ] 2.2 Create `src/app/i18n/zh-CN.ts` mirroring every key from `en.ts` with Simplified Chinese values.
-  - [ ] 2.3 Create `src/app/i18n/index.ts` exporting a `useTranslation()` hook that reads `AppSettings.language` from a React context and returns the active locale map.
-  - [ ] 2.4 Create a `LanguageContext` (in `src/app/`) that provides the language state and a toggle function; wrap `App.tsx` in it.
+  - [x] 2.1 Create `src/app/i18n/en.ts` with all English UI strings as a typed `Record<string, string>` export; cover: nav labels, button labels, error messages, loading states, settings labels, scope labels, spirit labels, demo badge text, homework check labels.
+  - [x] 2.2 Create `src/app/i18n/zh-CN.ts` mirroring every key from `en.ts` with Simplified Chinese values.
+  - [x] 2.3 Create `src/app/i18n/index.ts` exporting a `useTranslation()` hook that reads `AppSettings.language` from a React context and returns the active locale map.
+  - [x] 2.4 Create a `LanguageContext` (in `src/app/`) that provides the language state and a toggle function; wrap `App.tsx` in it.
 
 ---
 
 ## Phase 2 — Bundled Examples & Shell Layout
 
-- [ ] 3. Add bundled example netlists
+- [x] 3. Add bundled example netlists
   _Requirements: 2.1, 2.2_
-  - [ ] 3.1 Write `src/examples/rc-lowpass.net` — RC low-pass filter with `.tran` directive.
-  - [ ] 3.2 Write `src/examples/rl.net` — RL circuit with `.tran` directive.
-  - [ ] 3.3 Write `src/examples/rlc-ringing.net` — RLC series with under-damped ringing, `.tran` directive.
-  - [ ] 3.4 Write `src/examples/diode-rectifier.net` — half-wave diode rectifier, `.tran` directive.
-  - [ ] 3.5 Write `src/examples/bjt-common-emitter.net` — BJT common-emitter amplifier, `.tran` directive.
-  - [ ] 3.6 Write `src/examples/opamp-inverting.net` — op-amp inverting amplifier, `.ac` directive.
-  - [ ] 3.7 Create `src/examples/index.ts` exporting an `EXAMPLE_CIRCUITS` array of `{ id, label, labelZh, net: string }` where `net` is the bundled netlist imported as a string (`?raw` Vite import).
+  - [x] 3.1 Write `src/examples/rc-lowpass.net` — RC low-pass filter with `.tran` directive.
+  - [x] 3.2 Write `src/examples/rl.net` — RL circuit with `.tran` directive.
+  - [x] 3.3 Write `src/examples/rlc-ringing.net` — RLC series with under-damped ringing, `.tran` directive.
+  - [x] 3.4 Write `src/examples/diode-rectifier.net` — half-wave diode rectifier, `.tran` directive.
+  - [x] 3.5 Write `src/examples/bjt-common-emitter.net` — BJT common-emitter amplifier, `.tran` directive.
+  - [x] 3.6 Write `src/examples/opamp-inverting.net` — op-amp inverting amplifier, `.ac` directive.
+  - [x] 3.7 Create `src/examples/index.ts` exporting an `EXAMPLE_CIRCUITS` array of `{ id, label, labelZh, net: string }` where `net` is the bundled netlist imported as a string (`?raw` Vite import).
 
-- [ ] 4. Build the application shell layout
+- [x] 4. Build the application shell layout
   _Requirements: 9.1, 9.2, 10.1_
-  - [ ] 4.1 Create `src/app/App.tsx` with the two-panel layout: left panel (capture + netlist) and right panel (scope + spirit); use CSS Grid or Flexbox.
-  - [ ] 4.2 Add the top toolbar with: app title ("Circuit Séance / 电路招魂"), language toggle button (EN / 中文), and settings icon button.
-  - [ ] 4.3 Add a status bar at the bottom showing current simulation status; wire it to an `aria-live="polite"` region so screen readers announce status changes.
-  - [ ] 4.4 Implement responsive breakpoint: `< 1024 px` collapses to single-column stacked layout.
-  - [ ] 4.5 Add CSS custom properties for the CRT colour palette: background `#0a0f0a`, phosphor greens, graticule grey; import a monospace web font (e.g. `Share Tech Mono`) for the scope labels.
+  - [x] 4.1 Create `src/app/App.tsx` with the two-panel layout: left panel (capture + netlist) and right panel (scope + spirit); use CSS Grid or Flexbox.
+  - [x] 4.2 Add the top toolbar with: app title ("Circuit Séance / 电路招魂"), language toggle button (EN / 中文), and settings icon button.
+  - [x] 4.3 Add a status bar at the bottom showing current simulation status; wire it to an `aria-live="polite"` region so screen readers announce status changes.
+  - [x] 4.4 Implement responsive breakpoint: `< 1024 px` collapses to single-column stacked layout.
+  - [x] 4.5 Add CSS custom properties for the CRT colour palette: background `#0a0f0a`, phosphor greens, graticule grey; import a monospace web font (e.g. `Share Tech Mono`) for the scope labels.
   - [ ] 4.6 Create a `SettingsPanel` component (modal or drawer) with: provider preset selector (Qwen-VL default, OpenAI-compatible, Gemini, Anthropic stretch), API key field (masked), base URL field (editable, pre-filled by preset), model field (editable, pre-filled by preset), storage mode toggle ("Remember across sessions"), close button.
-  - [ ] 4.7 Wire settings state to `localStorage` / `sessionStorage` per `AppSettings.storageMode`; default storage is `sessionStorage`; never store the key in a React state tree that could be serialised to DevTools.
+  - [x] 4.7 Wire settings state to `localStorage` / `sessionStorage` per `AppSettings.storageMode`; default storage is `sessionStorage`; never store the key in a React state tree that could be serialised to DevTools.
 
 ---
 

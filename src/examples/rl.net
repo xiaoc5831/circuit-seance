@@ -1,0 +1,6 @@
+RL circuit step response tau = L/R = 10m/100 = 100us
+V1 in 0 PULSE(0 5 0 1n 1n 500u 1m)
+R1 in out 100
+L1 out 0 10m
+.tran 1u 1m
+.end

@@ -1,0 +1,8 @@
+Implement spec `circuit-seance` (`.kiro/specs/circuit-seance/`) tasks **1, 2, 3 and 4** (scaffold, i18n, bundled examples, application shell). Headless run: no questions, no approval waits, no git commands, never start a long-running dev server (use `npm run build` / `npx vitest run` to verify).
+
+Notes:
+- The project root is the current directory (it already contains `.kiro/`, `docs/`, `scripts/`, `spikes/`, README, LICENSE). Scaffold Vite + React 18 + TS **in place** (do not create a nested folder; do not overwrite README/LICENSE/.gitignore — merge `.gitignore` entries). Pin exact dependency versions. Add `eecircuit-engine@1.9.0` as a dependency now.
+- Example netlists: use the already-verified netlists in `docs/classics-verified.md` where they fit (RC low-pass τ=1 ms), and write the others (RL, RLC ringing, half-wave diode rectifier with a `.model D` card, BJT common-emitter with a `.model` NPN card, op-amp inverting using a behavioural subcircuit like the ones in that doc). Every example must be valid ngspice syntax (eecircuit-engine/ngspice-45). Quickly verify each with a small Node script using `eecircuit-engine` (like `spikes/rc-transient.mjs`) and fix any that fail; keep the script as `scripts/verify-examples.mjs`.
+- Shell: CRT look from the start (palette vars, Share Tech Mono / VT323 via Google Fonts link, scanline overlay, phosphor glow text). Placeholder panels are fine for features not built yet, but give them proper empty-state copy.
+- Mark completed sub-tasks `[x]` in `tasks.md`.
+- Finish with `npm run build` and `npx vitest run` both passing. Reply with a short summary (files, verification results).

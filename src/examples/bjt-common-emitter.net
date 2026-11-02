@@ -1,0 +1,12 @@
+BJT common-emitter amplifier, gain ~ -RC/RE = -4.5
+.model QNPN NPN(BF=150 IS=1e-14 VAF=100)
+VCC vcc 0 DC 12
+VIN sig 0 SIN(0 200m 1k)
+CIN sig base 10u
+R1 vcc base 47k
+R2 base 0 10k
+RC vcc coll 4.7k
+RE emitter 0 1k
+Q1 coll base emitter QNPN
+.tran 5u 5m
+.end
