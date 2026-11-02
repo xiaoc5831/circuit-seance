@@ -1,6 +1,6 @@
 {
   "name": "circuit-seance",
-  "description": "电路招魂 — Live SPICE simulation in the browser with AI explanation",
+  "description": "\u7535\u8def\u62db\u9b42 \u2014 Live SPICE simulation in the browser with AI explanation",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -11,13 +11,18 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "lint": "eslint . && prettier --check .",
-    "lint:fix": "eslint . --fix && prettier --write .",
+    "lint": "eslint src",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "bash scripts/e2e.sh",
+    "format:check": "prettier --check src",
+    "screenshots": "SCREENS=1 bash scripts/e2e.sh screens",
+    "verify:netlists": "node scripts/verify-examples.mjs src/examples src/features/haunted/netlists",
+    "lint:fix": "eslint src --fix && prettier --write src"
   },
   "dependencies": {
+    "@fontsource/share-tech-mono": "5.3.0",
+    "@fontsource/vt323": "5.3.0",
     "eecircuit-engine": "1.9.0",
     "marked": "14.1.3",
     "nanoid": "5.1.0",

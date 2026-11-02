@@ -1,1 +1,1 @@
-export {};
+export { fileToDataUrl } from './compress';

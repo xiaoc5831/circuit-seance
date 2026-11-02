@@ -121,6 +121,7 @@ function syntaxStage(text: string): ValidationError[] {
     }
 
     // Check for non-ASCII characters (will cause eecircuit-engine to hang)
+    // eslint-disable-next-line no-control-regex
     const nonAsciiMatches = [...text.matchAll(/[^\x00-\x7F]/g)];
     if (nonAsciiMatches.length > 0) {
       errors.push({
@@ -133,11 +134,11 @@ function syntaxStage(text: string): ValidationError[] {
         severity: 'warning',
       });
     }
-  } catch (err: any) {
+  } catch (err: unknown) {
     errors.push({
       lineNumber: null,
-      message: `Syntax error: ${err.message}`,
-      rawMessage: err.message,
+      message: `Syntax error: ${err instanceof Error ? err.message : String(err)}`,
+      rawMessage: err instanceof Error ? err.message : String(err),
       severity: 'error',
     });
   }

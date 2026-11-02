@@ -179,7 +179,7 @@ export function parseNetlist(text: string): ParsedNetlist {
       const parts = rest.split(/\s+/);
       const directiveName = parts[0].toLowerCase();
 
-      let directiveType: ParsedLine['directiveType'] = directiveName as any;
+      let directiveType = directiveName as ParsedLine['directiveType'];
 
       if (directiveName === 'tran') {
         hasTran = true;
@@ -198,6 +198,7 @@ export function parseNetlist(text: string): ParsedNetlist {
       }
 
       directives.push({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- legacy Kiro wave-B shape
         type: directiveType as any,
         params: rest.slice(parts[0].length).trim(),
         lineNumber: lineNum,
@@ -336,6 +337,7 @@ export function validateNetlist(text: string): ValidationResult {
   }
 
   // Check for non-ASCII characters (will cause eecircuit-engine to hang)
+  // eslint-disable-next-line no-control-regex
   const nonAsciiMatches = [...text.matchAll(/[^\x00-\x7F]/g)];
   if (nonAsciiMatches.length > 0) {
     result.warnings.push(

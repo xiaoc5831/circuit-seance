@@ -124,8 +124,13 @@ export class OpenAIAdapter implements LLMAdapter {
     // Set up timeout to abort the request after 60s
     timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
-    // Use provided signal if given, otherwise use controller signal
-    const mergedSignal = signal || controller.signal;
+    // Abort on either the caller's signal or the 60 s timeout (hand fix: the
+    // original ignored the timeout whenever a caller signal was passed)
+    if (signal) {
+      if (signal.aborted) controller.abort();
+      else signal.addEventListener('abort', () => controller.abort(), { once: true });
+    }
+    const mergedSignal = controller.signal;
 
     try {
       const response = await fetch(`${this.baseUrl}/chat/completions`, {
