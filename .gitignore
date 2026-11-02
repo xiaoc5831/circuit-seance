@@ -40,3 +40,7 @@ yarn-error.log*
 vite.config.js
 vite.config.d.ts
 test-results/
+
+# demo recorder raw capture
+docs/demo/raw/
+*.webm

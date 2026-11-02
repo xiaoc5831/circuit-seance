@@ -62,6 +62,24 @@ test('desktop tour B', async ({ page }) => {
   await page.screenshot({ path: `${OUT}/10-settings.png` });
 });
 
+test('possess a component', async ({ page }) => {
+  await guardNetwork(page);
+  await page.goto('/?nointro');
+  await page.getByRole('tab', { name: 'Bench' }).click();
+  await page.getByTestId('bench-rc-lowpass').click();
+  await waitForTrace(page);
+  await page.waitForTimeout(1200);
+  await page.getByTestId('possess-C1').click();
+  const slider = page.getByTestId('possess-slider');
+  await slider.focus();
+  for (let i = 0; i < 17; i++) await slider.press('ArrowRight');
+  await expect(page.getByTestId('possess-readout')).toContainText(/2\.1\d ms/, { timeout: 20_000 });
+  await page.waitForTimeout(1200);
+  await page.evaluate(() => window.scrollTo(0, document.querySelector('.scope-panel')!.getBoundingClientRect().top + window.scrollY - 96));
+  await page.waitForTimeout(600);
+  await page.screenshot({ path: `${OUT}/13-possess.png` });
+});
+
 test('mobile', async ({ browser }) => {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
   const page = await ctx.newPage();

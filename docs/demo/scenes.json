@@ -1,0 +1,206 @@
+{
+  "duration": 132.39,
+  "lead": 0.33,
+  "cut": 0.33,
+  "external": [],
+  "scenes": [
+    {
+      "id": "intro",
+      "start": -0.27
+    },
+    {
+      "id": "drawing",
+      "start": 7.09
+    },
+    {
+      "id": "spirit",
+      "start": 14.04
+    },
+    {
+      "id": "possess",
+      "start": 22.64
+    },
+    {
+      "id": "homework",
+      "start": 42.98
+    },
+    {
+      "id": "classics",
+      "start": 56.1
+    },
+    {
+      "id": "chinese",
+      "start": 73.81
+    },
+    {
+      "id": "settings",
+      "start": 85.11
+    },
+    {
+      "id": "kiro",
+      "start": 92.49
+    },
+    {
+      "id": "closing",
+      "start": 116.7
+    }
+  ],
+  "cues": [
+    {
+      "start": 0.658,
+      "end": 3.958,
+      "text": "1973, UC Berkeley: a program called SPICE learns to simulate circuits.",
+      "top": false
+    },
+    {
+      "start": 3.959,
+      "end": 7.424,
+      "text": "Tonight that 1973 program wakes up, inside your browser.",
+      "top": false
+    },
+    {
+      "start": 7.424,
+      "end": 9.105,
+      "text": "Circuit Séance: a hand-drawn circuit is read into a SPICE netlist…",
+      "top": false
+    },
+    {
+      "start": 9.105,
+      "end": 11.773,
+      "text": "…and ngspice, Berkeley SPICE’s open-source heir compiled to WebAssembly, simulates it on your device.",
+      "top": false
+    },
+    {
+      "start": 11.773,
+      "end": 14.374,
+      "text": "No server, no install, no account. The demo makes zero network requests.",
+      "top": false
+    },
+    {
+      "start": 14.374,
+      "end": 17.127,
+      "text": "Hover the green-phosphor scope to read any instant…",
+      "top": false
+    },
+    {
+      "start": 17.127,
+      "end": 25.006,
+      "text": "…and the Spirit explains the trace with numbers measured from the simulation: τ = 1 ms = R × C.",
+      "top": false
+    },
+    {
+      "start": 25.006,
+      "end": 27.317,
+      "text": "New: possess a component. Pick C1 and its spirit takes the slider.",
+      "top": true
+    },
+    {
+      "start": 27.317,
+      "end": 33.438,
+      "text": "Drag it: ngspice re-runs on every move, and the dashed ghost is the circuit before possession.",
+      "top": true
+    },
+    {
+      "start": 33.438,
+      "end": 36.038,
+      "text": "C × 2.2 → τ × 2.2. The readout shows it live: 1 ms becomes 2.2 ms.",
+      "top": true
+    },
+    {
+      "start": 36.038,
+      "end": 43.308,
+      "text": "Now ÷10: the capacitor fills ten times faster.",
+      "top": true
+    },
+    {
+      "start": 43.308,
+      "end": 48.976,
+      "text": "Homework check: solve it by hand, then let the simulation grade you (±5 %).",
+      "top": true
+    },
+    {
+      "start": 48.976,
+      "end": 53.43,
+      "text": "A classic slip, τ = RC/2, gets caught: off by −50 %.",
+      "top": true
+    },
+    {
+      "start": 53.43,
+      "end": 58.026,
+      "text": "Fix it, check again: correct. A lab partner for every EE problem set.",
+      "top": true
+    },
+    {
+      "start": 58.026,
+      "end": 60.218,
+      "text": "Haunted Classics: famous circuits resurrected from old pages.",
+      "top": false
+    },
+    {
+      "start": 60.218,
+      "end": 66.323,
+      "text": "The 1972 NE555 timer: its capacitor saws between ⅓ and ⅔ of the supply.",
+      "top": false
+    },
+    {
+      "start": 66.323,
+      "end": 74.143,
+      "text": "Bill Hewlett’s 1939 Wien-bridge oscillator: a sine wave grows out of a 10 mV whisper.",
+      "top": false
+    },
+    {
+      "start": 74.143,
+      "end": 85.444,
+      "text": "Every label and every explanation also works in Chinese, fully offline, with no blocked services.",
+      "top": false
+    },
+    {
+      "start": 85.444,
+      "end": 88.938,
+      "text": "Bring your own key (Qwen-VL by default) to read photos of your own drawings.",
+      "top": false
+    },
+    {
+      "start": 88.938,
+      "end": 92.824,
+      "text": "The key stays in this browser and goes only to the provider you pick. The demo needs none.",
+      "top": false
+    },
+    {
+      "start": 92.824,
+      "end": 98.597,
+      "text": "We built it spec-first with Kiro: steering, an EARS requirements spec, a design and a linked task list.",
+      "top": false
+    },
+    {
+      "start": 98.597,
+      "end": 103.407,
+      "text": "Every requirement is a WHEN … THE SYSTEM SHALL line that tasks link back to.",
+      "top": false
+    },
+    {
+      "start": 103.407,
+      "end": 107.815,
+      "text": "Kiro implemented the tasks in headless waves and ticked them off.",
+      "top": false
+    },
+    {
+      "start": 107.815,
+      "end": 113.027,
+      "text": "Agent hooks fired on every save: lint, netlist tests, and a spirit-tone review that hunts for leaked keys.",
+      "top": false
+    },
+    {
+      "start": 113.027,
+      "end": 117.028,
+      "text": "When the free credits ran out, we finished by hand, and logged every hand-written file.",
+      "top": false
+    },
+    {
+      "start": 122.78,
+      "end": 128.981,
+      "text": "Circuit Séance · 电路招魂. Berkeley SPICE, resurrected in your browser.",
+      "top": false
+    }
+  ]
+}
