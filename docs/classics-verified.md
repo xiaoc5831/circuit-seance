@@ -19,7 +19,7 @@ C1 thr 0 10n
 S1 dis 0 thr 0 SW555
 .model SW555 SW(Ron=10 Roff=1e9 Vt=2.5 Vh=0.8333)
 Bout out 0 V = v(dis) > 1 ? 5 : 0
-.tran 0.5u 600u
+.tran 0.5u 1m
 .end
 ```
 
