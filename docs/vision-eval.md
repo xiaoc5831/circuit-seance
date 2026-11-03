@@ -74,3 +74,14 @@ node tools/eval-vision.mjs score                   # → eval/results/summary.md
 ```
 
 Answers are cached per model and image in `eval/results/raw/`, so a rerun only sends what is missing. The 2 successful answers above are kept, which leaves 22 calls for the full set. The key is read only from the environment and sent only in the `Authorization` header. It is never printed, logged or written to disk.
+
+## Run 2026-11-03 (AMD Radeon Token Factory, free tier)
+
+Endpoint `https://developer.amd.com.cn/radeon/api/v1` (OpenAI-compatible). Same 12 synthetic images, same scorer.
+
+| Model | Fully right | R/L/C values | Exact component set | Median latency |
+|---|---|---|---|---|
+| Gemma-4-31B-IT | **7/12 (58 %)** | 38/38 (100 %) | 12/12 | 18.4 s |
+| MiniCPM-V-4.7-35B-A3B | 3/12 (25 %) | 36/38 (95 %) | 11/12 | 19.7 s |
+
+Gemma-4-31B-IT is the recommended free vision model. Passive circuits (RC, RLC, ladder, rectifier, Wien photo) pass; the remaining failures are op-amp/555 modelling (non-ideal op-amp gain, unknown `ne555` subckt), not reading errors — every component value was read correctly. Next fix: give the prompt a built-in `opamp`/`ne555` subckt library. n=12 synthetic images; real hand-drawn photos not yet measured.
