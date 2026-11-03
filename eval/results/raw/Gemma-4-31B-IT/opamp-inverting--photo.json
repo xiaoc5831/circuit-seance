@@ -1,0 +1,51 @@
+{
+  "model": "Gemma-4-31B-IT",
+  "id": "opamp-inverting--photo",
+  "image": "opamp-inverting--photo.jpg",
+  "promptHash": "66b78e18f886",
+  "ok": true,
+  "latencyMs": 12005,
+  "attempts": [
+    {
+      "status": 200,
+      "ms": 12005
+    }
+  ],
+  "finish": "stop",
+  "usage": {
+    "prompt_tokens": 1064,
+    "total_tokens": 1213,
+    "completion_tokens": 149,
+    "prompt_tokens_details": {
+      "cached_tokens": 6,
+      "image_tokens": 273,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "reasoning_tokens": 0,
+    "cost": 0.0000474642,
+    "cost_details": {
+      "upstream_inference_cost": 0.000047464200000000005,
+      "upstream_inference_prompt_cost": 0.000037034200000000005,
+      "upstream_inference_completions_cost": 0.00001043,
+      "total_cost": 0.0000474642,
+      "input_cost": 0.00003703,
+      "output_cost": 0.00001043,
+      "cached_input_cost": 4.2e-9,
+      "cache_write_input_cost": 0,
+      "request_cost": 0,
+      "web_search_cost": 0,
+      "image_input_cost": null,
+      "image_output_cost": null,
+      "audio_input_cost": null,
+      "data_storage_cost": 0.00001213
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "content": "```spice\nInverting amplifier\nVin 1 0 SIN(0 0.5 1k)\nR1 1 2 1k\nRf 2 3 10k\nX1 0 2 3 opamp\n.tran 0 5m 0 10u\n.end\n```\n\nConfidence: high\n\n* The input source is interpreted as a sine wave with 0.5V amplitude and 1kHz frequency based on the \"0.5V, 1kHz\" note.\n* Node 0 is ground, Node 1 is the input signal, Node 2 is the inverting input, and Node 3 is the output."
+}

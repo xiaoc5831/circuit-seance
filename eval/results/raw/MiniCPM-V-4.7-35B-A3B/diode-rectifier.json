@@ -1,0 +1,53 @@
+{
+  "model": "MiniCPM-V-4.7-35B-A3B",
+  "id": "diode-rectifier",
+  "image": "diode-rectifier.png",
+  "ok": true,
+  "latencyMs": 18965,
+  "attempts": [
+    {
+      "status": 200,
+      "ms": 18965
+    }
+  ],
+  "finish": "stop",
+  "usage": {
+    "prompt_tokens": 825,
+    "total_tokens": 1072,
+    "completion_tokens": 247,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "created_cache_tokens": 544,
+      "multimodal_tokens": {
+        "image": 314
+      },
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0,
+      "image_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    },
+    "cost": 0.000046165,
+    "cost_details": {
+      "upstream_inference_cost": 0.000046165,
+      "upstream_inference_prompt_cost": 0.000028875,
+      "upstream_inference_completions_cost": 0.00001729,
+      "total_cost": 0.000046165,
+      "input_cost": 0.000028875,
+      "output_cost": 0.00001729,
+      "cached_input_cost": 0,
+      "cache_write_input_cost": 0,
+      "request_cost": 0,
+      "web_search_cost": 0,
+      "image_input_cost": null,
+      "image_output_cost": null,
+      "audio_input_cost": null,
+      "data_storage_cost": 0.00001072
+    }
+  },
+  "content": "```spice\nHalf-wave rectifier with smoothing capacitor\nV1 1 0 SIN(0 10 50)\nD1 1 2 D1N4148\nC1 2 0 10u\nR1 2 0 10k\n.model D1N4148 D(is=2.52n rs=0.569 n=1.752 ck=3.49p)\n.tran 0 20m 0 10u\n.end\n```\nConfidence: high\n\n*   The voltage source V1 is defined as a sine wave with 0 DC offset, 10V amplitude, and 50Hz frequency.\n*   The diode D1 is modeled using a standard 1N4148 model definition.\n*   The transient analysis `.tran` runs for 20ms (covering 1 full cycle of the 50Hz input) with a step size of 10µs to capture the ripple details.\n*   Node 2 is the output node labeled \"out\" in the schematic."
+}

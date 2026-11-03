@@ -1,0 +1,53 @@
+{
+  "model": "MiniCPM-V-4.7-35B-A3B",
+  "id": "opamp-inverting--photo",
+  "image": "opamp-inverting--photo.jpg",
+  "ok": true,
+  "latencyMs": 32574,
+  "attempts": [
+    {
+      "status": 200,
+      "ms": 32574
+    }
+  ],
+  "finish": "stop",
+  "usage": {
+    "prompt_tokens": 825,
+    "total_tokens": 1048,
+    "completion_tokens": 223,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "created_cache_tokens": 544,
+      "multimodal_tokens": {
+        "image": 314
+      },
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0,
+      "image_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    },
+    "cost": 0.000044485,
+    "cost_details": {
+      "upstream_inference_cost": 0.000044485000000000005,
+      "upstream_inference_prompt_cost": 0.000028875,
+      "upstream_inference_completions_cost": 0.00001561,
+      "total_cost": 0.000044485,
+      "input_cost": 0.000028875,
+      "output_cost": 0.00001561,
+      "cached_input_cost": 0,
+      "cache_write_input_cost": 0,
+      "request_cost": 0,
+      "web_search_cost": 0,
+      "image_input_cost": null,
+      "image_output_cost": null,
+      "audio_input_cost": null,
+      "data_storage_cost": 0.000010480000000000001
+    }
+  },
+  "content": "```spice\nInverting Amplifier Circuit\nV1 in 0 SIN(0 0.5 1k)\nR1 in n1 1k\nRf n1 out 10k\nX1 n1 0 out opamp\n.tran 0 5m 0 10u\n.end\n```\n\nConfidence: high\n\n*   The input source `V1` is defined as a sine wave with 0.5V amplitude and 1kHz frequency.\n*   The op-amp is instantiated using the standard subcircuit `opamp` defined in the instructions.\n*   The non-inverting input (+) of the op-amp is connected to ground (node 0).\n*   The inverting input (-) is connected to the junction of R1 and Rf (node n1).\n*   A transient analysis (`.tran`) is performed for 5ms (5 periods of the 1kHz signal) with a step size of 10µs to capture the waveform details."
+}

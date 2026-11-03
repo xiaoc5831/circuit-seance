@@ -85,3 +85,34 @@ Endpoint `https://developer.amd.com.cn/radeon/api/v1` (OpenAI-compatible). Same 
 | MiniCPM-V-4.7-35B-A3B | 3/12 (25 %) | 36/38 (95 %) | 11/12 | 19.7 s |
 
 Gemma-4-31B-IT is the recommended free vision model. Passive circuits (RC, RLC, ladder, rectifier, Wien photo) pass; the remaining failures are op-amp/555 modelling (non-ideal op-amp gain, unknown `ne555` subckt), not reading errors — every component value was read correctly. Next fix: give the prompt a built-in `opamp`/`ne555` subckt library. n=12 synthetic images; real hand-drawn photos not yet measured.
+
+## Run 2026-11-03 (2): built-in subckt library + prompt change
+
+**What changed**
+
+- `src/features/netlist/stdlib.ts`: built-in `opamp` (pins `inp inn out`, same macro-model as the examples), a behavioural `ne555` (pins `gnd trig out rst ctrl thr dis vcc`, datasheet pins 1..8 in order; smooth SR latch, 1k/10k/10n at 5 V runs at 6.79 kHz like the hand-written SW555 model), and diode/BJT `.model`s (1N4148, D1N4148, 1N4001, 1N4007, 1N5819, 2N3904, 2N3906, 2N2222, BC547, BC557; the BC parts are approximate). `sanitizeNetlist` appends any of these the netlist uses but doesn't define, so the app's sim worker and this scorer both get it. A netlist's own definition wins.
+- Transcription prompt: "these parts are built in, don't define them", the op-amp pin order (+in, -in, out) with one inverting-amp example, the 555 pin order with one astable example, the model names, and "add `.ic v(<loop node>)=0.01` to oscillators".
+- Scorer: cache entries carry a hash of the prompt and stale ones are re-sent (the old answers move to `raw/<model>/superseded/`). One scorer fix: the 10 mV `.ic` kick the scorer adds on *every* node, combined with the truth's `UIC`, made ngspice abort on a correct integrator (op-amp output can't be both 10 mV and 1e5 x its input difference). When the kicked run fails, the scorer now retries without its own kick. It only changes the integrator row below.
+
+**Gemma-4-31B-IT, before → after** (12 synthetic images, ±5 % behaviour + every R/L/C value)
+
+| Image | Before (old prompt, 83394b8) | Library only, cached answers | After (new prompt for these 5) |
+|---|---|---|---|
+| opamp-inverting | ✗ ppLate 90 %: `X1 3 2 3` (output on +in) | ✗ same | ✓ 0.0 %: `X1 0 2 3 opamp` |
+| opamp-inverting--photo | ✗ ppLate 90 %: `X1 3 0 2` (pins rotated) | ✗ same | ✓ 0.0 % |
+| opamp-integrator | ✗ rampSlope 77 %: `X1 2 0 3` (+/- swapped) | ✗ same | ✓ 0.0 % (needed the kick fix above) |
+| ne555-astable | ✗ unknown subckt `ne555` (7 pins, own order) | ✗ too few pins for library `ne555` | ✗ the answer contains **two** `X1` lines (the model "corrected itself" inside the netlist) plus `R_DIS 2 6 0` → ngspice: device already exists |
+| wien-bridge | ✗ oscFreq ∞: output wired to -in | ✗ same | ✗ oscFreq ∞: R1 drawn from out to the RC arm is read as `R1 1 2`, onto the -in node, so the loop is wrong |
+| the other 7 | 7/7 ✓ | 7/7 ✓ | 7/7 ✓ (not re-sent) |
+| **Fully right** | **7/12** | **7/12** | **10/12** |
+
+MiniCPM-V-4.7-35B-A3B, cached answers only (not re-sent): 3/12 → **5/12**. Both op-amp inverting answers were right but used the subckt without defining it; the library makes them run.
+
+**Read this with care**
+
+- n = 12 synthetic renders of the app's own drawings. One answer per image, temperature 0.3, no repeats, so a single image flipping is within run-to-run noise. Real phone photos of hand drawings are still not measured.
+- The "after" column mixes prompts: the 5 failing images were re-sent with the new prompt, the 7 passing ones keep their old-prompt answers. A full re-run on the new prompt (12 calls) would remove that caveat; it was not done to stay inside the call budget.
+- The prompt's two examples (inverting amp `X1 0 inv out opamp`, 555 astable pin-out) are the same textbook topologies as two eval circuits. They teach pin order, but they also make those two rows easier than an unseen circuit would be. The integrator and Wien rows got no example.
+- The earlier note ("non-ideal op-amp gain") was wrong: the 90 % / 77 % op-amp misses were **pin-order errors in the `X` line**, not the model.
+- The ne555 library model is fine on Gemma's pin-out: with only its corrected `X1` line kept, the netlist runs at 6787 Hz (0.0 % off). That was a diagnostic, not a score; the scored answer still fails.
+- 5 API calls used (calls log 51 → 56 of the 66 cap), no retries.

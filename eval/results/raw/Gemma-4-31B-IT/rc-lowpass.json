@@ -1,0 +1,50 @@
+{
+  "model": "Gemma-4-31B-IT",
+  "id": "rc-lowpass",
+  "image": "rc-lowpass.png",
+  "ok": true,
+  "latencyMs": 58339,
+  "attempts": [
+    {
+      "status": 200,
+      "ms": 58339
+    }
+  ],
+  "finish": "stop",
+  "usage": {
+    "prompt_tokens": 788,
+    "total_tokens": 936,
+    "completion_tokens": 148,
+    "prompt_tokens_details": {
+      "cached_tokens": 7,
+      "image_tokens": 273,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "reasoning_tokens": 0,
+    "cost": 0.0000376999,
+    "cost_details": {
+      "upstream_inference_cost": 0.0000376999,
+      "upstream_inference_prompt_cost": 0.0000273399,
+      "upstream_inference_completions_cost": 0.00001036,
+      "total_cost": 0.0000376999,
+      "input_cost": 0.000027335,
+      "output_cost": 0.00001036,
+      "cached_input_cost": 4.9e-9,
+      "cache_write_input_cost": 0,
+      "request_cost": 0,
+      "web_search_cost": 0,
+      "image_input_cost": null,
+      "image_output_cost": null,
+      "audio_input_cost": null,
+      "data_storage_cost": 0.00000936
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "content": "```spice\nRC low-pass step response\nV1 in 0 PULSE(0 5 0 1u 1u 1m 2m)\nR1 in out 1k\nC1 out 0 1u\n.tran 0 5m 0 10u\n.end\n```\n\nConfidence: high\n\n* The pulse source `V1` is configured as a step from 0V to 5V with a fast rise/fall time (1u) to simulate the requested step response.\n* The transient analysis duration is set to 5ms, which covers 5 time constants ($\\tau = RC = 1\\text{ms}$)."
+}

@@ -1,8 +1,743 @@
 [
   {
+    "model": "Gemma-4-31B-IT",
+    "id": "rc-lowpass",
+    "variant": null,
+    "promptHash": null,
+    "latencyMs": 58339,
+    "attempts": 1,
+    "apiOk": true,
+    "want": {
+      "tau63": 0.000999095498378695,
+      "final": 4.998322713955912
+    },
+    "confidence": "high",
+    "netlist": "RC low-pass step response\nV1 in 0 PULSE(0 5 0 1u 1u 1m 2m)\nR1 in out 1k\nC1 out 0 1u\n.tran 0 5m 0 10u\n.end",
+    "values": {
+      "hit": 2,
+      "total": 2,
+      "extra": 0,
+      "exactSet": true,
+      "misses": []
+    },
+    "tweaks": [
+      "stimulus set to ground truth"
+    ],
+    "stage": "scored",
+    "node": "out",
+    "got": {
+      "tau63": 0.000999095498378695,
+      "final": 4.998322713955912
+    },
+    "maxRelErr": 0,
+    "behaviourPass": true
+  },
+  {
+    "model": "Gemma-4-31B-IT",
+    "id": "rlc-ringing",
+    "variant": null,
+    "promptHash": null,
+    "latencyMs": 9345,
+    "attempts": 1,
+    "apiOk": true,
+    "want": {
+      "ringFreq": 1013.0246020260047,
+      "peak": 8.891503672886603
+    },
+    "confidence": "high",
+    "netlist": "Series RLC Ringing Circuit\nV1 1 0 PULSE(0 5 1u 1n 1n 10u 20u)\nR1 1 2 100\nL1 2 3 100m\nC1 3 0 253n\n.tran 0 100u 100n\n.end",
+    "values": {
+      "hit": 3,
+      "total": 3,
+      "extra": 0,
+      "exactSet": true,
+      "misses": []
+    },
+    "tweaks": [
+      "stimulus set to ground truth"
+    ],
+    "stage": "scored",
+    "node": "3",
+    "got": {
+      "ringFreq": 1013.0246020260047,
+      "peak": 8.891503672886603
+    },
+    "maxRelErr": 0,
+    "behaviourPass": true
+  },
+  {
+    "model": "Gemma-4-31B-IT",
+    "id": "diode-rectifier",
+    "variant": null,
+    "promptHash": null,
+    "latencyMs": 57799,
+    "attempts": 1,
+    "apiOk": true,
+    "want": {
+      "maxLate": 9.391258754711803,
+      "minLate": 7.8626309329727
+    },
+    "confidence": "high",
+    "netlist": "Half-wave rectifier + smoothing cap\nV1 1 0 SIN(0 10 50)\nD1 1 2 1N4148\nC1 2 0 10u\nR1 2 0 10k\n.model 1N4148 D\n.tran 0 100m 0 1m\n.end",
+    "values": {
+      "hit": 2,
+      "total": 2,
+      "extra": 0,
+      "exactSet": true,
+      "misses": []
+    },
+    "tweaks": [
+      "stimulus set to ground truth"
+    ],
+    "stage": "scored",
+    "node": "2",
+    "got": {
+      "maxLate": 9.334926181606448,
+      "minLate": 7.809255778572509
+    },
+    "maxRelErr": 0.0067884598495342565,
+    "behaviourPass": true
+  },
+  {
+    "model": "Gemma-4-31B-IT",
+    "id": "opamp-inverting",
+    "variant": null,
+    "promptHash": "66b78e18f886",
+    "latencyMs": 11430,
+    "attempts": 1,
+    "apiOk": true,
+    "want": {
+      "ppLate": 9.998462493087072
+    },
+    "confidence": "high",
+    "netlist": "Inverting amplifier\nVin 1 0 SIN(0 0.5 1k)\nR1 1 2 1k\nRf 2 3 10k\nX1 0 2 3 opamp\n.tran 0 5m 0 10u\n.end",
+    "values": {
+      "hit": 2,
+      "total": 2,
+      "extra": 0,
+      "exactSet": true,
+      "misses": []
+    },
+    "tweaks": [
+      "stimulus set to ground truth"
+    ],
+    "stage": "scored",
+    "node": "3",
+    "got": {
+      "ppLate": 9.998462493087072
+    },
+    "maxRelErr": 0,
+    "behaviourPass": true
+  },
+  {
+    "model": "Gemma-4-31B-IT",
+    "id": "ne555-astable",
+    "variant": null,
+    "promptHash": "66b78e18f886",
+    "latencyMs": 36112,
+    "attempts": 1,
+    "apiOk": true,
+    "want": {
+      "oscFreq": 6787.330433234127
+    },
+    "confidence": "high",
+    "netlist": "* Signetics NE555 - Astable Mode\nVCC 1 0 DC 5V\nRA 1 2 1k\nRB 2 3 10k\nC 3 0 10n\nX1 0 3 4 1 5 3 6 1 ne555\n* Nodes for X1: GND=0, TRIG=3, OUT=4, RESET=1, CTRL=5, THRES=3, DIS=6, VCC=1\n* Note: Pin 7 (DIS) is connected to node 2 (between RA and RB)\nR_DIS 2 6 0\n* Correcting X1 instantiation to match the drawing connections:\n* Pin 1 (GND) -> 0\n* Pin 2 (TRIG) -> 3\n* Pin 3 (OUT) -> 4\n* Pin 4 (RST) -> 1\n* Pin 5 (CTRL) -> 5 (floating/unconnected in drawing)\n* Pin 6 (THR) -> 3\n* Pin 7 (DIS) -> 2\n* Pin 8 (VCC) -> 1\nX1 0 3 4 1 5 3 2 1 ne555\n\n.tran 0 1ms 10u\n.ic v(3)=0\n.end",
+    "values": {
+      "hit": 3,
+      "total": 3,
+      "extra": 1,
+      "exactSet": false,
+      "misses": []
+    },
+    "tweaks": [
+      "stimulus set to ground truth"
+    ],
+    "stage": "simulate",
+    "error": "Warning: Value of resistor r_dis is too small, set to 1.000000e-12 | Error on line 25 or its substitute: |   r.x1.r1 1 5 5k | device already exists, bail out |     Simulation interrupted due to error! | Error: circuit not parsed."
+  },
+  {
+    "model": "Gemma-4-31B-IT",
+    "id": "opamp-integrator",
+    "variant": null,
+    "promptHash": "66b78e18f886",
+    "latencyMs": 25818,
+    "attempts": 1,
+    "apiOk": true,
+    "want": {
+      "rampSlope": 9996.116887048605
+    },
+    "confidence": "high",
+    "netlist": "* OP-AMP INTEGRATOR\nVin 1 0 PULSE(0 1 0 1u 1u 1m 2m)\nR1 1 2 10k\nC1 2 3 10n\nRf 2 3 1meg\nX1 0 2 3 opamp\n.tran 0 10m 0 10u\n.end",
+    "values": {
+      "hit": 3,
+      "total": 3,
+      "extra": 0,
+      "exactSet": true,
+      "misses": []
+    },
+    "tweaks": [
+      "stimulus set to ground truth",
+      "kick dropped (run failed with it)"
+    ],
+    "stage": "scored",
+    "node": "3",
+    "got": {
+      "rampSlope": 9996.116887906082
+    },
+    "maxRelErr": 8.578101591736199e-11,
+    "behaviourPass": true
+  },
+  {
+    "model": "Gemma-4-31B-IT",
+    "id": "rc-ladder",
+    "variant": null,
+    "promptHash": null,
+    "latencyMs": 8890,
+    "attempts": 1,
+    "apiOk": true,
+    "want": {
+      "f3db": 955.0206831285865,
+      "gain10k": 0.019646935997770176
+    },
+    "confidence": "high",
+    "netlist": "* TWO-SECTION RC LOW-PASS FILTER\nVin 1 0 SIN(0 1 1.6k)\nR1 1 2 1k\nC1 2 0 100n\nR2 2 3 10k\nC2 3 0 10n\n.tran 0 2ms 0 10u\n.end",
+    "values": {
+      "hit": 4,
+      "total": 4,
+      "extra": 0,
+      "exactSet": true,
+      "misses": []
+    },
+    "tweaks": [
+      "stimulus set to ground truth"
+    ],
+    "stage": "scored",
+    "node": "3",
+    "got": {
+      "f3db": 955.0206831285865,
+      "gain10k": 0.019646935997770176
+    },
+    "maxRelErr": 0,
+    "behaviourPass": true
+  },
+  {
+    "model": "Gemma-4-31B-IT",
+    "id": "wien-bridge",
+    "variant": null,
+    "promptHash": "66b78e18f886",
+    "latencyMs": 10679,
+    "attempts": 1,
+    "apiOk": true,
+    "want": {
+      "oscFreq": 992.6157269410339
+    },
+    "confidence": "high",
+    "netlist": "Wien-Bridge Oscillator\n* Components\nR1 1 2 10k\nC1 3 1 16n\nR2 3 0 10k\nC2 2 0 16n\nRf 2 4 21k\nRg 2 0 10k\nX1 3 2 4 opamp\n\n* Analysis\n.tran 0 5m 10u\n.ic v(3)=0.01\n\n.end",
+    "values": {
+      "hit": 6,
+      "total": 6,
+      "extra": 0,
+      "exactSet": true,
+      "misses": []
+    },
+    "tweaks": [],
+    "stage": "scored",
+    "node": "1",
+    "got": {
+      "oscFreq": null
+    },
+    "maxRelErr": null,
+    "behaviourPass": false
+  },
+  {
+    "model": "Gemma-4-31B-IT",
+    "id": "rc-lowpass--tilt",
+    "variant": "9 deg phone tilt + sensor noise",
+    "promptHash": null,
+    "latencyMs": 76011,
+    "attempts": 1,
+    "apiOk": true,
+    "want": {
+      "tau63": 0.000999095498378695,
+      "final": 4.998322713955912
+    },
+    "confidence": "high",
+    "netlist": "* RC low-pass - step response\nV1 in 0 PULSE(0 5 0 1u 1u 10 10m)\nR1 in out 1k\nC1 out 0 1u\n.tran 0 5m 0 10u\n.end",
+    "values": {
+      "hit": 2,
+      "total": 2,
+      "extra": 0,
+      "exactSet": true,
+      "misses": []
+    },
+    "tweaks": [
+      "stimulus set to ground truth"
+    ],
+    "stage": "scored",
+    "node": "out",
+    "got": {
+      "tau63": 0.000999095498378695,
+      "final": 4.998322713955912
+    },
+    "maxRelErr": 0,
+    "behaviourPass": true
+  },
+  {
+    "model": "Gemma-4-31B-IT",
+    "id": "rlc-ringing--pencil",
+    "variant": "graphite pencil, grain, soft blur",
+    "promptHash": null,
+    "latencyMs": 19384,
+    "attempts": 1,
+    "apiOk": true,
+    "want": {
+      "ringFreq": 1013.0246020260047,
+      "peak": 8.891503672886603
+    },
+    "confidence": "high",
+    "netlist": "* Series RLC - why does it ring?\nV1 1 0 PULSE(0 5 1u 1n 1n 1u 2u)\nR1 1 2 100\nL1 2 3 100m\nC1 3 0 253n\n.tran 0 5m 1u\n.end",
+    "values": {
+      "hit": 3,
+      "total": 3,
+      "extra": 0,
+      "exactSet": true,
+      "misses": []
+    },
+    "tweaks": [
+      "stimulus set to ground truth"
+    ],
+    "stage": "scored",
+    "node": "3",
+    "got": {
+      "ringFreq": 1013.0246020260047,
+      "peak": 8.891503672886603
+    },
+    "maxRelErr": 0,
+    "behaviourPass": true
+  },
+  {
+    "model": "Gemma-4-31B-IT",
+    "id": "opamp-inverting--photo",
+    "variant": "notebook photo: keystone, lamp shading, defocus, 1000 px, JPEG q55",
+    "promptHash": "66b78e18f886",
+    "latencyMs": 12005,
+    "attempts": 1,
+    "apiOk": true,
+    "want": {
+      "ppLate": 9.998462493087072
+    },
+    "confidence": "high",
+    "netlist": "Inverting amplifier\nVin 1 0 SIN(0 0.5 1k)\nR1 1 2 1k\nRf 2 3 10k\nX1 0 2 3 opamp\n.tran 0 5m 0 10u\n.end",
+    "values": {
+      "hit": 2,
+      "total": 2,
+      "extra": 0,
+      "exactSet": true,
+      "misses": []
+    },
+    "tweaks": [
+      "stimulus set to ground truth"
+    ],
+    "stage": "scored",
+    "node": "3",
+    "got": {
+      "ppLate": 9.998462493087072
+    },
+    "maxRelErr": 0,
+    "behaviourPass": true
+  },
+  {
+    "model": "Gemma-4-31B-IT",
+    "id": "wien-bridge--photo",
+    "variant": "photo of a print: keystone, heavy vignette, blur, 900 px, JPEG q50",
+    "promptHash": null,
+    "latencyMs": 15044,
+    "attempts": 1,
+    "apiOk": true,
+    "want": {
+      "oscFreq": 992.6157269410339
+    },
+    "confidence": "high",
+    "netlist": "Wien-Bridge Oscillator\n* Components\nR1 2 3 10k\nC1 1 2 16n\nR2 1 0 10k\nC2 1 0 16n\nRf 3 4 21k\nRg 4 0 10k\n\n* Op-Amp instantiation\nX1 1 4 3 opamp\n\n* Op-Amp Subcircuit\n.subckt opamp inp inn out\nRin inp inn 1e7\nB1 out 0 V = 14*tanh(1e5*(v(inp)-v(inn))/14)\n.ends\n\n* Analysis: Transient analysis for 1kHz oscillation (T=1ms)\n.tran 0 5m 0 10u\n\n.end",
+    "values": {
+      "hit": 6,
+      "total": 6,
+      "extra": 0,
+      "exactSet": true,
+      "misses": []
+    },
+    "tweaks": [
+      "added .ic 10 mV kick"
+    ],
+    "stage": "scored",
+    "node": "2",
+    "got": {
+      "oscFreq": 989.3009992102471
+    },
+    "maxRelErr": 0.003339386673835862,
+    "behaviourPass": true
+  },
+  {
+    "model": "MiniCPM-V-4.7-35B-A3B",
+    "id": "rc-lowpass",
+    "variant": null,
+    "promptHash": null,
+    "latencyMs": null,
+    "attempts": 2,
+    "apiOk": false,
+    "want": {
+      "tau63": 0.000999095498378695,
+      "final": 4.998322713955912
+    },
+    "stage": "api",
+    "error": "timeout 90s"
+  },
+  {
+    "model": "MiniCPM-V-4.7-35B-A3B",
+    "id": "rlc-ringing",
+    "variant": null,
+    "promptHash": null,
+    "latencyMs": 19671,
+    "attempts": 1,
+    "apiOk": true,
+    "want": {
+      "ringFreq": 1013.0246020260047,
+      "peak": 8.891503672886603
+    },
+    "confidence": "high",
+    "netlist": "Series RLC Circuit - Transient Analysis\nV1 n1 0 PULSE(0 1 0 1n 1n 1m 2m)\nR1 n1 n2 100\nL1 n2 0 100m\nC1 0 0 253n\n.tran 0 5m 0 10u\n.end",
+    "values": {
+      "hit": 3,
+      "total": 3,
+      "extra": 0,
+      "exactSet": true,
+      "misses": []
+    },
+    "tweaks": [
+      "stimulus set to ground truth"
+    ],
+    "stage": "scored",
+    "node": "n1",
+    "got": {
+      "ringFreq": null,
+      "peak": 5
+    },
+    "maxRelErr": null,
+    "behaviourPass": false
+  },
+  {
+    "model": "MiniCPM-V-4.7-35B-A3B",
+    "id": "diode-rectifier",
+    "variant": null,
+    "promptHash": null,
+    "latencyMs": 18965,
+    "attempts": 1,
+    "apiOk": true,
+    "want": {
+      "maxLate": 9.391258754711803,
+      "minLate": 7.8626309329727
+    },
+    "confidence": "high",
+    "netlist": "Half-wave rectifier with smoothing capacitor\nV1 1 0 SIN(0 10 50)\nD1 1 2 D1N4148\nC1 2 0 10u\nR1 2 0 10k\n.model D1N4148 D(is=2.52n rs=0.569 n=1.752 ck=3.49p)\n.tran 0 20m 0 10u\n.end",
+    "values": {
+      "hit": 2,
+      "total": 2,
+      "extra": 0,
+      "exactSet": true,
+      "misses": []
+    },
+    "tweaks": [
+      "stimulus set to ground truth"
+    ],
+    "stage": "simulate",
+    "error": "strtod: Invalid argument\n\nERROR: fatal error in ngspice, exit(1)\nWarning: Detected unsettled top-level await at file:///workspace/projects/df3f975b-3143-40a3-aa65-e907fb70d1e7/circuit-seance/tools/eval-vision.mjs:493\nelse if (cmd === 'sim') await cmdSim();\n                        ^\n\n\n\n"
+  },
+  {
+    "model": "MiniCPM-V-4.7-35B-A3B",
+    "id": "opamp-inverting",
+    "variant": null,
+    "promptHash": null,
+    "latencyMs": 12854,
+    "attempts": 1,
+    "apiOk": true,
+    "want": {
+      "ppLate": 9.998462493087072
+    },
+    "confidence": "high",
+    "netlist": "Inverting Amplifier Circuit\nV1 in 0 SIN(0 0.5 1k)\nR1 in node1 1k\nRf node1 out 10k\nX1 node1 0 out opamp\n.tran 0 5m 0 10u\n.end",
+    "values": {
+      "hit": 2,
+      "total": 2,
+      "extra": 0,
+      "exactSet": true,
+      "misses": []
+    },
+    "tweaks": [
+      "stimulus set to ground truth"
+    ],
+    "stage": "scored",
+    "node": "out",
+    "got": {
+      "ppLate": 10.000764025121867
+    },
+    "maxRelErr": 0.0002301885951352181,
+    "behaviourPass": true
+  },
+  {
+    "model": "MiniCPM-V-4.7-35B-A3B",
+    "id": "ne555-astable",
+    "variant": null,
+    "promptHash": null,
+    "latencyMs": 28080,
+    "attempts": 1,
+    "apiOk": true,
+    "want": {
+      "oscFreq": 6787.330433234127
+    },
+    "confidence": "high",
+    "netlist": "SIGNETICS NE555 ASTABLE MODE CIRCUIT\nV1 1 0 DC 5V\nRA 1 2 1k\nRB 2 3 10k\nC1 3 0 10n\nX555 1 2 3 0 2 6 7 4 OUT opamp555\n.tran 0 10m 0 10u\n.end\n\n.subckt opamp555 vcc dis thr trig rst out gnd\n* Simplified NE555 Model for Astable Operation\n* Pins: 1=GND, 2=TRIG, 3=OUT, 4=RST, 6=THR, 7=DIS, 8=VCC\n* Note: This is a behavioral approximation for simulation purposes\nBout out 0 V = if(v(thr) > v(trig), 0, if(v(trig) > v(thr)/2, 5, v(out)))\nRint out 0 1k\n.ends",
+    "values": {
+      "hit": 3,
+      "total": 3,
+      "extra": 0,
+      "exactSet": true,
+      "misses": []
+    },
+    "tweaks": [
+      "stimulus set to ground truth"
+    ],
+    "stage": "simulate",
+    "error": "Too many parameters for subcircuit type \"opamp555\" (instance: xx555) |     Simulation interrupted due to error! | Error: there aren't any circuits loaded."
+  },
+  {
+    "model": "MiniCPM-V-4.7-35B-A3B",
+    "id": "opamp-integrator",
+    "variant": null,
+    "promptHash": null,
+    "latencyMs": 30620,
+    "attempts": 1,
+    "apiOk": true,
+    "want": {
+      "rampSlope": 9996.116887048605
+    },
+    "confidence": "high",
+    "netlist": "OP-AMP INTEGRATOR\n* Input Square Wave Source: 1V, assuming 1kHz period for transient analysis\nV1 IN 0 PULSE(-1 1 0 1u 1u 0.5m 1m)\n\n* Resistors\nR1 IN 2 10k\nRf 2 OUT 1meg\n\n* Capacitor in feedback loop\nC1 2 OUT 10n\n\n* Op-Amp Integration (Non-inverting input grounded)\nX1 2 0 OUT opamp\n\n* Op-Amp Subcircuit Definition\n.subckt opamp inp inn out\nRin inp inn 1e7\nB1 out 0 V = 14*tanh(1e5*(v(inp)-v(inn))/14)\n.ends\n\n* Transient Analysis\n.tran 0 2m 0 1u\n.end",
+    "values": {
+      "hit": 3,
+      "total": 3,
+      "extra": 0,
+      "exactSet": true,
+      "misses": []
+    },
+    "tweaks": [
+      "stimulus set to ground truth",
+      "added .ic 10 mV kick"
+    ],
+    "stage": "scored",
+    "node": "2",
+    "got": {
+      "rampSlope": 17719.697493874413
+    },
+    "maxRelErr": 0.7726580925471978,
+    "behaviourPass": false
+  },
+  {
+    "model": "MiniCPM-V-4.7-35B-A3B",
+    "id": "rc-ladder",
+    "variant": null,
+    "promptHash": null,
+    "latencyMs": 13356,
+    "attempts": 1,
+    "apiOk": true,
+    "want": {
+      "f3db": 955.0206831285865,
+      "gain10k": 0.019646935997770176
+    },
+    "confidence": "high",
+    "netlist": "TWO-SECTION RC LOW-PASS FILTER\nVin 1 0 AC 1\nR1 1 2 1k\nC1 2 0 100n\nR2 2 3 10k\nC2 3 0 10n\n.ac dec 50 1 1meg\n.end",
+    "values": {
+      "hit": 4,
+      "total": 4,
+      "extra": 0,
+      "exactSet": true,
+      "misses": []
+    },
+    "tweaks": [
+      "stimulus set to ground truth"
+    ],
+    "stage": "scored",
+    "node": "3",
+    "got": {
+      "f3db": 955.0206831285865,
+      "gain10k": 0.019646935997770176
+    },
+    "maxRelErr": 0,
+    "behaviourPass": true
+  },
+  {
+    "model": "MiniCPM-V-4.7-35B-A3B",
+    "id": "wien-bridge",
+    "variant": null,
+    "promptHash": null,
+    "latencyMs": 29326,
+    "attempts": 1,
+    "apiOk": true,
+    "want": {
+      "oscFreq": 992.6157269410339
+    },
+    "confidence": "high",
+    "netlist": "Wien-Bridge Oscillator Circuit\n* Components\nC1 1 2 16n\nR1 2 3 10k\nC2 1 0 16n\nR2 1 0 10k\nRf 4 3 21k\nRg 4 0 10k\n\n* Op-Amp Subcircuit Instance\n* Node 1: Non-inverting input (+)\n* Node 4: Inverting input (-)\n* Node 3: Output (OUT)\nX1 1 4 3 opamp\n\n* Op-Amp Subcircuit Definition\n.subckt opamp inp inn out\nRin inp inn 1e7\nB1 out 0 V = 14*tanh(1e5*(v(inp)-v(inn))/14)\n.ends\n\n* Analysis Directive\n* Frequency f  1/(2RC) = 1/(2 * 10k * 16n)  995 Hz\n* Period T  1ms. Simulate for 5 periods (5ms) with small step.\n.tran 0 5m 0 10u\n\n.end",
+    "values": {
+      "hit": 6,
+      "total": 6,
+      "extra": 0,
+      "exactSet": true,
+      "misses": []
+    },
+    "tweaks": [
+      "added .ic 10 mV kick"
+    ],
+    "stage": "scored",
+    "node": "2",
+    "got": {
+      "oscFreq": 989.3009992102471
+    },
+    "maxRelErr": 0.003339386673835862,
+    "behaviourPass": true
+  },
+  {
+    "model": "MiniCPM-V-4.7-35B-A3B",
+    "id": "rc-lowpass--tilt",
+    "variant": "9 deg phone tilt + sensor noise",
+    "promptHash": null,
+    "latencyMs": 16793,
+    "attempts": 1,
+    "apiOk": true,
+    "want": {
+      "tau63": 0.000999095498378695,
+      "final": 4.998322713955912
+    },
+    "confidence": "high",
+    "netlist": "RC low-pass step response\nV1 in 0 PULSE(0 5 0 1n 1n 1m 2m)\nR1 in out 1k\nC1 out 0 1u\n.tran 0 5m 0 10u\n.end",
+    "values": {
+      "hit": 2,
+      "total": 2,
+      "extra": 0,
+      "exactSet": true,
+      "misses": []
+    },
+    "tweaks": [
+      "stimulus set to ground truth"
+    ],
+    "stage": "scored",
+    "node": "out",
+    "got": {
+      "tau63": 0.000999095498378695,
+      "final": 4.998322713955912
+    },
+    "maxRelErr": 0,
+    "behaviourPass": true
+  },
+  {
+    "model": "MiniCPM-V-4.7-35B-A3B",
+    "id": "rlc-ringing--pencil",
+    "variant": "graphite pencil, grain, soft blur",
+    "promptHash": null,
+    "latencyMs": 18787,
+    "attempts": 1,
+    "apiOk": true,
+    "want": {
+      "ringFreq": 1013.0246020260047,
+      "peak": 8.891503672886603
+    },
+    "confidence": "high",
+    "netlist": "Series RLC Circuit - Step Response Analysis\nV1 n1 0 PULSE(0 1 0 1n 1n 1m 2m)\nR1 n1 n2 100\nL1 n2 0 100m\nC1 0 0 253n\n.tran 0 5m 0 10u\n.end",
+    "values": {
+      "hit": 3,
+      "total": 3,
+      "extra": 0,
+      "exactSet": true,
+      "misses": []
+    },
+    "tweaks": [
+      "stimulus set to ground truth"
+    ],
+    "stage": "scored",
+    "node": "n1",
+    "got": {
+      "ringFreq": null,
+      "peak": 5
+    },
+    "maxRelErr": null,
+    "behaviourPass": false
+  },
+  {
+    "model": "MiniCPM-V-4.7-35B-A3B",
+    "id": "opamp-inverting--photo",
+    "variant": "notebook photo: keystone, lamp shading, defocus, 1000 px, JPEG q55",
+    "promptHash": null,
+    "latencyMs": 32574,
+    "attempts": 1,
+    "apiOk": true,
+    "want": {
+      "ppLate": 9.998462493087072
+    },
+    "confidence": "high",
+    "netlist": "Inverting Amplifier Circuit\nV1 in 0 SIN(0 0.5 1k)\nR1 in n1 1k\nRf n1 out 10k\nX1 n1 0 out opamp\n.tran 0 5m 0 10u\n.end",
+    "values": {
+      "hit": 2,
+      "total": 2,
+      "extra": 0,
+      "exactSet": true,
+      "misses": []
+    },
+    "tweaks": [
+      "stimulus set to ground truth"
+    ],
+    "stage": "scored",
+    "node": "out",
+    "got": {
+      "ppLate": 10.000764025121867
+    },
+    "maxRelErr": 0.0002301885951352181,
+    "behaviourPass": true
+  },
+  {
+    "model": "MiniCPM-V-4.7-35B-A3B",
+    "id": "wien-bridge--photo",
+    "variant": "photo of a print: keystone, heavy vignette, blur, 900 px, JPEG q50",
+    "promptHash": null,
+    "latencyMs": 28298,
+    "attempts": 2,
+    "apiOk": true,
+    "want": {
+      "oscFreq": 992.6157269410339
+    },
+    "confidence": "high",
+    "netlist": "Mien-Bridge Oscillator Circuit\n* Components\nR1 OUT N1 10k\nC1 N1 N2 16n\nR2 N2 0 10k\nC2 N2 0 16n\nRf OUT N3 21k\nRg N3 0 10k\n\n* Operational Amplifier Instance\n* N1 is non-inverting input (+), N3 is inverting input (-), OUT is output\nX1 N1 N3 OUT opamp\n\n* OpAmp Subcircuit Definition\n.subckt opamp inp inn out\nRin inp inn 1e7\nB1 out 0 V = 14*tanh(1e5*(v(inp)-v(inn))/14)\n.ends\n\n* Analysis Directive\n* Based on the text \"f = 1/(2piRC) = 1 kHz\", we simulate a transient response\n* to observe the oscillation. Period T = 1/f = 1ms. Simulate for 5ms (5 periods).\n.tran 0 5m 0 10u\n\n.end",
+    "values": {
+      "hit": 6,
+      "total": 6,
+      "extra": 0,
+      "exactSet": true,
+      "misses": []
+    },
+    "tweaks": [
+      "added .ic 10 mV kick"
+    ],
+    "stage": "scored",
+    "node": "n1",
+    "got": {
+      "oscFreq": null
+    },
+    "maxRelErr": null,
+    "behaviourPass": false
+  },
+  {
     "model": "gpt-5.6-terra",
     "id": "rc-lowpass",
     "variant": null,
+    "promptHash": null,
     "latencyMs": 80120,
     "attempts": 1,
     "apiOk": true,
@@ -35,6 +770,7 @@
     "model": "gpt-6.1-sol",
     "id": "rlc-ringing",
     "variant": null,
+    "promptHash": null,
     "latencyMs": 4751,
     "attempts": 1,
     "apiOk": true,

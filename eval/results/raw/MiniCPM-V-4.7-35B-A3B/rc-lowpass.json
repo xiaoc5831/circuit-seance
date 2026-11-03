@@ -1,0 +1,20 @@
+{
+  "model": "MiniCPM-V-4.7-35B-A3B",
+  "id": "rc-lowpass",
+  "image": "rc-lowpass.png",
+  "ok": false,
+  "latencyMs": null,
+  "attempts": [
+    {
+      "status": null,
+      "ms": 90003,
+      "error": "timeout 90s"
+    },
+    {
+      "status": null,
+      "ms": 90002,
+      "error": "timeout 90s"
+    }
+  ],
+  "content": null
+}

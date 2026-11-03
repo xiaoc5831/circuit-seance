@@ -1,0 +1,50 @@
+{
+  "model": "Gemma-4-31B-IT",
+  "id": "rc-lowpass--tilt",
+  "image": "rc-lowpass--tilt.jpg",
+  "ok": true,
+  "latencyMs": 76011,
+  "attempts": [
+    {
+      "status": 200,
+      "ms": 76011
+    }
+  ],
+  "finish": "stop",
+  "usage": {
+    "prompt_tokens": 781,
+    "total_tokens": 946,
+    "completion_tokens": 165,
+    "prompt_tokens_details": {
+      "cached_tokens": 493,
+      "image_tokens": 266,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "reasoning_tokens": 0,
+    "cost": 0.0000219751,
+    "cost_details": {
+      "upstream_inference_cost": 0.0000219751,
+      "upstream_inference_prompt_cost": 0.0000104251,
+      "upstream_inference_completions_cost": 0.00001155,
+      "total_cost": 0.0000219751,
+      "input_cost": 0.00001008,
+      "output_cost": 0.00001155,
+      "cached_input_cost": 3.451e-7,
+      "cache_write_input_cost": 0,
+      "request_cost": 0,
+      "web_search_cost": 0,
+      "image_input_cost": null,
+      "image_output_cost": null,
+      "audio_input_cost": null,
+      "data_storage_cost": 0.000009460000000000001
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "content": "```spice\n* RC low-pass - step response\nV1 in 0 PULSE(0 5 0 1u 1u 10 10m)\nR1 in out 1k\nC1 out 0 1u\n.tran 0 5m 0 10u\n.end\n```\n\nConfidence: high\n\n* The source V1 is depicted as a step/pulse; I used a `PULSE` definition to simulate a 0V to 5V step.\n* The time constant $\\tau = RC = 1\\text{k} \\times 1\\text{u} = 1\\text{ms}$. The transient analysis is set to 5ms to cover 5 time constants."
+}

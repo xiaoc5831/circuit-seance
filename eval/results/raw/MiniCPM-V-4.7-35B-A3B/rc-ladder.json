@@ -1,0 +1,53 @@
+{
+  "model": "MiniCPM-V-4.7-35B-A3B",
+  "id": "rc-ladder",
+  "image": "rc-ladder.png",
+  "ok": true,
+  "latencyMs": 13356,
+  "attempts": [
+    {
+      "status": 200,
+      "ms": 13356
+    }
+  ],
+  "finish": "stop",
+  "usage": {
+    "prompt_tokens": 973,
+    "total_tokens": 1144,
+    "completion_tokens": 171,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "created_cache_tokens": 544,
+      "multimodal_tokens": {
+        "image": 462
+      },
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0,
+      "image_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    },
+    "cost": 0.000046025,
+    "cost_details": {
+      "upstream_inference_cost": 0.000046025,
+      "upstream_inference_prompt_cost": 0.000034055,
+      "upstream_inference_completions_cost": 0.00001197,
+      "total_cost": 0.000046025,
+      "input_cost": 0.000034055,
+      "output_cost": 0.00001197,
+      "cached_input_cost": 0,
+      "cache_write_input_cost": 0,
+      "request_cost": 0,
+      "web_search_cost": 0,
+      "image_input_cost": null,
+      "image_output_cost": null,
+      "audio_input_cost": null,
+      "data_storage_cost": 0.00001144
+    }
+  },
+  "content": "```spice\nTWO-SECTION RC LOW-PASS FILTER\nVin 1 0 AC 1\nR1 1 2 1k\nC1 2 0 100n\nR2 2 3 10k\nC2 3 0 10n\n.ac dec 50 1 1meg\n.end\n```\nConfidence: high\n\n*   The circuit is a passive two-section RC low-pass filter.\n*   Input voltage source `Vin` is set to 1V AC amplitude.\n*   Node 1 is the input after the source, Node 2 is the intermediate junction, and Node 3 is the output.\n*   An AC analysis is performed from 1 Hz to 1 MHz to observe the frequency response."
+}

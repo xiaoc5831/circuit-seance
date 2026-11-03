@@ -1,0 +1,50 @@
+{
+  "model": "Gemma-4-31B-IT",
+  "id": "ne555-astable",
+  "image": "ne555-astable.png",
+  "ok": true,
+  "latencyMs": 22048,
+  "attempts": [
+    {
+      "status": 200,
+      "ms": 22048
+    }
+  ],
+  "finish": "stop",
+  "usage": {
+    "prompt_tokens": 788,
+    "total_tokens": 1126,
+    "completion_tokens": 338,
+    "prompt_tokens_details": {
+      "cached_tokens": 493,
+      "image_tokens": 273,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "reasoning_tokens": 0,
+    "cost": 0.0000343301,
+    "cost_details": {
+      "upstream_inference_cost": 0.0000343301,
+      "upstream_inference_prompt_cost": 0.0000106701,
+      "upstream_inference_completions_cost": 0.00002366,
+      "total_cost": 0.0000343301,
+      "input_cost": 0.000010325,
+      "output_cost": 0.00002366,
+      "cached_input_cost": 3.451e-7,
+      "cache_write_input_cost": 0,
+      "request_cost": 0,
+      "web_search_cost": 0,
+      "image_input_cost": null,
+      "image_output_cost": null,
+      "audio_input_cost": null,
+      "data_storage_cost": 0.00001126
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "content": "```spice\n* Signetics NE555 - Astable Mode\nVCC 1 0 DC 5V\nRA 1 2 1k\nRB 2 3 10k\nC1 3 0 10n\nX1 3 3 4 1 2 1 0 NE555\n* Note: The NE555 is a complex IC. Since no subcircuit was provided for the 555, \n* it is instantiated as a generic component. For simulation, a 555 model is required.\n* Based on the formula f = 1.44 / ((RA + 2*RB)*C), f approx 6.45kHz.\n* Period T approx 155us.\n.tran 0 500u 0 1u\n.end\n```\n\nConfidence: medium\n\n* The NE555 is a complex integrated circuit; a standard SPICE model for the NE555 is required for the simulation to run, as it is not a primitive component like the opamp subcircuit provided in the instructions.\n* I have mapped the pins based on the schematic: Pin 8 (VCC) to node 1, Pin 4 (RST) to node 1, Pin 7 (DIS) to node 2, Pin 6 (THR) to node 3, Pin 2 (TRIG) to node 3, Pin 1 (GND) to node 0, and Pin 3 (OUT) to node 4."
+}

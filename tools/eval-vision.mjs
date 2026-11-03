@@ -8,7 +8,9 @@
  *
  * `call` sends each eval image through the app's own transcription request (same system
  * prompt, same JPEG ≤1600 px downscale as src/features/capture/compress.ts) and caches the
- * raw answer + latency in eval/results/raw/<model>/<id>.json. Every HTTP attempt is logged
+ * raw answer + latency in eval/results/raw/<model>/<id>.json, tagged with a hash of the system + user
+ * prompt. A cached answer only counts when its hash matches the current prompt (answers from before
+ * the hash existed count as stale too); a stale one is moved to raw/<model>/superseded/ and re-sent. Every HTTP attempt is logged
  * to eval/results/calls.jsonl (gitignored) and a hard cap (EVAL_MAX_CALLS, default 60) is enforced
  * across runs; delete that file to start a new budget. A quota/billing refusal stops the run at once.
  * (NODE_USE_ENV_PROXY=1 only matters behind an HTTPS proxy: Node's fetch ignores HTTPS_PROXY otherwise.)
@@ -24,6 +26,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import { spawnSync, execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -40,6 +43,8 @@ const opt = (name, dflt) => {
   const i = args.indexOf(`--${name}`);
   return i >= 0 ? args[i + 1] : dflt;
 };
+const USER_TEXT = 'Please transcribe this circuit schematic into a SPICE netlist.';
+const promptHash = (system) => createHash('sha256').update(system + '\n---\n' + USER_TEXT).digest('hex').slice(0, 12);
 const manifest = () => JSON.parse(fs.readFileSync(path.join(EVAL, 'manifest.json'), 'utf8'));
 
 // ------------------------------------------------------------------ app code reuse
@@ -75,7 +80,7 @@ async function callOnce(model, item, system, dataUrl) {
         role: 'user',
         content: [
           { type: 'image_url', image_url: { url: dataUrl } },
-          { type: 'text', text: 'Please transcribe this circuit schematic into a SPICE netlist.' },
+          { type: 'text', text: USER_TEXT },
         ],
       },
     ],
@@ -122,8 +127,13 @@ async function cmdCall() {
   const { TRANSCRIBE_SYSTEM_PROMPT } = await appModules();
   const outDir = path.join(RES, 'raw', model);
   fs.mkdirSync(outDir, { recursive: true });
-  const todo = manifest().items.filter((it) => (!only || only.includes(it.id)) && !fs.existsSync(path.join(outDir, `${it.id}.json`)));
-  console.log(`${model}: ${todo.length} image(s) to send; calls so far ${callsSoFar()}/${MAX_CALLS}`);
+  const hash = promptHash(TRANSCRIBE_SYSTEM_PROMPT);
+  const fresh = (id) => {
+    const f = path.join(outDir, `${id}.json`);
+    return fs.existsSync(f) && JSON.parse(fs.readFileSync(f, 'utf8')).promptHash === hash;
+  };
+  const todo = manifest().items.filter((it) => (!only || only.includes(it.id)) && !fresh(it.id));
+  console.log(`${model}: ${todo.length} image(s) to send (prompt ${hash}); calls so far ${callsSoFar()}/${MAX_CALLS}`);
   const queue = [...todo];
   let stop = null; // a quota / billing refusal stops every worker: retrying only burns attempts
   const worker = async () => {
@@ -142,7 +152,13 @@ async function cmdCall() {
         console.log(`${it.id}: STOP (${stop}); nothing cached, will be resent next run`);
         break;
       }
-      const rec = { model, id: it.id, image: it.image, ok: res.ok, latencyMs: res.ok ? res.ms : null, attempts, finish: res.finish, usage: res.usage, content: res.content ?? null };
+      const prev = path.join(outDir, `${it.id}.json`);
+      if (fs.existsSync(prev)) {
+        const old = JSON.parse(fs.readFileSync(prev, 'utf8'));
+        fs.mkdirSync(path.join(outDir, 'superseded'), { recursive: true });
+        fs.renameSync(prev, path.join(outDir, 'superseded', `${it.id}.${old.promptHash ?? 'nohash'}.json`));
+      }
+      const rec = { model, id: it.id, image: it.image, promptHash: hash, ok: res.ok, latencyMs: res.ok ? res.ms : null, attempts, finish: res.finish, usage: res.usage, content: res.content ?? null };
       fs.writeFileSync(path.join(outDir, `${it.id}.json`), JSON.stringify(rec, null, 2));
       console.log(`${it.id}: ${res.ok ? 'ok' : 'FAIL'} ${res.ms} ms ${res.error ?? ''}`);
     }
@@ -255,8 +271,11 @@ export function valueMatch(truthNet, candNet) {
  *    its own nodes but takes the ground-truth stimulus (most drawings show only a source symbol,
  *    so amplitude/period are a model's guess, not a transcription error);
  *  - a candidate without .ic gets a 10 mV kick when the truth uses .ic (oscillator start-up).
+ *    With `kick: false` it is left out: the scorer retries that way when the kicked netlist fails to
+ *    simulate (a 10 mV .ic on *every* node + the truth's UIC contradicts a high-gain op-amp whose
+ *    output must be 1e5 x its input difference, and ngspice gives up on a correct circuit).
  */
-export function normalise(candNet, truthNet, needAc) {
+export function normalise(candNet, truthNet, needAc, { kick = true } = {}) {
   const truthV = topLines(truthNet).filter((l) => /^v/i.test(l));
   const candV = topLines(candNet).filter((l) => /^v/i.test(l));
   const swapStimulus = truthV.length > 0 && truthV.length === candV.length;
@@ -287,7 +306,7 @@ export function normalise(candNet, truthNet, needAc) {
   const analysis = truthLines.filter((l) => /^\.(tran|ac|dc|op)\b/i.test(l));
   const tweaks = swapStimulus ? ['stimulus set to ground truth'] : [];
   // the oscillator/integrator truths set initial conditions; give a candidate without any the same kind of kick
-  if (truthLines.some((l) => /^\.ic\b/i.test(l)) && !keep.some((l) => /^\s*\.ic\b/i.test(l))) {
+  if (kick && truthLines.some((l) => /^\.ic\b/i.test(l)) && !keep.some((l) => /^\s*\.ic\b/i.test(l))) {
     const n = nodesOf(candNet);
     if (n.length) {
       keep.push(`.ic ${n.map((x) => `v(${x})=0.01`).join(' ')}`);
@@ -384,7 +403,7 @@ async function cmdScore() {
         truthCache[tkey] = measure(ts, it.probe, it.metrics);
       }
       const want = truthCache[tkey];
-      const row = { model, id: it.id, variant: it.variant ?? null, latencyMs: rec.latencyMs, attempts: rec.attempts.length, apiOk: rec.ok, want };
+      const row = { model, id: it.id, variant: it.variant ?? null, promptHash: rec.promptHash ?? null, latencyMs: rec.latencyMs, attempts: rec.attempts.length, apiOk: rec.ok, want };
       rows.push(row);
       if (!rec.ok) {
         row.stage = 'api';
@@ -401,9 +420,18 @@ async function cmdScore() {
       row.netlist = parsed.netlist;
       const { sanitized } = sanitizeNetlist(parsed.netlist);
       row.values = valueMatch(truthNet, sanitized);
-      const { netlist: normed, tweaks } = normalise(sanitized, truthNet, it.metrics.some((m) => m === 'f3db' || m === 'gain10k'));
+      const needAc = it.metrics.some((m) => m === 'f3db' || m === 'gain10k');
+      const { netlist: normed, tweaks } = normalise(sanitized, truthNet, needAc);
       row.tweaks = tweaks;
-      const cs = simulate(normed);
+      let cs = simulate(normed);
+      if (!cs.ok && tweaks.includes('added .ic 10 mV kick')) {
+        // the kick is the scorer's own addition; when it is what breaks the run, score the netlist as written
+        const retry = simulate(normalise(sanitized, truthNet, needAc, { kick: false }).netlist);
+        if (retry.ok) {
+          cs = retry;
+          row.tweaks = [...tweaks.filter((t) => t !== 'added .ic 10 mV kick'), 'kick dropped (run failed with it)'];
+        }
+      }
       if (!cs.ok) {
         row.stage = 'simulate';
         row.error = (cs.errors ?? []).join(' | ').slice(0, 400);

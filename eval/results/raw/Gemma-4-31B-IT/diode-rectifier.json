@@ -1,0 +1,50 @@
+{
+  "model": "Gemma-4-31B-IT",
+  "id": "diode-rectifier",
+  "image": "diode-rectifier.png",
+  "ok": true,
+  "latencyMs": 57799,
+  "attempts": [
+    {
+      "status": 200,
+      "ms": 57799
+    }
+  ],
+  "finish": "stop",
+  "usage": {
+    "prompt_tokens": 767,
+    "total_tokens": 913,
+    "completion_tokens": 146,
+    "prompt_tokens_details": {
+      "cached_tokens": 7,
+      "image_tokens": 252,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "reasoning_tokens": 0,
+    "cost": 0.0000368249,
+    "cost_details": {
+      "upstream_inference_cost": 0.0000368249,
+      "upstream_inference_prompt_cost": 0.0000266049,
+      "upstream_inference_completions_cost": 0.00001022,
+      "total_cost": 0.0000368249,
+      "input_cost": 0.0000266,
+      "output_cost": 0.00001022,
+      "cached_input_cost": 4.9e-9,
+      "cache_write_input_cost": 0,
+      "request_cost": 0,
+      "web_search_cost": 0,
+      "image_input_cost": null,
+      "image_output_cost": null,
+      "audio_input_cost": null,
+      "data_storage_cost": 0.00000913
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "content": "```spice\nHalf-wave rectifier + smoothing cap\nV1 1 0 SIN(0 10 50)\nD1 1 2 1N4148\nC1 2 0 10u\nR1 2 0 10k\n.model 1N4148 D\n.tran 0 100m 0 1m\n.end\n```\n\nConfidence: high\n\n* Assumed V1 is a sine wave with 10V amplitude based on the \"10V, 50Hz\" label.\n* Used a generic diode model for 1N4148."
+}

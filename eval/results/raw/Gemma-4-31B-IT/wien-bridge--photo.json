@@ -1,0 +1,50 @@
+{
+  "model": "Gemma-4-31B-IT",
+  "id": "wien-bridge--photo",
+  "image": "wien-bridge--photo.jpg",
+  "ok": true,
+  "latencyMs": 15044,
+  "attempts": [
+    {
+      "status": 200,
+      "ms": 15044
+    }
+  ],
+  "finish": "stop",
+  "usage": {
+    "prompt_tokens": 775,
+    "total_tokens": 1036,
+    "completion_tokens": 261,
+    "prompt_tokens_details": {
+      "cached_tokens": 493,
+      "image_tokens": 260,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "reasoning_tokens": 0,
+    "cost": 0.0000284851,
+    "cost_details": {
+      "upstream_inference_cost": 0.0000284851,
+      "upstream_inference_prompt_cost": 0.0000102151,
+      "upstream_inference_completions_cost": 0.00001827,
+      "total_cost": 0.0000284851,
+      "input_cost": 0.00000987,
+      "output_cost": 0.00001827,
+      "cached_input_cost": 3.451e-7,
+      "cache_write_input_cost": 0,
+      "request_cost": 0,
+      "web_search_cost": 0,
+      "image_input_cost": null,
+      "image_output_cost": null,
+      "audio_input_cost": null,
+      "data_storage_cost": 0.00001036
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "content": "```spice\nWien-Bridge Oscillator\n* Components\nR1 2 3 10k\nC1 1 2 16n\nR2 1 0 10k\nC2 1 0 16n\nRf 3 4 21k\nRg 4 0 10k\n\n* Op-Amp instantiation\nX1 1 4 3 opamp\n\n* Op-Amp Subcircuit\n.subckt opamp inp inn out\nRin inp inn 1e7\nB1 out 0 V = 14*tanh(1e5*(v(inp)-v(inn))/14)\n.ends\n\n* Analysis: Transient analysis for 1kHz oscillation (T=1ms)\n.tran 0 5m 0 10u\n\n.end\n```\n\nConfidence: high\n\n* The circuit is a standard Wien-Bridge oscillator; the output node (3) is fed back to the non-inverting input via the RC network and to the inverting input via the voltage divider (Rf, Rg).\n* The output node is labeled \"OUT\" in the drawing, mapped to node 3 in the netlist."
+}

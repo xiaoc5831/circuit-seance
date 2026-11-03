@@ -21,16 +21,16 @@ Follow these rules strictly:
    - Use \`.ac dec 50 1 1meg\` if the drawing shows AC analysis intent.
    - Use \`.dc V1 <sweep_range>\` if the drawing shows a sweep.
 7. Always end with \`.end\`.
-8. If an operational amplifier appears, include this subcircuit:
-   \`\`\`
-   .subckt opamp inp inn out
-   Rin inp inn 1e7
-   B1 out 0 V = 14*tanh(1e5*(v(inp)-v(inn))/14)
-   .ends
-   \`\`\`
-   And use \`X<n> <node1> <node2> <node3> opamp\` to instantiate it.
-9. After the fenced block, include a single line: \`Confidence: high|medium|low\`.
-10. Follow with bullet-point notes for any ambiguous values, illegible labels, or uncertain junctions.
+8. These parts are BUILT IN. Do NOT write a .subckt or .model for them; just instantiate them with the exact pin order:
+   - Op-amp: \`X<name> <non-inverting +in> <inverting -in> <output> opamp\` (3 pins, in that order; no supply pins).
+     Check each pin against the drawing: the pin marked - is -in, the pin marked + is +in, and negative feedback (resistor or capacitor) runs from the output back to -in.
+     Example, inverting amplifier with +in grounded: \`X1 0 inv out opamp\`.
+   - 555 timer: \`X<name> <gnd> <trig> <out> <reset> <ctrl> <thres> <disch> <vcc> ne555\` (8 pins = datasheet pins 1..8 in that order).
+     Example, astable: \`X1 0 thr out vcc ctl thr dis vcc ne555\` (trigger and threshold tied to the timing capacitor, reset tied to Vcc).
+   - Diodes and transistors: use the model names 1N4148, 1N4001, 1N4007, 1N5819, 2N3904, 2N3906, 2N2222, BC547 or BC557 as drawn; write your own .model only for other parts.
+9. Oscillators (Wien bridge, phase shift, relaxation, LC) need a kick to start: add \`.ic v(<a node in the feedback loop>)=0.01\`.
+10. After the fenced block, include a single line: \`Confidence: high|medium|low\`.
+11. Follow with bullet-point notes for any ambiguous values, illegible labels, or uncertain junctions.
 
 Output ONLY the netlist block and confidence note. Do not explain or discuss.`;
 

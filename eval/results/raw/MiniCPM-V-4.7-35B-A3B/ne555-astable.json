@@ -1,0 +1,53 @@
+{
+  "model": "MiniCPM-V-4.7-35B-A3B",
+  "id": "ne555-astable",
+  "image": "ne555-astable.png",
+  "ok": true,
+  "latencyMs": 28080,
+  "attempts": [
+    {
+      "status": 200,
+      "ms": 28080
+    }
+  ],
+  "finish": "stop",
+  "usage": {
+    "prompt_tokens": 973,
+    "total_tokens": 1394,
+    "completion_tokens": 421,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "created_cache_tokens": 544,
+      "multimodal_tokens": {
+        "image": 462
+      },
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0,
+      "image_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    },
+    "cost": 0.000063525,
+    "cost_details": {
+      "upstream_inference_cost": 0.000063525,
+      "upstream_inference_prompt_cost": 0.000034055,
+      "upstream_inference_completions_cost": 0.00002947,
+      "total_cost": 0.000063525,
+      "input_cost": 0.000034055,
+      "output_cost": 0.00002947,
+      "cached_input_cost": 0,
+      "cache_write_input_cost": 0,
+      "request_cost": 0,
+      "web_search_cost": 0,
+      "image_input_cost": null,
+      "image_output_cost": null,
+      "audio_input_cost": null,
+      "data_storage_cost": 0.00001394
+    }
+  },
+  "content": "```spice\nSIGNETICS NE555 ASTABLE MODE CIRCUIT\nV1 1 0 DC 5V\nRA 1 2 1k\nRB 2 3 10k\nC1 3 0 10n\nX555 1 2 3 0 2 6 7 4 OUT opamp555\n.tran 0 10m 0 10u\n.end\n\n.subckt opamp555 vcc dis thr trig rst out gnd\n* Simplified NE555 Model for Astable Operation\n* Pins: 1=GND, 2=TRIG, 3=OUT, 4=RST, 6=THR, 7=DIS, 8=VCC\n* Note: This is a behavioral approximation for simulation purposes\nBout out 0 V = if(v(thr) > v(trig), 0, if(v(trig) > v(thr)/2, 5, v(out)))\nRint out 0 1k\n.ends\n```\n\nConfidence: high\n\nNotes:\n- The schematic shows a standard NE555 astable multivibrator configuration.\n- Component values are clearly labeled: RA=1k, RB=10k, C=10nF, VCC=5V.\n- The NE555 pinout is standard: Pin 1=GND, Pin 2=TRIG, Pin 3=OUT, Pin 4=RST (connected to VCC), Pin 6=THR, Pin 7=DIS, Pin 8=VCC.\n- A behavioral model for the NE555 is used since the exact internal circuitry is not provided; this model approximates the toggle behavior based on threshold and trigger voltages.\n- The transient analysis time span (10ms) is chosen to capture several oscillation cycles given the RC time constant."
+}

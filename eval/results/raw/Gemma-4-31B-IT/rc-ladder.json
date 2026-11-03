@@ -1,0 +1,50 @@
+{
+  "model": "Gemma-4-31B-IT",
+  "id": "rc-ladder",
+  "image": "rc-ladder.png",
+  "ok": true,
+  "latencyMs": 8890,
+  "attempts": [
+    {
+      "status": 200,
+      "ms": 8890
+    }
+  ],
+  "finish": "stop",
+  "usage": {
+    "prompt_tokens": 779,
+    "total_tokens": 930,
+    "completion_tokens": 151,
+    "prompt_tokens_details": {
+      "cached_tokens": 493,
+      "image_tokens": 264,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "reasoning_tokens": 0,
+    "cost": 0.0000209251,
+    "cost_details": {
+      "upstream_inference_cost": 0.0000209251,
+      "upstream_inference_prompt_cost": 0.0000103551,
+      "upstream_inference_completions_cost": 0.00001057,
+      "total_cost": 0.0000209251,
+      "input_cost": 0.00001001,
+      "output_cost": 0.00001057,
+      "cached_input_cost": 3.451e-7,
+      "cache_write_input_cost": 0,
+      "request_cost": 0,
+      "web_search_cost": 0,
+      "image_input_cost": null,
+      "image_output_cost": null,
+      "audio_input_cost": null,
+      "data_storage_cost": 0.0000093
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "content": "```spice\n* TWO-SECTION RC LOW-PASS FILTER\nVin 1 0 SIN(0 1 1.6k)\nR1 1 2 1k\nC1 2 0 100n\nR2 2 3 10k\nC2 3 0 10n\n.tran 0 2ms 0 10u\n.end\n```\n\nConfidence: high\n\n* The input source is specified as 1V AC; I have modeled this as a sine wave with a frequency of 1.6kHz based on the \"corner\" frequency mentioned in the title.\n* The output node is labeled as node 3."
+}

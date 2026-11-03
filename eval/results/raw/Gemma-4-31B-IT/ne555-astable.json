@@ -1,0 +1,51 @@
+{
+  "model": "Gemma-4-31B-IT",
+  "id": "ne555-astable",
+  "image": "ne555-astable.png",
+  "promptHash": "66b78e18f886",
+  "ok": true,
+  "latencyMs": 36112,
+  "attempts": [
+    {
+      "status": 200,
+      "ms": 36112
+    }
+  ],
+  "finish": "stop",
+  "usage": {
+    "prompt_tokens": 1064,
+    "total_tokens": 1457,
+    "completion_tokens": 393,
+    "prompt_tokens_details": {
+      "cached_tokens": 769,
+      "image_tokens": 273,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "reasoning_tokens": 0,
+    "cost": 0.0000383733,
+    "cost_details": {
+      "upstream_inference_cost": 0.0000383733,
+      "upstream_inference_prompt_cost": 0.0000108633,
+      "upstream_inference_completions_cost": 0.00002751,
+      "total_cost": 0.0000383733,
+      "input_cost": 0.000010325,
+      "output_cost": 0.00002751,
+      "cached_input_cost": 5.383e-7,
+      "cache_write_input_cost": 0,
+      "request_cost": 0,
+      "web_search_cost": 0,
+      "image_input_cost": null,
+      "image_output_cost": null,
+      "audio_input_cost": null,
+      "data_storage_cost": 0.00001457
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "content": "```spice\n* Signetics NE555 - Astable Mode\nVCC 1 0 DC 5V\nRA 1 2 1k\nRB 2 3 10k\nC 3 0 10n\nX1 0 3 4 1 5 3 6 1 ne555\n* Nodes for X1: GND=0, TRIG=3, OUT=4, RESET=1, CTRL=5, THRES=3, DIS=6, VCC=1\n* Note: Pin 7 (DIS) is connected to node 2 (between RA and RB)\nR_DIS 2 6 0\n* Correcting X1 instantiation to match the drawing connections:\n* Pin 1 (GND) -> 0\n* Pin 2 (TRIG) -> 3\n* Pin 3 (OUT) -> 4\n* Pin 4 (RST) -> 1\n* Pin 5 (CTRL) -> 5 (floating/unconnected in drawing)\n* Pin 6 (THR) -> 3\n* Pin 7 (DIS) -> 2\n* Pin 8 (VCC) -> 1\nX1 0 3 4 1 5 3 2 1 ne555\n\n.tran 0 1ms 10u\n.ic v(3)=0\n.end\n```\n\nConfidence: high\n\n* Pin 5 (Control Voltage) is not connected in the schematic, so it is left as a floating node (node 5).\n* Pin 7 (Discharge) is connected to the junction between RA and RB (node 2).\n* Pin 2 (Trigger) and Pin 6 (Threshold) are tied together to the timing capacitor (node 3)."
+}

@@ -1,0 +1,58 @@
+{
+  "model": "MiniCPM-V-4.7-35B-A3B",
+  "id": "wien-bridge--photo",
+  "image": "wien-bridge--photo.jpg",
+  "ok": true,
+  "latencyMs": 28298,
+  "attempts": [
+    {
+      "status": null,
+      "ms": 90006,
+      "error": "timeout 90s"
+    },
+    {
+      "status": 200,
+      "ms": 28298
+    }
+  ],
+  "finish": "stop",
+  "usage": {
+    "prompt_tokens": 716,
+    "total_tokens": 1090,
+    "completion_tokens": 374,
+    "prompt_tokens_details": {
+      "cached_tokens": 544,
+      "created_cache_tokens": 0,
+      "multimodal_tokens": {
+        "image": 205
+      },
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0,
+      "image_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    },
+    "cost": 0.0000325808,
+    "cost_details": {
+      "upstream_inference_cost": 0.0000325808,
+      "upstream_inference_prompt_cost": 0.0000064008,
+      "upstream_inference_completions_cost": 0.00002618,
+      "total_cost": 0.0000325808,
+      "input_cost": 0.00000602,
+      "output_cost": 0.00002618,
+      "cached_input_cost": 3.808e-7,
+      "cache_write_input_cost": 0,
+      "request_cost": 0,
+      "web_search_cost": 0,
+      "image_input_cost": null,
+      "image_output_cost": null,
+      "audio_input_cost": null,
+      "data_storage_cost": 0.0000109
+    }
+  },
+  "content": "```spice\nMien-Bridge Oscillator Circuit\n* Components\nR1 OUT N1 10k\nC1 N1 N2 16n\nR2 N2 0 10k\nC2 N2 0 16n\nRf OUT N3 21k\nRg N3 0 10k\n\n* Operational Amplifier Instance\n* N1 is non-inverting input (+), N3 is inverting input (-), OUT is output\nX1 N1 N3 OUT opamp\n\n* OpAmp Subcircuit Definition\n.subckt opamp inp inn out\nRin inp inn 1e7\nB1 out 0 V = 14*tanh(1e5*(v(inp)-v(inn))/14)\n.ends\n\n* Analysis Directive\n* Based on the text \"f = 1/(2piRC) = 1 kHz\", we simulate a transient response\n* to observe the oscillation. Period T = 1/f = 1ms. Simulate for 5ms (5 periods).\n.tran 0 5m 0 10u\n\n.end\n```\n\nConfidence: high\n\n*   The circuit is identified as a Wien-Bridge Oscillator.\n*   The operational amplifier is modeled using the standard subcircuit provided in the instructions.\n*   Node numbering: `OUT` is the output node, `N1` connects to the non-inverting input, `N2` is the junction of C1, C2, and R2, `N3` connects to the inverting input.\n*   The transient analysis `.tran` command is set to simulate 5 milliseconds to capture several cycles of the 1 kHz oscillation."
+}
