@@ -61,6 +61,7 @@ export function SettingsDialog({ open, value, onSave, onForget, onClose, t }: Pr
 
   const setPreset = (id: string) => {
     const p = PROVIDER_PRESETS[id];
+    if (!p) return;
     setDraft((d) => ({ ...d, provider: id, baseUrl: p.baseUrl, visionModel: p.visionModel, textModel: p.textModel }));
   };
 
@@ -119,16 +120,28 @@ export function SettingsDialog({ open, value, onSave, onForget, onClose, t }: Pr
             {t('settings.keyNote')}
           </p>
 
+          {PROVIDER_PRESETS[draft.provider]?.needsBaseUrl && (
+            <p className="hint small" data-testid="compat-hint">
+              {t('settings.compatHint')}
+            </p>
+          )}
           <label htmlFor="s-base">{t('settings.baseUrl')}</label>
-          <input id="s-base" value={draft.baseUrl} spellCheck={false} onChange={(e) => setDraft((d) => ({ ...d, baseUrl: e.target.value }))} />
+          <input
+            id="s-base"
+            value={draft.baseUrl}
+            spellCheck={false}
+            placeholder="https://your-gateway.example/v1"
+            required={!!PROVIDER_PRESETS[draft.provider]?.needsBaseUrl}
+            onChange={(e) => setDraft((d) => ({ ...d, baseUrl: e.target.value }))}
+          />
           <div className="two">
             <div>
               <label htmlFor="s-vm">{t('settings.visionModel')}</label>
-              <input id="s-vm" value={draft.visionModel} spellCheck={false} onChange={(e) => setDraft((d) => ({ ...d, visionModel: e.target.value }))} />
+              <input id="s-vm" value={draft.visionModel} spellCheck={false} placeholder="vision model id" required onChange={(e) => setDraft((d) => ({ ...d, visionModel: e.target.value }))} />
             </div>
             <div>
               <label htmlFor="s-tm">{t('settings.textModel')}</label>
-              <input id="s-tm" value={draft.textModel} spellCheck={false} onChange={(e) => setDraft((d) => ({ ...d, textModel: e.target.value }))} />
+              <input id="s-tm" value={draft.textModel} spellCheck={false} placeholder="= vision model" onChange={(e) => setDraft((d) => ({ ...d, textModel: e.target.value }))} />
             </div>
           </div>
 

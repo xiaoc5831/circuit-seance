@@ -44,3 +44,4 @@ test-results/
 # demo recorder raw capture
 docs/demo/raw/
 *.webm
+eval/results/calls.jsonl

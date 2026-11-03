@@ -55,3 +55,31 @@ test('live mode: a rejected key shows a friendly error and the netlist can still
   await page.locator('#photo-input').setInputFiles('public/samples/rc-lowpass.svg');
   await expect(page.getByRole('alert')).toContainText('rejected the API key');
 });
+
+test('OpenAI-compatible preset: custom base URL + typed model reach the gateway, nothing else', async ({ page }) => {
+  const external = await guardNetwork(page);
+  const calls: Array<{ url: string; auth: string; model: string }> = [];
+  await page.route('https://gw.example.test/**', async (route) => {
+    const req = route.request();
+    calls.push({ url: req.url(), auth: req.headers()['authorization'] ?? '', model: (req.postDataJSON() as { model: string }).model });
+    // relays sometimes answer in Chinese around the fence; the parser must not care
+    const content = '我先读取元件和连线。```spice\n' + NET + '\n```\nConfidence: high';
+    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ choices: [{ message: { content } }] }) });
+  });
+  await page.goto('/?nointro');
+  await page.getByTestId('open-settings').click();
+  await page.getByLabel('Provider').selectOption('openai-compatible');
+  await expect(page.getByTestId('compat-hint')).toBeVisible();
+  await expect(page.getByLabel('Base URL')).toHaveValue('');
+  await page.getByLabel('API key').fill('sk-gw');
+  await page.getByLabel('Base URL').fill('https://gw.example.test/v1/');
+  await page.getByLabel('Vision model').fill('vision-x');
+  await page.getByRole('button', { name: 'Save' }).click();
+  await page.keyboard.press('Escape');
+
+  await page.locator('#photo-input').setInputFiles('public/samples/rc-lowpass.svg');
+  await expect(page.getByTestId('netlist-editor')).toHaveValue(/Photo RC \(live\)/);
+  await waitForTrace(page);
+  expect(calls).toEqual([{ url: 'https://gw.example.test/v1/chat/completions', auth: 'Bearer sk-gw', model: 'vision-x' }]);
+  expect(external.filter((u) => !u.startsWith('https://gw.example.test'))).toEqual([]);
+});

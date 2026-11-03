@@ -1,0 +1,18 @@
+{
+  "note": "Vision eval set. Images are synthetic hand-drawn-style renders of the bundled drawings (public/**/*.svg via rsvg-convert -z 1.5) plus ImageMagick photo-like variants (tools/make-eval-images.sh). Ground truth = the verified netlist each drawing was made from. 'probe' is the ground-truth node the metrics are read on; candidate netlists may name nodes differently, so the scorer reads every candidate node voltage and keeps the best-matching one.",
+  "tolerance": 0.05,
+  "items": [
+    { "id": "rc-lowpass", "image": "rc-lowpass.png", "truth": "src/examples/rc-lowpass.net", "probe": "out", "metrics": ["tau63", "final"] },
+    { "id": "rlc-ringing", "image": "rlc-ringing.png", "truth": "src/examples/rlc-ringing.net", "probe": "n2", "metrics": ["ringFreq", "peak"] },
+    { "id": "diode-rectifier", "image": "diode-rectifier.png", "truth": "src/examples/diode-rectifier.net", "probe": "out", "metrics": ["maxLate", "minLate"] },
+    { "id": "opamp-inverting", "image": "opamp-inverting.png", "truth": "src/examples/opamp-inverting.net", "probe": "out", "metrics": ["ppLate"] },
+    { "id": "ne555-astable", "image": "ne555-astable.png", "truth": "src/features/haunted/netlists/ne555-astable.net", "probe": "thr", "metrics": ["oscFreq"] },
+    { "id": "opamp-integrator", "image": "opamp-integrator.png", "truth": "src/features/haunted/netlists/opamp-integrator.net", "probe": "out", "metrics": ["rampSlope"] },
+    { "id": "rc-ladder", "image": "rc-ladder.png", "truth": "src/features/haunted/netlists/rc-ladder.net", "probe": "out", "metrics": ["f3db", "gain10k"] },
+    { "id": "wien-bridge", "image": "wien-bridge.png", "truth": "src/features/haunted/netlists/wien-bridge.net", "probe": "out", "metrics": ["oscFreq"] },
+    { "id": "rc-lowpass--tilt", "image": "rc-lowpass--tilt.jpg", "variant": "9 deg phone tilt + sensor noise", "truth": "src/examples/rc-lowpass.net", "probe": "out", "metrics": ["tau63", "final"] },
+    { "id": "rlc-ringing--pencil", "image": "rlc-ringing--pencil.jpg", "variant": "graphite pencil, grain, soft blur", "truth": "src/examples/rlc-ringing.net", "probe": "n2", "metrics": ["ringFreq", "peak"] },
+    { "id": "opamp-inverting--photo", "image": "opamp-inverting--photo.jpg", "variant": "notebook photo: keystone, lamp shading, defocus, 1000 px, JPEG q55", "truth": "src/examples/opamp-inverting.net", "probe": "out", "metrics": ["ppLate"] },
+    { "id": "wien-bridge--photo", "image": "wien-bridge--photo.jpg", "variant": "photo of a print: keystone, heavy vignette, blur, 900 px, JPEG q50", "truth": "src/features/haunted/netlists/wien-bridge.net", "probe": "out", "metrics": ["oscFreq"] }
+  ]
+}

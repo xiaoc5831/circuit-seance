@@ -1,0 +1,23 @@
+{
+  "model": "gpt-5.6-terra",
+  "id": "rc-lowpass",
+  "image": "rc-lowpass.png",
+  "ok": true,
+  "latencyMs": 80120,
+  "attempts": [
+    {
+      "status": 200,
+      "ms": 80120
+    }
+  ],
+  "finish": "stop",
+  "usage": {
+    "prompt_tokens": 5829,
+    "completion_tokens": 201,
+    "total_tokens": 6030,
+    "prompt_tokens_details": {
+      "cached_tokens": 3264
+    }
+  },
+  "content": "我会先读取图中的元件连接、数值和阶跃源标注，再据此整理成包含瞬态分析指令的 SPICE 网表。```spice\nRC low-pass step response\nV1 in 0 PULSE(0 5 0 1n 1n 10m 20m)\nR1 in out 1k\nC1 out 0 1u\n.tran 0 5m 0 10u\n.end\n```\nConfidence: medium\n- 阶跃源标注为 0 到 5 V；上升/下降时间及脉冲持续时间未标明，网表中采用近似理想阶跃并设置了示例脉冲参数。\n- RC 时间常数为 1 ms；瞬态仿真时长取 5 ms，覆盖约 5 个时间常数。"
+}

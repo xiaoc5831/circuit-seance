@@ -38,6 +38,10 @@ export function parseNetlistFromResponse(raw: string): ParsedNetlist | ParseErro
     return { error: 'empty-fence' };
   }
 
+  // Hand fix (vision eval, 2026-11-03): fold the micro sign to 'u' *before* stripping,
+  // otherwise "1µF" became "1F" (a 10^6 error) without any warning.
+  netlist = netlist.replace(/[µμ]/g, 'u');
+
   // Strip non-ASCII characters and track what was removed
   const nonAsciiChars = new Set<string>();
   let cleaned = '';

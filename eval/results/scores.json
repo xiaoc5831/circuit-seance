@@ -1,0 +1,66 @@
+[
+  {
+    "model": "gpt-5.6-terra",
+    "id": "rc-lowpass",
+    "variant": null,
+    "latencyMs": 80120,
+    "attempts": 1,
+    "apiOk": true,
+    "want": {
+      "tau63": 0.000999095498378695,
+      "final": 4.998322713955912
+    },
+    "confidence": "medium",
+    "netlist": "RC low-pass step response\nV1 in 0 PULSE(0 5 0 1n 1n 10m 20m)\nR1 in out 1k\nC1 out 0 1u\n.tran 0 5m 0 10u\n.end",
+    "values": {
+      "hit": 2,
+      "total": 2,
+      "extra": 0,
+      "exactSet": true,
+      "misses": []
+    },
+    "tweaks": [
+      "stimulus set to ground truth"
+    ],
+    "stage": "scored",
+    "node": "out",
+    "got": {
+      "tau63": 0.000999095498378695,
+      "final": 4.998322713955912
+    },
+    "maxRelErr": 0,
+    "behaviourPass": true
+  },
+  {
+    "model": "gpt-6.1-sol",
+    "id": "rlc-ringing",
+    "variant": null,
+    "latencyMs": 4751,
+    "attempts": 1,
+    "apiOk": true,
+    "want": {
+      "ringFreq": 1013.0246020260047,
+      "peak": 8.891503672886603
+    },
+    "confidence": "medium",
+    "netlist": "Series RLC ringing circuit\nV1 1 0 PULSE(0 1 0 1n 1n 500u 1m)\nR1 1 2 100\nL1 2 3 100m\nC1 3 0 253n\n.tran 0 5m 0 1u\n.end",
+    "values": {
+      "hit": 3,
+      "total": 3,
+      "extra": 0,
+      "exactSet": true,
+      "misses": []
+    },
+    "tweaks": [
+      "stimulus set to ground truth"
+    ],
+    "stage": "scored",
+    "node": "3",
+    "got": {
+      "ringFreq": 1013.0246020260047,
+      "peak": 8.891503672886603
+    },
+    "maxRelErr": 0,
+    "behaviourPass": true
+  }
+]

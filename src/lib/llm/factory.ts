@@ -4,6 +4,7 @@
  */
 import type { LLMAdapter } from './adapter';
 import { OpenAIAdapter } from './openai';
+import { DEFAULT_TIMEOUT_MS, PROVIDER_PRESETS, resolvePresetId } from './presets';
 
 export interface AdapterConfig {
   provider: string;
@@ -15,11 +16,14 @@ export interface AdapterConfig {
 
 export function createAdapter(config: AdapterConfig): LLMAdapter | null {
   const key = config.apiKey.trim();
-  if (!key || !config.baseUrl.trim()) return null;
+  if (!key || !config.baseUrl.trim() || !config.visionModel.trim()) return null;
+  const preset = PROVIDER_PRESETS[resolvePresetId(config.provider)];
   return new OpenAIAdapter(
     config.baseUrl.trim().replace(/\/+$/, ''),
     key,
     config.visionModel.trim(),
-    config.textModel.trim(),
+    // a gateway that only serves one model: reuse the vision model for the spirit
+    config.textModel.trim() || config.visionModel.trim(),
+    preset?.timeoutMs ?? DEFAULT_TIMEOUT_MS,
   );
 }

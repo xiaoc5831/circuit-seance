@@ -122,6 +122,8 @@ export const zhCN: Record<keyof typeof en, string> = {
   'settings.close': '关闭',
   'settings.saved': '已保存。',
   'settings.forgotten': '已从本浏览器删除密钥。',
+  'settings.compatHint':
+    '适用于任何兼容 OpenAI /chat/completions 接口的网关或中转。填入它的 Base URL（以 /v1 结尾）和它提供的准确模型名；视觉模型必须支持图片输入。请求最多等待 90 秒。',
 
   'status.idle': '就绪。首次仿真时加载引擎。',
   'status.loading': '正在唤醒 ngspice…',

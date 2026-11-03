@@ -28,7 +28,7 @@ interface ChatCompletionResponse {
   }>;
 }
 
-const REQUEST_TIMEOUT_MS = 60_000; // 60 seconds
+const REQUEST_TIMEOUT_MS = 60_000; // default; the OpenAI-compatible preset passes 90 s
 
 /**
  * OpenAI-compatible adapter supporting image input via image_url content part.
@@ -38,7 +38,8 @@ export class OpenAIAdapter implements LLMAdapter {
     private baseUrl: string,
     private apiKey: string,
     private visionModel: string,
-    private textModel: string
+    private textModel: string,
+    private timeoutMs: number = REQUEST_TIMEOUT_MS
   ) {}
 
   async transcribeSchematic(imageDataUrl: string, signal?: AbortSignal): Promise<string> {
@@ -122,7 +123,7 @@ export class OpenAIAdapter implements LLMAdapter {
     let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
     // Set up timeout to abort the request after 60s
-    timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+    timeoutId = setTimeout(() => controller.abort(), this.timeoutMs);
 
     // Abort on either the caller's signal or the 60 s timeout (hand fix: the
     // original ignored the timeout whenever a caller signal was passed)
@@ -186,7 +187,7 @@ export class OpenAIAdapter implements LLMAdapter {
       // Handle AbortError (timeout or cancellation)
       // DOMException is the runtime type for AbortError
       if (err instanceof DOMException || (err instanceof Error && err.name === 'AbortError')) {
-        throw new LLMError('timeout', null, 'LLM request timed out or was cancelled (60s)');
+        throw new LLMError('timeout', null, `LLM request timed out or was cancelled (${Math.round(this.timeoutMs / 1000)}s)`);
       }
 
       // Network error

@@ -3,7 +3,7 @@
  * localStorage on this device — never in sessionStorage, cookies, URLs or logs —
  * and is sent only to the configured provider base URL.
  */
-import { PROVIDER_PRESETS } from '@/lib/llm/presets';
+import { PROVIDER_PRESETS, resolvePresetId } from '@/lib/llm/presets';
 import { createAdapter, type AdapterConfig } from '@/lib/llm/factory';
 import type { LLMAdapter } from '@/lib/llm/adapter';
 
@@ -34,7 +34,8 @@ export function loadLlm(): AdapterConfig {
     const raw = store()?.getItem(KEY_LLM);
     if (!raw) return { ...DEFAULT_LLM };
     const v = JSON.parse(raw) as Partial<AdapterConfig>;
-    return { ...DEFAULT_LLM, ...v };
+    const merged = { ...DEFAULT_LLM, ...v };
+    return { ...merged, provider: resolvePresetId(merged.provider) };
   } catch {
     return { ...DEFAULT_LLM };
   }
@@ -56,7 +57,11 @@ export interface LlmStatus {
 }
 
 export function llmStatus(cfg: AdapterConfig = loadLlm()): LlmStatus {
-  return { hasKey: !!cfg.apiKey.trim() && !!cfg.baseUrl.trim(), provider: cfg.provider, baseUrl: cfg.baseUrl };
+  return {
+    hasKey: !!cfg.apiKey.trim() && !!cfg.baseUrl.trim() && !!cfg.visionModel.trim(),
+    provider: cfg.provider,
+    baseUrl: cfg.baseUrl,
+  };
 }
 
 /**

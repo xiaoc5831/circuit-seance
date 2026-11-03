@@ -1,0 +1,20 @@
+{
+  "model": "gpt-6.1-sol",
+  "id": "rlc-ringing",
+  "image": "rlc-ringing.png",
+  "ok": true,
+  "latencyMs": 4751,
+  "attempts": [
+    {
+      "status": 200,
+      "ms": 4751
+    }
+  ],
+  "finish": "stop",
+  "usage": {
+    "prompt_tokens": 7145,
+    "completion_tokens": 187,
+    "total_tokens": 7332
+  },
+  "content": "我先按图确认元件连接、数值和方波源特性，再整理成包含瞬态分析的 SPICE 网表。```spice\nSeries RLC ringing circuit\nV1 1 0 PULSE(0 1 0 1n 1n 500u 1m)\nR1 1 2 100\nL1 2 3 100m\nC1 3 0 253n\n.tran 0 5m 0 1u\n.end\n```\nConfidence: medium\n- 方波源的幅值和占空比在图中未标注；这里假设 0 V 到 1 V、50% 占空比、1 kHz。\n- 上升和下降时间未标注；这里假设各为 1 ns。"
+}

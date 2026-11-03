@@ -130,6 +130,8 @@ export const en = {
   'settings.close': 'Close',
   'settings.saved': 'Saved.',
   'settings.forgotten': 'Key removed from this browser.',
+  'settings.compatHint':
+    'Any gateway that speaks the OpenAI /chat/completions API. Paste its base URL (ending in /v1) and the exact model names it serves; the vision model must accept images. Requests wait up to 90 s.',
 
   // status bar
   'status.idle': 'Ready. The engine loads on the first simulation.',
